@@ -12,7 +12,7 @@ import Home from './components/Home'
 function App() {
   return (
     <Router>
-      <Fragment>
+      <div className='bg-light'>
         <Header />
         <main className='py-3'>
           <Container>
@@ -22,7 +22,7 @@ function App() {
           </Container>
         </main>
         <Footer />
-      </Fragment>
+      </div>
     </Router>
   )
 }
