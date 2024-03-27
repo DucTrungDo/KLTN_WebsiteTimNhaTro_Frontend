@@ -1,15 +1,14 @@
 import React from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
     <header>
-      <Navbar>
-        <Container>
-          <a href='/'>
+      <nav className='navbar navbar-expand-lg bg-body-tertiary'>
+        <div className='container'>
+          <Link to='/'>
             <img src='./images/logo.png' alt='' className='header-image' />
-          </a>
+          </Link>
           <div className='collapse navbar-collapse' id='navbarCollapse'>
             <div className='navbar-nav ms-auto py-0'>
               <a href='index.html' className='nav-item nav-link'>
@@ -29,8 +28,8 @@ const Header = () => {
               Đăng tin miễn phí
             </a>
           </div>
-        </Container>
-      </Navbar>
+        </div>
+      </nav>
       <div>
         <nav className='navbar navbar-expand-lg navbar-light bg-white'>
           <div className='container justify-content-center justify-content-md-between'>
