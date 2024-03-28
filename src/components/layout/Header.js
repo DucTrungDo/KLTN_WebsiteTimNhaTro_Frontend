@@ -1,5 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-regular-svg-icons'
+import {
+  faArrowRightToBracket,
+  faUserPlus,
+} from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
   return (
@@ -11,15 +17,21 @@ const Header = () => {
           </Link>
           <div className='collapse navbar-collapse' id='navbarCollapse'>
             <div className='navbar-nav ms-auto py-0'>
-              <a href='index.html' className='nav-item nav-link'>
+              <Link to='/farvorite' className='nav-item nav-link'>
+                <FontAwesomeIcon icon={faHeart} className='me-1' />
                 Yêu thích
-              </a>
+              </Link>
               <Link to='/login' className='nav-item nav-link mx-3'>
+                <FontAwesomeIcon icon={faUserPlus} className='me-1' />
                 Đăng nhập
               </Link>
-              <a href='service.html' className='nav-item nav-link'>
+              <Link to='/register' className='nav-item nav-link'>
+                <FontAwesomeIcon
+                  icon={faArrowRightToBracket}
+                  className='me-1'
+                />
                 Đăng ký
-              </a>
+              </Link>
             </div>
             <a
               href='#'
