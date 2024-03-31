@@ -13,19 +13,47 @@ const Header = () => {
       <nav className='navbar navbar-expand-lg bg-body-tertiary'>
         <div className='container'>
           <Link to='/'>
-            <img src='./images/logo.png' alt='' className='header-image' />
+            <img src='/images/logo.png' alt='' className='header-image' />
           </Link>
+
           <div className='collapse navbar-collapse' id='navbarCollapse'>
             <div className='navbar-nav ms-auto py-0'>
-              <Link to='/farvorite' className='nav-item nav-link'>
+              <Link
+                className='welcome-text text-decoration-none'
+                to='/user/dashboard'
+                rel='nofollow'
+              >
+                <img
+                  src='https://phongtro123.com/images/default-user.png'
+                  className='user-info'
+                />
+                <div className=''>
+                  <span className='d-block fs-6 mw-200 text-ellipsis overflow-hidden nowrap'>
+                    Xin chào, <strong>Đỗ Trung Đức</strong>
+                  </span>
+                  <span className='fs-6'>
+                    TK Chính: <strong>0 VNĐ</strong>
+                  </span>
+                </div>
+              </Link>
+              <Link
+                to='/farvorite'
+                className='nav-item nav-link align-content-center'
+              >
                 <FontAwesomeIcon icon={faHeart} className='me-1' />
                 Yêu thích
               </Link>
-              <Link to='/login' className='nav-item nav-link mx-3'>
+              <Link
+                to='/login'
+                className='nav-item nav-link mx-3 align-content-center'
+              >
                 <FontAwesomeIcon icon={faUserPlus} className='me-1' />
                 Đăng nhập
               </Link>
-              <Link to='/register' className='nav-item nav-link'>
+              <Link
+                to='/register'
+                className='nav-item nav-link align-content-center'
+              >
                 <FontAwesomeIcon
                   icon={faArrowRightToBracket}
                   className='me-1'

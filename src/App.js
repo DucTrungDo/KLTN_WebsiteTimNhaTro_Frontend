@@ -7,8 +7,9 @@ import './App.css'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import Home from './components/Home'
-import Login from './components/user/Login'
-import Register from './components/user/Register'
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+import UserDashboard from './components/user/Dashboard'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/user/dashboard' element={<UserDashboard />} />
             </Routes>
           </div>
         </main>
