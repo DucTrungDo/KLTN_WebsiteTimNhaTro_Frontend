@@ -10,6 +10,7 @@ import Home from './components/Home'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import UserDashboard from './components/user/Dashboard'
+import PostDetail from './components/post/PostDetail'
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/user/dashboard' element={<UserDashboard />} />
+
+              <Route path='/post_detail' element={<PostDetail />} />
             </Routes>
           </div>
         </main>
