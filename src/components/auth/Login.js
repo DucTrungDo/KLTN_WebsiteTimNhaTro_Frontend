@@ -60,10 +60,10 @@ const Login = () => {
                 <div className='row gy-3 gy-md-4 overflow-hidden'>
                   <div className='col-12'>
                     <label htmlFor='phonenumber' className='form-label'>
-                      Số điện thoại <span className='text-danger'>*</span>
+                      Email <span className='text-danger'>*</span>
                     </label>
                     <input
-                      type='text'
+                      type='email'
                       className='form-control'
                       name='phonenumber'
                       id='phonenumber'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Register = () => {
+const VerifyRegister = () => {
   return (
     <section className='bg-light p-3 p-md-4 p-xl-5'>
       <div className='container'>
@@ -52,46 +52,22 @@ const Register = () => {
               <div className='row'>
                 <div className='col-12'>
                   <div className='mb-5'>
-                    <h3>Đăng Ký</h3>
+                    <h3>Xác thực đăng ký</h3>
                   </div>
                 </div>
               </div>
               <form action='#!'>
                 <div className='row gy-3 gy-md-4 overflow-hidden'>
                   <div className='col-12'>
-                    <label for='fullname' className='form-label'>
-                      Họ tên <span className='text-danger'>*</span>
-                    </label>
-                    <input
-                      type='text'
-                      className='form-control'
-                      name='fullname'
-                      id='fullname'
-                      required
-                    />
-                  </div>
-                  <div className='col-12'>
-                    <label for='phonenumber' className='form-label'>
-                      Email <span className='text-danger'>*</span>
+                    <label htmlFor='otp' className='form-label'>
+                      Nhập OTP đã gửi qua mail{' '}
+                      <span className='text-danger'>*</span>
                     </label>
                     <input
                       type='email'
                       className='form-control'
-                      name='phonenumber'
-                      id='phonenumber'
-                      required
-                    />
-                  </div>
-                  <div className='col-12'>
-                    <label for='password' className='form-label'>
-                      Mật khẩu <span className='text-danger'>*</span>
-                    </label>
-                    <input
-                      type='password'
-                      className='form-control'
-                      name='password'
-                      id='password'
-                      value=''
+                      name='otp'
+                      id='otp'
                       required
                     />
                   </div>
@@ -101,20 +77,10 @@ const Register = () => {
                         className='btn bsb-btn-xl btn-primary'
                         type='submit'
                       >
-                        Tạo tài khoản
+                        Xác nhận
                       </button>
                     </div>
                   </div>
-                  <p className='mt-4'>
-                    Bấm vào nút đăng ký tức là bạn đã đồng ý với{' '}
-                    <Link
-                      to='/login'
-                      className='link-secondary text-primary text-decoration-none'
-                    >
-                      quy định sử dụng
-                    </Link>{' '}
-                    của chúng tôi
-                  </p>
                 </div>
               </form>
             </div>
@@ -125,4 +91,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default VerifyRegister
