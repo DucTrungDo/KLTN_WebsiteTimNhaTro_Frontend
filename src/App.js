@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import store from './store';
+import { loadUser } from './actions/userActions';
+import Cookies from 'js-cookie';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
-import './App.css'
+import './App.css';
 
 // Home import
 import MainHeader from './components/layout/Header'
@@ -15,15 +13,18 @@ import UserHeader from './components/layout/UserHeader'
 import Home from './components/Home'
 
 // Authentication
-import Login from './components/auth/Login'
-import Register from './components/auth/Register'
-import VerifyRegister from './components/auth/VerifyRegister'
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import VerifyRegister from './components/auth/VerifyRegister';
 
-import UserDashboard from './components/user/Dashboard'
-import PostDetail from './components/post/PostDetail'
+import UserDashboard from './components/user/Dashboard';
+import PostDetail from './components/post/PostDetail';
 
 function App() {
-  // const [showMainHeader, setShowMainHeader] = useState(false)
+  const token = Cookies.get('accessToken');
+  useEffect(() => {
+    store.dispatch(loadUser(token));
+  });
   return (
     <Router>
       <div className='bg-light'>
@@ -43,7 +44,7 @@ function App() {
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
 function HeaderSwitcher() {
