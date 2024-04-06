@@ -18,6 +18,43 @@ const Dashboard = () => {
     <div className='container-fluid'>
       <div className='row'>
         <div className='col-lg-2 d-none d-lg-block bg-light'>
+          <div className='user_info'>
+            <a href='#' className='clearfix'>
+              <div className='user_avatar'>
+                <img
+                  src='https://phongtro123.com/images/default-user.png'
+                  className='user-info'
+                />
+              </div>
+              <div className='user_meta'>
+                <div className='inner'>
+                  <div className='user_name'>Đỗ Trung Đức</div>
+                  <div
+                    className='user_verify'
+                    style={{ color: '#555', fonSize: '0.9rem' }}
+                  >
+                    0397260965
+                  </div>
+                </div>
+              </div>
+            </a>
+            <div>
+              <span>TK Chính:</span>{' '}
+              <span style={{ fontWeight: '700' }}> 0</span>
+            </div>
+            <a
+              className='btn btn-warning btn-sm mr-1'
+              href='https://phongtro123.com/quan-ly/nap-tien.html'
+            >
+              Nạp tiền
+            </a>
+            <a
+              className='btn btn-danger btn-sm'
+              href='https://phongtro123.com/quan-ly/dang-tin-moi.html'
+            >
+              Đăng tin
+            </a>
+          </div>
           <ul className='nav nav-pills flex-column mb-auto'>
             <li className='nav-item'>
               <a href='#' className='nav-link active' aria-current='page'>

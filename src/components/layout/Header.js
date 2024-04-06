@@ -9,7 +9,7 @@ import {
 
 const Header = () => {
   return (
-    <header>
+    <>
       <nav className='navbar navbar-expand-lg bg-body-tertiary'>
         <div className='container'>
           <Link to='/'>
@@ -103,7 +103,7 @@ const Header = () => {
           </div>
         </nav>
       </div>
-    </header>
+    </>
   )
 }
 

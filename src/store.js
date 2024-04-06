@@ -3,10 +3,13 @@ import { thunk } from 'redux-thunk'
 
 import { postsReducer } from './reducers/postReducers'
 
+import { authReducer } from './reducers/userReducers'
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const reducer = combineReducers({
   posts: postsReducer,
+  auth: authReducer,
 })
 
 const middleware = [thunk]

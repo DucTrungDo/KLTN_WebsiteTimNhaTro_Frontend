@@ -16,21 +16,21 @@ const Login = () => {
                 height='80'
                 alt='BootstrapBrain Logo'
               />
-              <hr class='border-primary-subtle mb-4' />
-              <h2 class='h1 mb-4'>
+              <hr className='border-primary-subtle mb-4' />
+              <h2 className='h1 mb-4'>
                 Discover Ideal Accommodations Quickly and Conveniently.
               </h2>
-              <p class='lead mb-5'>
+              <p className='lead mb-5'>
                 We support you in searching and posting according to your
                 requirements.
               </p>
-              <div class='text-endx'>
+              <div className='text-endx'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   width='48'
                   height='48'
                   fill='currentColor'
-                  class='bi bi-grip-horizontal'
+                  className='bi bi-grip-horizontal'
                   viewBox='0 0 16 16'
                 >
                   <path d='M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
@@ -79,7 +79,6 @@ const Login = () => {
                       className='form-control'
                       name='password'
                       id='password'
-                      value=''
                       required
                     />
                   </div>

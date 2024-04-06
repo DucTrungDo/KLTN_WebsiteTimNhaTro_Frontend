@@ -1,11 +1,17 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import React, { useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
 
 import './App.css'
 
 // Home import
-import Header from './components/layout/Header'
+import MainHeader from './components/layout/Header'
 import Footer from './components/layout/Footer'
+import UserHeader from './components/layout/UserHeader'
 import Home from './components/Home'
 
 // Authentication
@@ -17,10 +23,11 @@ import UserDashboard from './components/user/Dashboard'
 import PostDetail from './components/post/PostDetail'
 
 function App() {
+  // const [showMainHeader, setShowMainHeader] = useState(false)
   return (
     <Router>
       <div className='bg-light'>
-        <Header />
+        <HeaderSwitcher />
         <main className='py-3'>
           <div className='container'>
             <Routes>
@@ -28,8 +35,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/verify_register' element={<VerifyRegister />} />
-              <Route path='/user/dashboard' element={<UserDashboard />} />
-
+              <Route path='/user/*' element={<UserRoutes />} />
               <Route path='/post_detail' element={<PostDetail />} />
             </Routes>
           </div>
@@ -37,6 +43,22 @@ function App() {
         <Footer />
       </div>
     </Router>
+  )
+}
+
+function HeaderSwitcher() {
+  const location = useLocation()
+  const isUserRoute = location.pathname.startsWith('/user')
+
+  return <>{isUserRoute ? <UserHeader /> : <MainHeader />}</>
+}
+
+function UserRoutes() {
+  return (
+    <Routes>
+      <Route path='dashboard' element={<UserDashboard />} />
+      {/* Add more user routes here */}
+    </Routes>
   )
 }
 

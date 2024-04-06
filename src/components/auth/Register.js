@@ -1,7 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { useDispatch } from 'react-redux'
+import { registerSendOTP, saveTempEmail } from '../../actions/userActions'
 import { Link } from 'react-router-dom'
 
 const Register = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  // const { isAuthenticated, error, loading } = useSelector(
+  //   (state) => state.auth
+  // );
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate(redirect);
+  //   }
+
+  //   if (error && error !== 'Login first to access this resource.') {
+  //     alert.error(error);
+  //     dispatch(clearErrors());
+  //   }
+  // }, [dispatch, alert, isAuthenticated, error, navigate]);
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(saveTempEmail(email))
+    dispatch(registerSendOTP(name, email, password))
+    navigate('/verify_register')
+  }
+
   return (
     <section className='bg-light p-3 p-md-4 p-xl-5'>
       <div className='container'>
@@ -16,21 +50,21 @@ const Register = () => {
                 height='80'
                 alt='BootstrapBrain Logo'
               />
-              <hr class='border-primary-subtle mb-4' />
-              <h2 class='h1 mb-4'>
+              <hr className='border-primary-subtle mb-4' />
+              <h2 className='h1 mb-4'>
                 Discover Ideal Accommodations Quickly and Conveniently.
               </h2>
-              <p class='lead mb-5'>
+              <p className='lead mb-5'>
                 We support you in searching and posting according to your
                 requirements.
               </p>
-              <div class='text-endx'>
+              <div className='text-endx'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   width='48'
                   height='48'
                   fill='currentColor'
-                  class='bi bi-grip-horizontal'
+                  className='bi bi-grip-horizontal'
                   viewBox='0 0 16 16'
                 >
                   <path d='M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
@@ -56,34 +90,38 @@ const Register = () => {
                   </div>
                 </div>
               </div>
-              <form action='#!'>
+              <form onSubmit={submitHandler}>
                 <div className='row gy-3 gy-md-4 overflow-hidden'>
                   <div className='col-12'>
-                    <label for='fullname' className='form-label'>
+                    <label htmlFor='name' className='form-label'>
                       Họ tên <span className='text-danger'>*</span>
                     </label>
                     <input
                       type='text'
                       className='form-control'
-                      name='fullname'
-                      id='fullname'
+                      name='name'
+                      id='name'
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       required
                     />
                   </div>
                   <div className='col-12'>
-                    <label for='phonenumber' className='form-label'>
+                    <label htmlFor='email' className='form-label'>
                       Email <span className='text-danger'>*</span>
                     </label>
                     <input
                       type='email'
                       className='form-control'
-                      name='phonenumber'
-                      id='phonenumber'
+                      name='email'
+                      id='email'
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className='col-12'>
-                    <label for='password' className='form-label'>
+                    <label htmlFor='password' className='form-label'>
                       Mật khẩu <span className='text-danger'>*</span>
                     </label>
                     <input
@@ -91,7 +129,8 @@ const Register = () => {
                       className='form-control'
                       name='password'
                       id='password'
-                      value=''
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
