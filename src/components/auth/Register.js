@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAlert } from 'react-alert'
 
-import { useDispatch } from 'react-redux'
-import { registerSendOTP, saveTempEmail } from '../../actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  registerSendOTP,
+  saveTempEmail,
+  clearErrors,
+} from '../../actions/userActions'
 import { Link } from 'react-router-dom'
 
 const Register = () => {
@@ -12,21 +17,21 @@ const Register = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const alert = useAlert()
 
-  // const { isAuthenticated, error, loading } = useSelector(
-  //   (state) => state.auth
-  // );
+  const { isAuthenticated, error } = useSelector((state) => state.auth)
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate(redirect);
-  //   }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
 
-  //   if (error && error !== 'Login first to access this resource.') {
-  //     alert.error(error);
-  //     dispatch(clearErrors());
-  //   }
-  // }, [dispatch, alert, isAuthenticated, error, navigate]);
+    if (error && error !== 'Request failed with status code 401') {
+      console.log('Register page error')
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+  }, [dispatch, alert, isAuthenticated, error, navigate])
 
   const submitHandler = (e) => {
     e.preventDefault()

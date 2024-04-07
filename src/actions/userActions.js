@@ -38,12 +38,12 @@ export const verifyRegister = (email, otp) => async (dispatch) => {
 
     dispatch({
       type: REGISTER_USER_VERIFY_SUCCESS,
-      payload: data.user,
+      payload: data.message,
     })
   } catch (error) {
     dispatch({
       type: REGISTER_USER_VERIFY_FAIL,
-      payload: error,
+      payload: error.response.data.message,
     })
   }
 }
@@ -80,11 +80,12 @@ export const registerSendOTP = (name, email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_USER_SEND_OTP_FAIL,
-      payload: error.message,
+      payload: error.response.data.message,
     })
   }
 }
 
+// User Login
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST })
