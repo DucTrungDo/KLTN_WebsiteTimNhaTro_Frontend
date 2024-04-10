@@ -5,10 +5,10 @@ const UserHeader = () => {
   return (
     <nav className='py-2 bg-body-tertiary border-bottom'>
       <div className='container d-flex flex-wrap'>
-        <Link className='fs-4 text-decoration-none text-dark me-4' to='/'>
+        <Link className='fs-4 text-decoration-none text-dark ms-3  me-5' to='/'>
           TroTot123
         </Link>
-        <ul className='nav me-auto'>
+        <ul className='nav me-auto ms-5 '>
           <li className='nav-item'>
             <Link
               href='#'

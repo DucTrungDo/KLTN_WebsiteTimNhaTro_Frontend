@@ -17,7 +17,7 @@ const Dashboard = () => {
   return (
     <div className='container-fluid'>
       <div className='row'>
-        <div className='col-lg-2 d-none d-lg-block bg-light'>
+        <div className='col-lg-2 d-none d-lg-block bg-light border-end'>
           <div className='user_info'>
             <a href='#' className='clearfix'>
               <div className='user_avatar'>
@@ -26,15 +26,17 @@ const Dashboard = () => {
                   className='user-info'
                 />
               </div>
-              <div className='user_meta'>
-                <div className='inner'>
-                  <div className='user_name'>Đỗ Trung Đức</div>
-                  <div
-                    className='user_verify'
+              <div className='welcome-text text-decoration-none'>
+                <div className='ms-2'>
+                  <span className='d-block'>
+                    <strong>Đỗ Trung Đức</strong>
+                  </span>
+                  <span
+                    className='d-block'
                     style={{ color: '#555', fonSize: '0.9rem' }}
                   >
                     0397260965
-                  </div>
+                  </span>
                 </div>
               </div>
             </a>
@@ -42,21 +44,23 @@ const Dashboard = () => {
               <span>TK Chính:</span>{' '}
               <span style={{ fontWeight: '700' }}> 0</span>
             </div>
-            <a
-              className='btn btn-warning btn-sm mr-1'
-              href='https://phongtro123.com/quan-ly/nap-tien.html'
-            >
-              Nạp tiền
-            </a>
-            <a
-              className='btn btn-danger btn-sm'
-              href='https://phongtro123.com/quan-ly/dang-tin-moi.html'
-            >
-              Đăng tin
-            </a>
+            <div className='my-2 '>
+              <a
+                className='btn btn-warning btn-sm'
+                href='https://phongtro123.com/quan-ly/nap-tien.html'
+              >
+                Nạp tiền
+              </a>
+              <a
+                className='btn btn-danger btn-sm ms-2'
+                href='https://phongtro123.com/quan-ly/dang-tin-moi.html'
+              >
+                Đăng tin
+              </a>
+            </div>
           </div>
           <ul className='nav nav-pills flex-column mb-auto'>
-            <li className='nav-item'>
+            <li className='nav-item '>
               <a href='#' className='nav-link active' aria-current='page'>
                 <FontAwesomeIcon icon={faFileLines} className='me-2' />
                 Quản lý tin đăng

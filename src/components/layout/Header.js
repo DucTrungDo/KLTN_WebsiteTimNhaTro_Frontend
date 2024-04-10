@@ -62,7 +62,7 @@ const Header = () => {
                           src='https://phongtro123.com/images/default-user.png'
                           className='user-info'
                         />
-                        <div className=''>
+                        <div>
                           <span className='d-block fs-6 mw-200 text-ellipsis overflow-hidden nowrap'>
                             Xin chào, <strong>{user.name}</strong>
                           </span>
