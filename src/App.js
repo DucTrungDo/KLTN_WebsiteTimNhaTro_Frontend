@@ -52,13 +52,13 @@ function App() {
               <Route path='/post_detail' element={<PostDetail />} />
             </Routes>
           </div>
-          <div>
-            <Routes>
-              <Route path='/user/*' element={<UserRoutes />} />
-            </Routes>
-          </div>
         </main>
         <FooterSwitcher />
+      </div>
+      <div>
+        <Routes>
+          <Route path='/user/*' element={<UserRoutes />} />
+        </Routes>
       </div>
     </Router>
   )
@@ -87,7 +87,7 @@ function UserRoutes() {
     <div className='container-fluid'>
       <div className='row vh-100'>
         <UserSidebar />
-        <div className='col-lg-2 mx-3 py-3'>
+        <div className='col-lg-2 ms-3 py-3 ps-3'>
           <Routes>
             <Route path='dashboard' element={<UserDashboard />} />
             <Route path='profile' element={<Profile />} />
@@ -95,7 +95,6 @@ function UserRoutes() {
             <Route path='recharge-history' element={<RechargeHistory />} />
             <Route path='payment-history' element={<PaymentHistory />} />
             <Route path='service-price-list' element={<ServicePriceList />} />
-
           </Routes>
         </div>
       </div>
