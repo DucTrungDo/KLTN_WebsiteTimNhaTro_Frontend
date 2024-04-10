@@ -73,6 +73,8 @@
   height: 96px;
   background-color: #f2fcf9;
 }
+/* Post detail */
+
 /* Loader */
 .loader {
   display: block;
@@ -102,9 +104,18 @@
     transform: rotate(360deg);
   }
 }
+/* Loader */
 
 /* Header */
 .content-header li {
   margin-left: 15px;
 }
 /* Header */
+
+/* User management Header */
+.navbar-brand {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+/* User management Header */

@@ -1,50 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import store from './store';
-import { loadUser } from './actions/userActions';
-import Cookies from 'js-cookie';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import store from './store'
+import { loadUser } from './actions/userActions'
+import Cookies from 'js-cookie'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
 
-import './App.css';
+import './App.css'
 
 // Home import
 import MainHeader from './components/layout/Header'
-import Footer from './components/layout/Footer'
+import MainFooter from './components/layout/Footer'
 import UserHeader from './components/layout/UserHeader'
+import UserSidebar from './components/layout/UserSidebar'
 import Home from './components/Home'
 
 // Authentication
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import VerifyRegister from './components/auth/VerifyRegister';
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+import VerifyRegister from './components/auth/VerifyRegister'
 
-import UserDashboard from './components/user/Dashboard';
-import PostDetail from './components/post/PostDetail';
+// User management page
+import UserDashboard from './components/user/Dashboard'
+import Profile from './components/user/Profile'
+import Recharge from './components/user/Recharge'
+import RechargeHistory from './components/user/RechargeHistory'
+import PaymentHistory from './components/user/PaymentHistory'
+import ServicePriceList from './components/user/ServicePriceList'
+
+import PostDetail from './components/post/PostDetail'
 
 function App() {
-  const token = Cookies.get('accessToken');
+  const token = Cookies.get('accessToken')
   useEffect(() => {
-    store.dispatch(loadUser(token));
-  });
+    store.dispatch(loadUser(token))
+  })
   return (
     <Router>
       <div className='bg-light'>
         <HeaderSwitcher />
-        <main className='py-3'>
+        <main>
           <div className='container'>
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/verify_register' element={<VerifyRegister />} />
-              <Route path='/user/*' element={<UserRoutes />} />
               <Route path='/post_detail' element={<PostDetail />} />
             </Routes>
           </div>
+          <div>
+            <Routes>
+              <Route path='/user/*' element={<UserRoutes />} />
+            </Routes>
+          </div>
         </main>
-        <Footer />
+        <FooterSwitcher />
       </div>
     </Router>
-  );
+  )
 }
 
 function HeaderSwitcher() {
@@ -54,12 +71,35 @@ function HeaderSwitcher() {
   return <>{isUserRoute ? <UserHeader /> : <MainHeader />}</>
 }
 
+function FooterSwitcher() {
+  const location = useLocation()
+  const isUserRoute = location.pathname.startsWith('/user')
+
+  return <>{isUserRoute ? <HiddenFooter /> : <MainFooter />}</>
+}
+
+function HiddenFooter() {
+  return null // Trả về null để ẩn footer
+}
+
 function UserRoutes() {
   return (
-    <Routes>
-      <Route path='dashboard' element={<UserDashboard />} />
-      {/* Add more user routes here */}
-    </Routes>
+    <div className='container-fluid'>
+      <div className='row vh-100'>
+        <UserSidebar />
+        <div className='col-lg-2 mx-3 py-3'>
+          <Routes>
+            <Route path='dashboard' element={<UserDashboard />} />
+            <Route path='profile' element={<Profile />} />
+            <Route path='recharge' element={<Recharge />} />
+            <Route path='recharge-history' element={<RechargeHistory />} />
+            <Route path='payment-history' element={<PaymentHistory />} />
+            <Route path='service-price-list' element={<ServicePriceList />} />
+
+          </Routes>
+        </div>
+      </div>
+    </div>
   )
 }
 

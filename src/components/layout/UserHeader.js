@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom'
 const UserHeader = () => {
   return (
     <nav className='py-2 bg-body-tertiary border-bottom'>
-      <div className='container d-flex flex-wrap'>
-        <Link className='fs-4 text-decoration-none text-dark ms-3  me-5' to='/'>
+      <div className='container-fluid d-flex flex-wrap'>
+        <Link
+          className='fs-4 text-decoration-none text-dark col-sm-3 col-md-2 navbar-brand ms-3'
+          to='/'
+        >
           TroTot123
         </Link>
-        <ul className='nav me-auto ms-5 '>
+        <ul className='nav me-auto '>
           <li className='nav-item'>
             <Link
               href='#'

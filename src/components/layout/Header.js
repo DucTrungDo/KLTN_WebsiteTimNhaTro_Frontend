@@ -23,7 +23,7 @@ const Header = () => {
   }
   return (
     <>
-      <div className='container'>
+      <div className='container mb-3'>
         <nav className='navbar navbar-expand-lg navbar-light bg-light border-bottom'>
           <div className='container-fluid p-0'>
             <Link to='/'>
