@@ -12,14 +12,14 @@ import {
   faDollarSign,
   faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const UserSidebar = () => {
   return (
     <div className='user-sidebar col-lg-2 d-none d-lg-block bg-light border-end p-3'>
       <div className='mx-3'>
         <div className='user_info'>
-          <NavLink to='/' className='clearfix'>
+          <Link to='/' className='clearfix'>
             <div className='user_avatar'>
               <img
                 src='https://phongtro123.com/images/default-user.png'
@@ -39,29 +39,25 @@ const UserSidebar = () => {
                 </span>
               </div>
             </div>
-          </NavLink>
+          </Link>
           <div>
             <span>TK Chính:</span> <span style={{ fontWeight: '700' }}> 0</span>
           </div>
           <div className='my-2 '>
-            <NavLink className='btn btn-warning btn-sm' to='/user/recharge'>
+            <Link className='btn btn-warning btn-sm' to='/user/recharge'>
               Nạp tiền
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               className='btn btn-danger btn-sm ms-2'
               to='/user/add-new-post'
             >
               Đăng tin
-            </NavLink>
+            </Link>
           </div>
         </div>
         <ul className='nav nav-pills flex-column mb-auto'>
           <li className='nav-item '>
-            <NavLink
-              to='/user/dashboard'
-              className='nav-link link-dark'
-              activeClassName='active'
-            >
+            <NavLink to='/user/post-management' className='nav-link link-dark'>
               <FontAwesomeIcon icon={faFileLines} className='me-2' />
               Quản lý tin đăng
             </NavLink>

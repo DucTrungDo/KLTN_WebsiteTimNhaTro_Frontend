@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const UserHeader = () => {
   return (
-    <nav className='py-2 user-header-bg'>
+    <nav className='py-2 user-header fixed-top'>
       <div className='container-fluid d-flex flex-wrap'>
         <Link
           className='fs-4 text-decoration-none text-light col-sm-3 col-md-2 navbar-brand ms-3'
@@ -11,7 +11,7 @@ const UserHeader = () => {
         >
           TroTot123
         </Link>
-        <ul className='nav me-auto '>
+        <ul className='nav me-auto fw-medium'>
           <li className='nav-item'>
             <Link
               to='/'

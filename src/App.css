@@ -112,18 +112,64 @@
 }
 /* Header */
 
-/* User management Header */
+/* User management*/
 .navbar-brand {
   font-size: 1rem;
   font-weight: bold;
   color: #fff;
 }
 
-.user-header-bg {
+.user-header {
   background-color: #055699;
+  -webkit-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
-/* User management Header */
+
+.user-sidebar {
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #fff;
+  border-right: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+}
 
 .user-sidebar .nav-link.active {
   color: white !important;
 }
+
+.user-sidebar .nav-link:not(.active):hover {
+  color: #000;
+  background: #f1f1f1;
+}
+
+.user-main {
+  padding-top: 68px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-left: auto !important;
+}
+
+.desktop {
+  display: block !important;
+}
+
+.dashboard_list_menu .list-group-item {
+  padding: 1rem 0.75rem;
+  color: #000;
+}
+
+.dashboard_list_menu .angle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -8px;
+}
+/* User management*/

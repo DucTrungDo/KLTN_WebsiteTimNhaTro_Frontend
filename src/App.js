@@ -25,6 +25,7 @@ import VerifyRegister from './components/auth/VerifyRegister'
 
 // User management page
 import UserDashboard from './components/user/Dashboard'
+import PostManagement from './components/user/PostManagement'
 import Profile from './components/user/Profile'
 import Recharge from './components/user/Recharge'
 import RechargeHistory from './components/user/RechargeHistory'
@@ -87,16 +88,17 @@ function UserRoutes() {
     <div className='container-fluid'>
       <div className='row vh-100'>
         <UserSidebar />
-        <div className='col-lg-2 ms-3 py-3 ps-3'>
+        <main className='ml-sm-auto col-lg-10 user-main'>
           <Routes>
             <Route path='dashboard' element={<UserDashboard />} />
+            <Route path='post-management' element={<PostManagement />} />
             <Route path='profile' element={<Profile />} />
             <Route path='recharge' element={<Recharge />} />
             <Route path='recharge-history' element={<RechargeHistory />} />
             <Route path='payment-history' element={<PaymentHistory />} />
             <Route path='service-price-list' element={<ServicePriceList />} />
           </Routes>
-        </div>
+        </main>
       </div>
     </div>
   )
