@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import store from './store'
-import { loadUser } from './actions/userActions'
-import Cookies from 'js-cookie'
+import React, { useEffect, useState } from 'react';
+import store from './store';
+import { loadUser } from './actions/userActions';
+import Cookies from 'js-cookie';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   useLocation,
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-import './App.css'
+import './App.css';
 
 // Home import
-import MainHeader from './components/layout/Header'
-import MainFooter from './components/layout/Footer'
-import UserHeader from './components/layout/UserHeader'
-import UserSidebar from './components/layout/UserSidebar'
-import Home from './components/Home'
+import MainHeader from './components/layout/Header';
+import MainFooter from './components/layout/Footer';
+import UserHeader from './components/layout/UserHeader';
+import UserSidebar from './components/layout/UserSidebar';
+import Home from './components/Home';
 
 // Authentication
-import Login from './components/auth/Login'
-import Register from './components/auth/Register'
-import VerifyRegister from './components/auth/VerifyRegister'
-
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import VerifyRegister from './components/auth/VerifyRegister';
+import ForgotPassword from './components/auth/ForgotPassWord';
 // User management page
-import UserDashboard from './components/user/Dashboard'
-import PostManagement from './components/user/PostManagement'
-import Profile from './components/user/Profile'
-import Recharge from './components/user/Recharge'
-import RechargeHistory from './components/user/RechargeHistory'
-import PaymentHistory from './components/user/PaymentHistory'
-import ServicePriceList from './components/user/ServicePriceList'
+import UserDashboard from './components/user/Dashboard';
+import PostManagement from './components/user/PostManagement';
+import Profile from './components/user/Profile';
+import Recharge from './components/user/Recharge';
+import RechargeHistory from './components/user/RechargeHistory';
+import PaymentHistory from './components/user/PaymentHistory';
+import ServicePriceList from './components/user/ServicePriceList';
 
-import PostDetail from './components/post/PostDetail'
+import PostDetail from './components/post/PostDetail';
 
 function App() {
-  const token = Cookies.get('accessToken')
+  const token = Cookies.get('accessToken');
   useEffect(() => {
-    store.dispatch(loadUser(token))
-  })
+    store.dispatch(loadUser(token));
+  });
   return (
     <Router>
       <div className='bg-light'>
@@ -51,6 +51,7 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/verify_register' element={<VerifyRegister />} />
               <Route path='/post_detail' element={<PostDetail />} />
+              <Route path='/forgot_password' element={<ForgotPassword />} />
             </Routes>
           </div>
         </main>
@@ -62,25 +63,25 @@ function App() {
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
 function HeaderSwitcher() {
-  const location = useLocation()
-  const isUserRoute = location.pathname.startsWith('/user')
+  const location = useLocation();
+  const isUserRoute = location.pathname.startsWith('/user');
 
-  return <>{isUserRoute ? <UserHeader /> : <MainHeader />}</>
+  return <>{isUserRoute ? <UserHeader /> : <MainHeader />}</>;
 }
 
 function FooterSwitcher() {
-  const location = useLocation()
-  const isUserRoute = location.pathname.startsWith('/user')
+  const location = useLocation();
+  const isUserRoute = location.pathname.startsWith('/user');
 
-  return <>{isUserRoute ? <HiddenFooter /> : <MainFooter />}</>
+  return <>{isUserRoute ? <HiddenFooter /> : <MainFooter />}</>;
 }
 
 function HiddenFooter() {
-  return null // Trả về null để ẩn footer
+  return null; // Trả về null để ẩn footer
 }
 
 function UserRoutes() {
@@ -101,7 +102,7 @@ function UserRoutes() {
         </main>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
