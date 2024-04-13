@@ -172,4 +172,64 @@
   top: 50%;
   margin-top: -8px;
 }
+
+.form-control.disable {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.user-avatar-upload-wrapper {
+  width: 140px;
+}
+
+.user-avatar-preview {
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #fafafa;
+}
+
+.btn-add-avatar {
+  color: transparent;
+  margin: 5px 0 10px;
+  width: 100%;
+}
+
+.btn-add-avatar::before {
+  content: 'Chọn ảnh';
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  color: #000;
+  border-radius: 5px;
+  border: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+}
+
+.remove-image {
+  color: red !important;
+  cursor: pointer;
+  display: none;
+  width: 100%;
+  height: 30px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-image.upload_done {
+  display: inline-block;
+}
 /* User management*/
