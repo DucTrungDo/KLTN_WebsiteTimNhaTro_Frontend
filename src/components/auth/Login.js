@@ -1,40 +1,40 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAlert } from 'react-alert';
-import Loader from '../layout/Loader';
-import { useDispatch, useSelector } from 'react-redux';
-import Cookies from 'js-cookie';
-import { login, clearErrors } from '../../actions/userActions';
+import React, { Fragment, useState, useEffect } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useAlert } from 'react-alert'
+import Loader from '../layout/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
+import { login, clearErrors } from '../../actions/userActions'
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  const alert = useAlert();
-  const dispatch = useDispatch();
-  const location = useLocation();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+  const alert = useAlert()
+  const dispatch = useDispatch()
+  const location = useLocation()
   const { isAuthenticated, error, loading, token } = useSelector(
     (state) => state.auth
-  );
+  )
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/')
       if (Cookies.get('accessToken') == undefined) {
-        Cookies.set('accessToken', token);
+        Cookies.set('accessToken', token)
       }
     }
 
     if (error && error !== 'Request failed with status code 401') {
-      console.log(error);
-      alert.error(error);
-      dispatch(clearErrors());
+      console.log(error)
+      alert.error(error)
+      dispatch(clearErrors())
     }
-  }, [dispatch, alert, isAuthenticated, error, navigate]);
+  }, [dispatch, alert, isAuthenticated, error, navigate])
 
   const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(login(email, password));
-  };
+    e.preventDefault()
+    dispatch(login(email, password))
+  }
 
   return (
     <Fragment>
@@ -212,7 +212,7 @@ const Login = () => {
         </Fragment>
       )}
     </Fragment>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

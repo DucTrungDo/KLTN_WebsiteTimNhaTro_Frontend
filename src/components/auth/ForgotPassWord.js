@@ -3,63 +3,63 @@ import {
   forgotPasswordVerifyOtp,
   forgotPasswordReset,
   clearErrors,
-} from '../../actions/userActions';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
-import { useAlert } from 'react-alert';
-import Loader from '../layout/Loader';
+} from '../../actions/userActions'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useAlert } from 'react-alert'
+import Loader from '../layout/Loader'
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [password, setPassword] = useState('');
-  const [showOtpInput, setShowOtpInput] = useState(false);
-  const [showpaswordInput, setShowpasswordinput] = useState(false);
-  const [step, setstep] = useState(0);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const alert = useAlert();
+  const [email, setEmail] = useState('')
+  const [otp, setOtp] = useState('')
+  const [password, setPassword] = useState('')
+  const [showOtpInput, setShowOtpInput] = useState(false)
+  const [showpaswordInput, setShowpasswordinput] = useState(false)
+  const [step, setstep] = useState(0)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const alert = useAlert()
   const { isAuthenticated, error, loading, message } = useSelector(
     (state) => state.auth
-  );
+  )
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/')
     }
     if (error && error !== 'Request failed with status code 401') {
       if (error === 'Request failed with status code 400') {
-        setstep(0);
-        setShowOtpInput(false);
-        alert.error('Tài khoản chưa đăng ký');
+        setstep(0)
+        setShowOtpInput(false)
+        alert.error('Tài khoản chưa đăng ký')
       }
       if (error === 'Request failed with status code 500') {
-        setstep(1);
-        setShowOtpInput(true);
-        setShowpasswordinput(false);
-        alert.error('Sai mã OTP xin vui lòng kiểm tra lại');
+        setstep(1)
+        setShowOtpInput(true)
+        setShowpasswordinput(false)
+        alert.error('Sai mã OTP xin vui lòng kiểm tra lại')
       }
-      dispatch(clearErrors());
+      dispatch(clearErrors())
     }
-  }, [dispatch, alert, isAuthenticated, error, navigate]);
+  }, [dispatch, alert, isAuthenticated, error, navigate])
 
   const submitHandler = (e) => {
-    console.log(step);
-    e.preventDefault();
+    console.log(step)
+    e.preventDefault()
     if (step === 1) {
-      setstep(2);
-      dispatch(forgotPasswordVerifyOtp(email, otp));
-      setShowpasswordinput(true);
+      setstep(2)
+      dispatch(forgotPasswordVerifyOtp(email, otp))
+      setShowpasswordinput(true)
     } else if (step === 2) {
-      dispatch(forgotPasswordReset(email, otp, password));
-      alert.success('Đổi mật khẩu thành công');
-      navigate('/');
+      dispatch(forgotPasswordReset(email, otp, password))
+      alert.success('Đổi mật khẩu thành công')
+      navigate('/')
     } else {
-      setstep(1);
-      dispatch(forgotPasswordSendOtp(email));
-      setShowOtpInput(true);
+      setstep(1)
+      dispatch(forgotPasswordSendOtp(email))
+      setShowOtpInput(true)
     }
-  };
+  }
 
   return (
     <section className='bg-light p-3 p-md-4 p-xl-5'>
@@ -202,6 +202,6 @@ const ForgotPassword = () => {
         </div>
       </div>
     </section>
-  );
-};
-export default ForgotPassword;
+  )
+}
+export default ForgotPassword
