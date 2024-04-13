@@ -140,12 +140,12 @@ const Login = () => {
                     <div className='row'>
                       <div className='col-12'>
                         <div className='mt-5 text-end'>
-                          <a
-                            href='#!'
+                          <Link
+                            to='/forgot_password'
                             className='link-secondary text-decoration-none'
                           >
                             Quên mật khẩu
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
