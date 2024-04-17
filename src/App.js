@@ -31,7 +31,7 @@ import Recharge from './components/user/Recharge'
 import RechargeHistory from './components/user/RechargeHistory'
 import PaymentHistory from './components/user/PaymentHistory'
 import ServicePriceList from './components/user/ServicePriceList'
-
+import AddNewPost from './components/user/Addnewpost'
 import PostDetail from './components/post/PostDetail'
 
 function App() {
@@ -98,6 +98,7 @@ function UserRoutes() {
             <Route path='recharge-history' element={<RechargeHistory />} />
             <Route path='payment-history' element={<PaymentHistory />} />
             <Route path='service-price-list' element={<ServicePriceList />} />
+            <Route path='/add-new-post' element={<AddNewPost />} />
           </Routes>
         </main>
       </div>
