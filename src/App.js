@@ -8,6 +8,7 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import './App.css'
 
@@ -18,12 +19,13 @@ import UserHeader from './components/layout/UserHeader'
 import UserSidebar from './components/layout/UserSidebar'
 import Home from './components/Home'
 
-// Authentication
+// Auth import
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import VerifyRegister from './components/auth/VerifyRegister'
 import ForgotPassword from './components/auth/ForgotPassWord'
-// User management page
+
+// User import
 import UserDashboard from './components/user/Dashboard'
 import PostManagement from './components/user/PostManagement'
 import Profile from './components/user/Profile'
@@ -31,8 +33,12 @@ import Recharge from './components/user/Recharge'
 import RechargeHistory from './components/user/RechargeHistory'
 import PaymentHistory from './components/user/PaymentHistory'
 import ServicePriceList from './components/user/ServicePriceList'
+import ChangePassword from './components/user/ChangePassword'
 
+// Post import
 import PostDetail from './components/post/PostDetail'
+
+import ProtectedRoute from './components/route/ProtectedRoute'
 
 function App() {
   const token = Cookies.get('accessToken')
@@ -59,7 +65,9 @@ function App() {
       </div>
       <div>
         <Routes>
-          <Route path='/user/*' element={<UserRoutes />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path='/user/*' element={<UserRoutes />} />
+          </Route>
         </Routes>
       </div>
     </Router>
@@ -69,8 +77,16 @@ function App() {
 function HeaderSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
-
-  return <>{isUserRoute ? <UserHeader /> : <MainHeader />}</>
+  const { loading, isAuthenticated } = useSelector((state) => state.auth)
+  return (
+    <>
+      {loading && isUserRoute ? null : isUserRoute && isAuthenticated ? (
+        <UserHeader />
+      ) : (
+        <MainHeader />
+      )}
+    </>
+  )
 }
 
 function FooterSwitcher() {
@@ -98,6 +114,7 @@ function UserRoutes() {
             <Route path='recharge-history' element={<RechargeHistory />} />
             <Route path='payment-history' element={<PaymentHistory />} />
             <Route path='service-price-list' element={<ServicePriceList />} />
+            <Route path='change-password' element={<ChangePassword />} />
           </Routes>
         </main>
       </div>

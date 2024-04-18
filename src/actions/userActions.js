@@ -25,6 +25,12 @@ import {
   FORGOT_PASSWORD_RESET_REQUEST,
   FORGOT_PASSWORD_RESET_SUCCESS,
   FORGOT_PASSWORD_RESET_FAIL,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
+  UPDATE_PROFILE_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
 } from '../constants/userConstants'
 
 // Verify User for register
@@ -169,6 +175,7 @@ export const clearErrors = () => async (dispatch) => {
   })
 }
 
+// Send Otp when perform Fogot password
 export const forgotPasswordSendOtp = (email) => async (dispatch) => {
   try {
     dispatch({ type: FORGOT_PASSWORD_SEND_OTP_REQUEST })
@@ -195,6 +202,7 @@ export const forgotPasswordSendOtp = (email) => async (dispatch) => {
   }
 }
 
+// Verify Otp when perform Fogot password
 export const forgotPasswordVerifyOtp = (email, otp) => async (dispatch) => {
   try {
     dispatch({ type: FORGOT_PASSWORD_VERIFY_OTP_REQUEST })
@@ -222,6 +230,7 @@ export const forgotPasswordVerifyOtp = (email, otp) => async (dispatch) => {
   }
 }
 
+// Reset password after verify success
 export const forgotPasswordReset =
   (email, otp, password) => async (dispatch) => {
     try {
@@ -246,6 +255,67 @@ export const forgotPasswordReset =
       dispatch({
         type: FORGOT_PASSWORD_RESET_FAIL,
         payload: error.message,
+      })
+    }
+  }
+
+// Update profile
+export const updateProfile = (token, name) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_PROFILE_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.put(
+      'https://boardinghouse-api.onrender.com/api/v1/users/me',
+      { name },
+      config
+    )
+
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    })
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Update password
+export const updatePassword =
+  (token, oldPassword, newPassword) => async (dispatch) => {
+    try {
+      dispatch({ type: UPDATE_PASSWORD_REQUEST })
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.patch(
+        'https://boardinghouse-api.onrender.com/api/v1/users/me/password',
+        { oldPassword, newPassword },
+        config
+      )
+
+      dispatch({
+        type: UPDATE_PASSWORD_SUCCESS,
+        payload: data.success,
+      })
+    } catch (error) {
+      dispatch({
+        type: UPDATE_PASSWORD_FAIL,
+        payload: error.response.data.message,
       })
     }
   }

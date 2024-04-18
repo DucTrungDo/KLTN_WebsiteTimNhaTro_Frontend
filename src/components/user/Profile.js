@@ -1,10 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useAlert } from 'react-alert'
+import Cookies from 'js-cookie'
+
+import { updateProfile, loadUser, clearErrors } from '../../actions/userActions'
+import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'
 
 const Profile = () => {
+  const token = Cookies.get('accessToken')
+  const [name, setName] = useState('')
   const [avatarPreview, setAvatarPreview] = useState(
     '/images/default_avatar.jpg'
   )
+  const navigate = useNavigate()
+  const alert = useAlert()
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.auth.user)
+  const { error, isUpdated, loading } = useSelector((state) => state.user)
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name)
+    }
+
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+
+    if (isUpdated) {
+      alert.success('User updated successfully')
+      dispatch(loadUser(token))
+      dispatch({
+        type: UPDATE_PROFILE_RESET,
+      })
+    }
+  }, [dispatch, alert, error, navigate, isUpdated])
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(updateProfile(token, name))
+  }
+
   // Xử lý sự kiện khi người dùng chọn ảnh mới
   const handleAvatarChange = (event) => {
     const file = event.target.files[0]
@@ -48,13 +89,7 @@ const Profile = () => {
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
         <h1 className='h2'>Cập nhật thông tin cá nhân</h1>
       </div>
-      <form
-        className='js-form-submit-data'
-        action='#'
-        data-action-url='https://phongtro123.com/api/user/update/profile'
-        method='POST'
-        noValidate='novalidate'
-      >
+      <form onSubmit={submitHandler}>
         <div className='row mt-5 mb-3'>
           <label
             htmlFor='user_id'
@@ -67,7 +102,7 @@ const Profile = () => {
               type='text'
               className='form-control disable'
               id='user_id'
-              defaultValue='#138665'
+              defaultValue={user._id}
               readOnly
             />
           </div>
@@ -84,7 +119,7 @@ const Profile = () => {
               type='phone'
               className='form-control'
               id='user_phone'
-              defaultValue='0397260965'
+              value=''
             />
           </div>
         </div>
@@ -101,8 +136,8 @@ const Profile = () => {
               className='form-control'
               id='user_name'
               name='name'
-              defaultValue='Đỗ Trung Đức'
-              placeholder='Ex: Nguyễn Văn A'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
         </div>
@@ -116,11 +151,11 @@ const Profile = () => {
           <div className='col-md-6'>
             <input
               type='text'
-              className='form-control'
+              className='form-control disable'
               id='user_email'
               name='email'
-              defaultValue=''
-              placeholder=''
+              defaultValue={user.email}
+              readOnly
             />
           </div>
         </div>
@@ -137,7 +172,7 @@ const Profile = () => {
               className='form-control'
               id='user_zalo'
               name='user_zalo'
-              defaultValue='0397260965'
+              value='0397260965'
             />
           </div>
         </div>
@@ -154,7 +189,7 @@ const Profile = () => {
               className='form-control'
               id='user_facebook'
               name='user_facebook'
-              defaultValue=''
+              value=''
               placeholder=''
             />
           </div>
@@ -170,7 +205,7 @@ const Profile = () => {
           <div className='col-md-6'>
             <Link
               className='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover'
-              to='/change-password'
+              to='/user/change-password'
             >
               Đổi mật khẩu
             </Link>
@@ -220,12 +255,15 @@ const Profile = () => {
             className='col-md-2 col-form-label'
           ></label>
           <div className='col-md-8'>
-            <button type='submit' className='btn btn-primary btn-lg mb-2 w-100'>
+            <button
+              type='submit'
+              className='btn btn-primary btn-lg mb-2 w-100'
+              disabled={loading ? true : false}
+            >
               Lưu &amp; Cập nhật
             </button>
           </div>
         </div>
-        <input type='hidden' name='user_id' defaultValue='138665' />
       </form>
     </div>
   )

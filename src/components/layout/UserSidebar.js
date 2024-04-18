@@ -43,14 +43,11 @@ const UserSidebar = () => {
           <div>
             <span>TK Chính:</span> <span style={{ fontWeight: '700' }}> 0</span>
           </div>
-          <div className='my-2 '>
-            <Link className='btn btn-warning btn-sm' to='/user/recharge'>
+          <div className='my-2'>
+            <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
               Nạp tiền
             </Link>
-            <Link
-              className='btn btn-danger btn-sm ms-2'
-              to='/user/add-new-post'
-            >
+            <Link className='btn btn-danger btn-sm' to='/user/add-new-post'>
               Đăng tin
             </Link>
           </div>
