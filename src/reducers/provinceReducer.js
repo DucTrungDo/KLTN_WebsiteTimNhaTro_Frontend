@@ -8,6 +8,9 @@ import {
   PROVINCE_DISTRICT_WARD_REQUEST,
   PROVINCE_DISTRICT_WARD_SUCCESS,
   PROVINCE_DISTRICT_WARD_FAIL,
+  API_GOOGLE_GEO_REQUEST,
+  API_GOOGLE_GEO_SUCCESS,
+  API_GOOGLE_GEO_FAIL,
 } from '../constants/provinceContants'
 export const provinceReducer = (state = { provinces: [] }, action) => {
   switch (action.type) {
@@ -72,6 +75,30 @@ export const wardReducer = (state = { wards: [] }, action) => {
       }
 
     case PROVINCE_DISTRICT_WARD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+    default:
+      return state
+  }
+}
+export const googleGeoReducer = (state = { Geos: [] }, action) => {
+  switch (action.type) {
+    case API_GOOGLE_GEO_REQUEST:
+      return {
+        loading: true,
+        Geos: [],
+      }
+
+    case API_GOOGLE_GEO_SUCCESS:
+      return {
+        loading: false,
+        Geos: action.payload.results,
+      }
+
+    case API_GOOGLE_GEO_FAIL:
       return {
         ...state,
         loading: false,

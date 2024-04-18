@@ -7,7 +7,7 @@
 .env
 # testing
 /coverage
-
+/src/env.js
 # production
 /build
 

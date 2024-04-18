@@ -6,6 +6,7 @@ import {
   provinceReducer,
   districtReducer,
   wardReducer,
+  googleGeoReducer,
 } from './reducers/provinceReducer'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   province: provinceReducer,
   district: districtReducer,
   ward: wardReducer,
+  googleGeo: googleGeoReducer,
 })
 
 const middleware = [thunk]

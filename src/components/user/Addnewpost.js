@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
+import MapD from '../googleMap/MapD'
 const AddNewPost = () => {
   const navigate = useNavigate()
   const alert = useAlert()
@@ -18,6 +19,11 @@ const AddNewPost = () => {
   const [district, setDistrict] = useState('')
   const [ward, setWard] = useState('')
   const [street, setStreet] = useState('')
+
+  const [provinceName, setProvinceName] = useState('')
+  const [districtName, setDistrictName] = useState('')
+  const [wardName, setWardName] = useState('')
+
   const [address, setAddres] = useState({
     city: '',
     district: '',
@@ -31,30 +37,48 @@ const AddNewPost = () => {
   useEffect(() => {
     dispatch(getdistrict(province))
     dispatch(getWard(''))
-  }, [province])
-  useEffect(() => {
-    dispatch(getWard(district))
-  }, [district])
-  useEffect(() => {
+    setAddressAbsolute('')
+    setDistrictName('')
+    setWardName('')
+    setAddres('')
+    setStreet('')
     if (provinces !== undefined) {
-      if (
-        provinces.length !== 0 &&
-        districts.length !== 0 &&
-        wards.length !== 0
-      ) {
+      if (provinces.length !== 0) {
         const proName = provinces.find(
           (provinces) => provinces.province_id === province
         ).province_name
-        const disName = districts.find(
-          (districts) => districts.district_id === district
-        ).district_name
-        const warName = wards.find((wards) => wards.ward_id === ward).ward_name
-        setAddressAbsolute(
-          proName + '/' + disName + '/' + warName + '/' + street
-        )
+        setProvinceName(proName)
+        setAddressAbsolute(proName)
       }
     }
-  }, [province, district, ward, street])
+  }, [province])
+  useEffect(() => {
+    dispatch(getWard(district))
+    setWardName('')
+    setStreet('')
+    if (districts.length !== 0) {
+      const disName = districts.find(
+        (districts) => districts.district_id === district
+      ).district_name
+      setDistrictName(disName)
+      setAddressAbsolute(provinceName + '/' + disName)
+    }
+  }, [district])
+  useEffect(() => {
+    setStreet('')
+    if (districts.length !== 0) {
+      const warName = wards.find((wards) => wards.ward_id === ward).ward_name
+      setWardName(warName)
+      setAddressAbsolute(provinceName + '/' + districtName + '/' + warName)
+    }
+  }, [ward])
+  useEffect(() => {
+    if (street !== '')
+      setAddressAbsolute(
+        provinceName + '/' + districtName + '/' + wardName + '/' + street
+      )
+  }, [street])
+
   const { provinces } = useSelector((state) => state.province)
   const { districts } = useSelector((state) => state.district)
   const { wards } = useSelector((state) => state.ward)
@@ -552,19 +576,7 @@ const AddNewPost = () => {
             </div>
           </div>
           <div className='col-md-4'>
-            <div
-              id='maps'
-              style={{ width: '100%', height: '300px', marginBottom: '30px' }}
-            >
-              <iframe
-                width='100%'
-                height='100%'
-                style={{ border: 0 }}
-                loading='lazy'
-                allowFullScreen=''
-                src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD6Coia3ssHYuRKJ2nDysWBdSlVlBCzKAw&amp;q=Hồ Chí Minh'
-              ></iframe>
-            </div>
+            <MapD direction={addressAbsolute} userDirect={false} />
 
             <div
               className='card mb-5'
