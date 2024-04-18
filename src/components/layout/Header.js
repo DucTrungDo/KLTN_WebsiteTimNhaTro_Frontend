@@ -147,12 +147,12 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <a
-                    href='#'
+                  <Link
+                    to='/user/add-new-post'
                     className='btn btn-danger rounded text-white py-2 px-4 flex-wrap flex-sm-shrink-0 border border-0 '
                   >
                     Đăng tin miễn phí
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

@@ -36,6 +36,7 @@ import ServicePriceList from './components/user/ServicePriceList'
 import ChangePassword from './components/user/ChangePassword'
 
 // Post import
+import AddNewPost from './components/user/Addnewpost'
 import PostDetail from './components/post/PostDetail'
 
 import ProtectedRoute from './components/route/ProtectedRoute'
@@ -115,6 +116,7 @@ function UserRoutes() {
             <Route path='payment-history' element={<PaymentHistory />} />
             <Route path='service-price-list' element={<ServicePriceList />} />
             <Route path='change-password' element={<ChangePassword />} />
+            <Route path='add-new-post' element={<AddNewPost />} />
           </Routes>
         </main>
       </div>

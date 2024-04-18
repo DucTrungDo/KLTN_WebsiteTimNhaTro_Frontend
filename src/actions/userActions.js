@@ -31,6 +31,9 @@ import {
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAIL,
+  ADD_NEW_POST_REQUEST,
+  ADD_NEW_POST_SUCCESS,
+  ADD_NEW_POST_FAIL,
 } from '../constants/userConstants'
 
 // Verify User for register
@@ -319,3 +322,30 @@ export const updatePassword =
       })
     }
   }
+
+// Add new post
+export const newPost = (token, post) => async (dispatch) => {
+  try {
+    dispatch({ type: ADD_NEW_POST_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+
+    const { data } = await axios.post(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/me`,
+      post,
+      config
+    )
+    dispatch({
+      type: ADD_NEW_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ADD_NEW_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
