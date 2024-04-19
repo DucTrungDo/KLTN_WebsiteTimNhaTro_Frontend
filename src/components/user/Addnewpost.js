@@ -42,8 +42,9 @@ const AddNewPost = () => {
     setWardName('')
     setAddres('')
     setStreet('')
+    console.log(province)
     if (provinces !== undefined) {
-      if (provinces.length !== 0) {
+      if (provinces.length !== 0 && province !== '') {
         const proName = provinces.find(
           (provinces) => provinces.province_id === province
         ).province_name
@@ -91,12 +92,9 @@ const AddNewPost = () => {
       alert.error('thiếu thông tin')
     } else {
       setAddres({
-        city: provinces.find((provinces) => provinces.province_id === province)
-          .province_name,
-        district: districts.find(
-          (districts) => districts.district_id === district
-        ).district_name,
-        ward: wards.find((wards) => wards.ward_id === ward).ward_name,
+        city: provinceName,
+        district: districtName,
+        ward: wardName,
         street: street,
       })
 

@@ -72,7 +72,7 @@ function MapD({ direction, userDirect }) {
         mapContainerStyle={{
           width: '100%',
           height: '300px',
-          marginBottom: '10px',
+          marginBottom: '15px',
         }}
         center={coords}
         zoom={15}
