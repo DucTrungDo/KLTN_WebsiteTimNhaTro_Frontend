@@ -249,3 +249,30 @@
   display: inline-block;
 }
 /* User management*/
+
+********* Template CSS ********* :root {
+  --primary: #00b98e;
+  --secondary: #ff6922;
+  --light: #effdf5;
+  --dark: #0e2e50;
+}
+
+/*** Property List ***/
+.property-item img {
+  transition: 0.5s;
+}
+
+.property-item:hover img {
+  transform: scale(1.1);
+}
+.property-item:hover a {
+  color: rgba(var(--bs-primary-rgb));
+}
+.property-item a {
+  text-decoration: none;
+}
+
+.property-item:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}

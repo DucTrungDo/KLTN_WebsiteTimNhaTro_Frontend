@@ -27,7 +27,7 @@ const Home = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className='container-xxl py-5'>
+        <div className='container-xxl py-5 border mb-3'>
           <div className='container'>
             <div className='row g-0 gx-5 align-items-end'>
               <div className='col-lg-6'>
@@ -36,11 +36,7 @@ const Home = () => {
                   data-wow-delay='0.1s'
                 >
                   <h1 className='mb-3'>Property Listing</h1>
-                  <p>
-                    Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor
-                    ut dolore lorem kasd vero ipsum sit eirmod sit diam justo
-                    sed rebum.
-                  </p>
+                  <h4>Kết quả tìm thấy {posts.count}</h4>
                 </div>
               </div>
               <div
@@ -81,7 +77,7 @@ const Home = () => {
             <div className='tab-content'>
               <div id='tab-1' className=''>
                 <div className='row g-4'>
-                  {posts?.map((post, index) => (
+                  {posts.posts?.map((post, index) => (
                     <Post key={index} post={post} />
                   ))}
                   <div

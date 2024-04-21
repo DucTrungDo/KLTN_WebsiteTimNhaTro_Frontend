@@ -27,7 +27,6 @@ function MapD({ direction, userDirect }) {
     )
   }, [dispatch])
   useEffect(() => {
-    console.log(direction)
     if (direction !== '') {
       geocodeByAddress(direction)
         .then((results) => getLatLng(results[0]))
@@ -72,7 +71,7 @@ function MapD({ direction, userDirect }) {
         mapContainerStyle={{
           width: '100%',
           height: '300px',
-          marginBottom: '10px',
+          marginBottom: '15px',
         }}
         center={coords}
         zoom={15}

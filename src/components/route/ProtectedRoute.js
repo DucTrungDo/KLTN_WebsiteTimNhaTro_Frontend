@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 const ProtectedRoute = ({ isAdmin }) => {
   const { isAuthenticated, loading, user } = useSelector((state) => state.auth)
-  console.log('1')
 
   return (
     loading === false &&

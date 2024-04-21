@@ -40,10 +40,10 @@ const AddNewPost = () => {
     setAddressAbsolute('')
     setDistrictName('')
     setWardName('')
-    setAddres('')
     setStreet('')
+    console.log(province)
     if (provinces !== undefined) {
-      if (provinces.length !== 0) {
+      if (provinces.length !== 0 && province !== '') {
         const proName = provinces.find(
           (provinces) => provinces.province_id === province
         ).province_name
@@ -56,7 +56,7 @@ const AddNewPost = () => {
     dispatch(getWard(district))
     setWardName('')
     setStreet('')
-    if (districts.length !== 0) {
+    if (districts.length !== 0 && district !== '') {
       const disName = districts.find(
         (districts) => districts.district_id === district
       ).district_name
@@ -66,7 +66,7 @@ const AddNewPost = () => {
   }, [district])
   useEffect(() => {
     setStreet('')
-    if (districts.length !== 0) {
+    if (districts.length !== 0 && ward !== '') {
       const warName = wards.find((wards) => wards.ward_id === ward).ward_name
       setWardName(warName)
       setAddressAbsolute(provinceName + '/' + districtName + '/' + warName)
@@ -77,6 +77,12 @@ const AddNewPost = () => {
       setAddressAbsolute(
         provinceName + '/' + districtName + '/' + wardName + '/' + street
       )
+    setAddres({
+      city: provinceName,
+      district: districtName,
+      ward: wardName,
+      street: street,
+    })
   }, [street])
 
   const { provinces } = useSelector((state) => state.province)
@@ -86,20 +92,10 @@ const AddNewPost = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     const fields = [title, description, province, district, ward, street]
-    const isEmpty = fields.every((field) => field.trim() === '')
+    const isEmpty = fields.some((field) => field.trim() === '')
     if (isEmpty || price <= 100000 || area <= 10) {
       alert.error('thiếu thông tin')
     } else {
-      setAddres({
-        city: provinces.find((provinces) => provinces.province_id === province)
-          .province_name,
-        district: districts.find(
-          (districts) => districts.district_id === district
-        ).district_name,
-        ward: wards.find((wards) => wards.ward_id === ward).ward_name,
-        street: street,
-      })
-
       const token = Cookies.get('accessToken')
       dispatch(
         newPost(token, {
@@ -111,6 +107,7 @@ const AddNewPost = () => {
           title: title,
         })
       )
+      alert.success('Đăng tin thành công')
     }
   }
 
