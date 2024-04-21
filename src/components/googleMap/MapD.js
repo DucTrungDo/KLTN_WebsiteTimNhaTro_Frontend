@@ -27,7 +27,6 @@ function MapD({ direction, userDirect }) {
     )
   }, [dispatch])
   useEffect(() => {
-    console.log(direction)
     if (direction !== '') {
       geocodeByAddress(direction)
         .then((results) => getLatLng(results[0]))

@@ -16,7 +16,7 @@ export const postsReducer = (state = { posts: [] }, action) => {
     case ALL_POSTS_SUCCESS:
       return {
         loading: false,
-        posts: action.payload,
+        posts: action.payload.data,
       }
 
     case ALL_POSTS_FAIL:
