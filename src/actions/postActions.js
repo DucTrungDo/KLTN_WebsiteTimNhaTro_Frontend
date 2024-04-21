@@ -1,37 +1,61 @@
-import axios from 'axios';
+import axios from 'axios'
 
 import {
   ALL_POSTS_REQUEST,
   ALL_POSTS_SUCCESS,
   ALL_POSTS_FAIL,
+  POST_DETAILS_REQUEST,
+  POST_DETAILS_SUCCESS,
+  POST_DETAILS_FAIL,
   CLEAR_ERRORS,
-} from '../constants/postConstants';
+} from '../constants/postConstants'
 
 // Get all posts
 export const getPosts = () => async (dispatch) => {
   try {
-    dispatch({ type: ALL_POSTS_REQUEST });
+    dispatch({ type: ALL_POSTS_REQUEST })
 
-    let link = `https://jsonplaceholder.typicode.com/posts`;
+    let link = `https://jsonplaceholder.typicode.com/posts`
     // let link = `http://localhost:8000/posts`
 
-    const { data } = await axios.get(link);
+    const { data } = await axios.get(link)
 
     dispatch({
       type: ALL_POSTS_SUCCESS,
       payload: data,
-    });
+    })
   } catch (error) {
     dispatch({
       type: ALL_POSTS_FAIL,
       payload: error.response.data.message,
-    });
+    })
   }
-};
+}
+
+// Get post details
+export const getPostDetails = (slug) => async (dispatch) => {
+  try {
+    dispatch({ type: POST_DETAILS_REQUEST })
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}`
+    )
+
+    dispatch({
+      type: POST_DETAILS_SUCCESS,
+      payload: data.data.post,
+    })
+  } catch (error) {
+    dispatch({
+      type: POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERRORS,
-  });
-};
+  })
+}

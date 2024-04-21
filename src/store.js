@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { thunk } from 'redux-thunk'
 import { authReducer, userReducer } from './reducers/userReducers'
-import { postsReducer } from './reducers/postReducers'
+import { postsReducer, postDetailsReducer } from './reducers/postReducers'
 import {
   provinceReducer,
   districtReducer,
@@ -12,6 +12,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const reducer = combineReducers({
   posts: postsReducer,
+  postDetails: postDetailsReducer,
   auth: authReducer,
   user: userReducer,
   province: provinceReducer,

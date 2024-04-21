@@ -28,7 +28,7 @@
   object-fit: contain;
 }
 .info_sell {
-  height: 300px;
+  height: 309px;
   width: 100%;
   background-color: rgba(253, 152, 67, 255);
 }
@@ -39,7 +39,7 @@
 .iconzalo {
   width: 20px;
   height: 20px;
-  background: url(../public/images/icon-zalo.png) center no-repeat;
+  background: url(/public/images/icon-zalo.png) center no-repeat;
   background-size: contain;
   margin-right: 5px;
 }
@@ -72,6 +72,21 @@
 .card-list-relation {
   height: 96px;
   background-color: #f2fcf9;
+}
+
+.post-attributes-icon {
+  color: #b7b7b7;
+}
+
+.post-attributes-icon.price {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.post-attributes-price {
+  color: #16c784;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 /* Post detail */
 

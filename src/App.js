@@ -57,7 +57,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/verify_register' element={<VerifyRegister />} />
-              <Route path='/post_detail' element={<PostDetail />} />
+              <Route path='/post/:slug' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
             </Routes>
           </div>
@@ -94,11 +94,7 @@ function FooterSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
 
-  return <>{isUserRoute ? <HiddenFooter /> : <MainFooter />}</>
-}
-
-function HiddenFooter() {
-  return null // Trả về null để ẩn footer
+  return <>{isUserRoute ? null : <MainFooter />}</>
 }
 
 function UserRoutes() {
