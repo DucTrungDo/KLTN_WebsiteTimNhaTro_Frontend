@@ -25,7 +25,7 @@ const Post = ({ post }) => {
   return (
     <div class='col-lg-4 col-md-6 wow fadeInUp' data-wow-delay='0.5s'>
       <Link
-        to={'posts/' + post.slug}
+        to={'post/' + post.slug}
         className='link-secondary text-decoration-none'
       >
         <div

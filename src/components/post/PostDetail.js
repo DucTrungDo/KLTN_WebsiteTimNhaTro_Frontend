@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,7 +24,7 @@ const PostDetail = () => {
   const dispatch = useDispatch()
   const { slug } = useParams()
   const { loading, post, error } = useSelector((state) => state.postDetails)
-
+  const [addressPost, setaddressPost] = useState('')
   useEffect(() => {
     dispatch(getPostDetails(slug))
 
@@ -33,7 +33,24 @@ const PostDetail = () => {
       dispatch(clearErrors())
     }
   }, [dispatch, alert, error])
-
+  useEffect(() => {
+    if (post.address !== undefined) {
+      setaddressPost(
+        post.address.city +
+          '/' +
+          post.address.district +
+          '/' +
+          post.address.ward +
+          '/' +
+          post.address.street
+      )
+    }
+  }, [
+    post.address?.street,
+    post.address?.ward,
+    post.address?.district,
+    post.address?.city,
+  ])
   const PriceDisplay = ({ price }) => {
     if (!price) return
     if (price >= 1000000) {
@@ -199,9 +216,7 @@ const PostDetail = () => {
                   Dịa chỉ: 01 Võ Văn Ngân, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí
                   Minh, Việt Nam
                 </p>
-                {Object.keys(post).length !== 0 ? (
-                  <MapD direction={''} userDirect={true} />
-                ) : null}
+                <MapD direction={addressPost} useDirect={true} />
               </div>
             </div>
             <div className='col-sm-12 col-md-4 pe-0'>

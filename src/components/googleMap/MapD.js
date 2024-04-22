@@ -14,7 +14,11 @@ import Button from 'react-bootstrap/Button'
 import { useAlert } from 'react-alert'
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete'
 import { GOOGLE_MAPS_APT_KEY } from '../../env'
-function MapD({ direction, userDirect }) {
+function MapD({ direction, useDirect }) {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_APT_KEY,
+    libraries: ['places'],
+  })
   const alert = useAlert()
   const [coords, setCoords] = useState({ lat: 10.838042, lng: 106.793579 })
   const dispatch = useDispatch()
@@ -25,19 +29,16 @@ function MapD({ direction, userDirect }) {
         setCoords({ lat: latitude, lng: longitude })
       }
     )
-  }, [dispatch])
+  }, [dispatch, isLoaded])
   useEffect(() => {
-    if (direction !== '') {
+    if (isLoaded && direction !== '') {
       geocodeByAddress(direction)
         .then((results) => getLatLng(results[0]))
-        .then(({ lat, lng }) => setCoords({ lat: lat, lng: lng }))
+        .then(({ lat, lng }) => setCoords({ lat, lng }))
+        .catch((error) => console.error('Error', error))
     }
-  }, [direction])
+  }, [direction, isLoaded])
   const { Geos } = useSelector((state) => state.googleGeo)
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_APT_KEY,
-    libraries: ['places'],
-  })
   const [map, setMap] = useState(/** @type google.maps.Map */ (null))
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [distance, setDistance] = useState('')
@@ -89,7 +90,7 @@ function MapD({ direction, userDirect }) {
         )}
         <></>
       </GoogleMap>
-      <div style={{ display: userDirect ? 'block' : 'none' }}>
+      <div style={{ display: useDirect ? 'block' : 'none' }}>
         <div>
           <InputGroup className='mb-1'>
             <InputGroup.Text id='basic-addon1'>Khoản cách</InputGroup.Text>

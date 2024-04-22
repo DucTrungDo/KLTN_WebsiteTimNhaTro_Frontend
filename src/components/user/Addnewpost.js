@@ -573,7 +573,7 @@ const AddNewPost = () => {
             </div>
           </div>
           <div className='col-md-4'>
-            <MapD direction={addressAbsolute} userDirect={false} />
+            <MapD direction={addressAbsolute} useDirect={false} />
 
             <div
               className='card mb-5'
