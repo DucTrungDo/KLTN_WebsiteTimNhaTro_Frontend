@@ -263,7 +263,7 @@ export const forgotPasswordReset =
   }
 
 // Update profile
-export const updateProfile = (token, name) => async (dispatch) => {
+export const updateProfile = (token, name, phone) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PROFILE_REQUEST })
 
@@ -276,7 +276,7 @@ export const updateProfile = (token, name) => async (dispatch) => {
 
     const { data } = await axios.put(
       'https://boardinghouse-api.onrender.com/api/v1/users/me',
-      { name },
+      { name, phone },
       config
     )
 

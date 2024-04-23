@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { logout } from '../../actions/userActions'
+import { loadUser, logout } from '../../actions/userActions'
 import { useAlert } from 'react-alert'
 
 import {
@@ -18,8 +18,8 @@ const Header = () => {
   const { user, loading } = useSelector((state) => state.auth)
   const logoutHandler = () => {
     dispatch(logout())
-    alert.success('Logged out successfully.')
     Cookies.remove('accessToken')
+    alert.success('Logged out successfully.')
   }
   return (
     <>

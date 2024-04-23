@@ -115,6 +115,7 @@ export const authReducer = (state = { user: {} }, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
+        token: null,
       }
     case LOAD_USER_FAIL:
       return {

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Loader from '../layout/Loader'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,6 @@ const Login = () => {
   const navigate = useNavigate()
   const alert = useAlert()
   const dispatch = useDispatch()
-  const location = useLocation()
   const { isAuthenticated, error, loading, token } = useSelector(
     (state) => state.auth
   )

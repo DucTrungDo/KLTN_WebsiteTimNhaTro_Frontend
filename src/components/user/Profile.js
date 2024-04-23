@@ -11,6 +11,7 @@ import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'
 const Profile = () => {
   const token = Cookies.get('accessToken')
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [avatarPreview, setAvatarPreview] = useState(
     '/images/default_avatar.jpg'
   )
@@ -24,6 +25,7 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       setName(user.name)
+      setPhone(user.phone)
     }
 
     if (error) {
@@ -43,7 +45,7 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updateProfile(token, name))
+    dispatch(updateProfile(token, name, phone))
   }
 
   // Xử lý sự kiện khi người dùng chọn ảnh mới
@@ -119,7 +121,8 @@ const Profile = () => {
               type='phone'
               className='form-control'
               id='user_phone'
-              value=''
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
         </div>

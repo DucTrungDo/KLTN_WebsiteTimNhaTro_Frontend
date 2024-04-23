@@ -228,7 +228,7 @@ const PostDetail = () => {
                   ></img>
                 </div>
                 <div className='text-center'>
-                  <span className='fs-4 fw-bold'>User</span>
+                  <span className='fs-4 fw-bold'>{post.userId?.name}</span>
                   <div>
                     <p className='mb-1'>
                       <i className='bi bi-dot'></i>Đang hoạt động
