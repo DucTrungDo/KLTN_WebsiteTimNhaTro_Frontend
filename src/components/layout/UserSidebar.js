@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFileLines,
@@ -15,6 +16,8 @@ import {
 import { Link, NavLink } from 'react-router-dom'
 
 const UserSidebar = () => {
+  const { user } = useSelector((state) => state.auth)
+
   return (
     <div className='user-sidebar col-lg-2 d-none d-lg-block bg-light border-end p-3'>
       <div className='mx-3'>
@@ -29,13 +32,13 @@ const UserSidebar = () => {
             <div className='welcome-text text-decoration-none'>
               <div className='ms-2'>
                 <span className='d-block'>
-                  <strong>Đỗ Trung Đức</strong>
+                  <strong>{user.name}</strong>
                 </span>
                 <span
                   className='d-block'
                   style={{ color: '#555', fonSize: '0.9rem' }}
                 >
-                  0397260965
+                  {user.phone}
                 </span>
               </div>
             </div>

@@ -12,6 +12,8 @@ const Profile = () => {
   const token = Cookies.get('accessToken')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [zalo, setZalo] = useState('')
+  const [facebook, setFacebook] = useState('')
   const [avatarPreview, setAvatarPreview] = useState(
     '/images/default_avatar.jpg'
   )
@@ -26,6 +28,8 @@ const Profile = () => {
     if (user) {
       setName(user.name)
       setPhone(user.phone)
+      setZalo(user.zalo)
+      setFacebook(user.facebook)
     }
 
     if (error) {
@@ -45,7 +49,7 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updateProfile(token, name, phone))
+    dispatch(updateProfile(token, name, phone, zalo, facebook))
   }
 
   // Xử lý sự kiện khi người dùng chọn ảnh mới
@@ -175,7 +179,8 @@ const Profile = () => {
               className='form-control'
               id='user_zalo'
               name='user_zalo'
-              value='0397260965'
+              value={zalo}
+              onChange={(e) => setZalo(e.target.value)}
             />
           </div>
         </div>
@@ -192,8 +197,8 @@ const Profile = () => {
               className='form-control'
               id='user_facebook'
               name='user_facebook'
-              value=''
-              placeholder=''
+              value={facebook}
+              onChange={(e) => setFacebook(e.target.value)}
             />
           </div>
         </div>

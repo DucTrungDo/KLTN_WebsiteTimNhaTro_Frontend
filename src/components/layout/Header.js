@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { loadUser, logout } from '../../actions/userActions'
+import { logout } from '../../actions/userActions'
 import { useAlert } from 'react-alert'
 
 import {

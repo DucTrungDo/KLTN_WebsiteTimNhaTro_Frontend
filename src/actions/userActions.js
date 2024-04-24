@@ -171,13 +171,6 @@ export const logout = () => async (dispatch) => {
   }
 }
 
-// Clear Errors
-export const clearErrors = () => async (dispatch) => {
-  dispatch({
-    type: CLEAR_ERRORS,
-  })
-}
-
 // Send Otp when perform Fogot password
 export const forgotPasswordSendOtp = (email) => async (dispatch) => {
   try {
@@ -263,34 +256,35 @@ export const forgotPasswordReset =
   }
 
 // Update profile
-export const updateProfile = (token, name, phone) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_PROFILE_REQUEST })
+export const updateProfile =
+  (token, name, phone, zalo, facebook) => async (dispatch) => {
+    try {
+      dispatch({ type: UPDATE_PROFILE_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-        'Content-Type': 'application/json',
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.put(
+        'https://boardinghouse-api.onrender.com/api/v1/users/me',
+        { name, phone, zalo, facebook },
+        config
+      )
+
+      dispatch({
+        type: UPDATE_PROFILE_SUCCESS,
+        payload: data.success,
+      })
+    } catch (error) {
+      dispatch({
+        type: UPDATE_PROFILE_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.put(
-      'https://boardinghouse-api.onrender.com/api/v1/users/me',
-      { name, phone },
-      config
-    )
-
-    dispatch({
-      type: UPDATE_PROFILE_SUCCESS,
-      payload: data.success,
-    })
-  } catch (error) {
-    dispatch({
-      type: UPDATE_PROFILE_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Update password
 export const updatePassword =
@@ -348,4 +342,11 @@ export const newPost = (token, post) => async (dispatch) => {
       payload: error.response.data.message,
     })
   }
+}
+
+// Clear Errors
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  })
 }

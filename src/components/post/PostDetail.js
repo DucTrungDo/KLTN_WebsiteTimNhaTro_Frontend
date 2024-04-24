@@ -244,13 +244,12 @@ const PostDetail = () => {
                     aria-pressed='true'
                   >
                     <span className='bi bi-telephone'></span>
-                    0346952976
+                    {post.userId?.phone}
                   </a>
                   <a
-                    href='#'
+                    href={`https://zalo.me/${post.userId?.zalo}`}
                     className='container-zalo border border-1  border-secondary btn btn-light fw-bold d-flex justify-content-center'
                     role='button'
-                    data-bs-toggle='button'
                     aria-pressed='true'
                   >
                     <i className='iconzalo'></i> Zalo

@@ -7,6 +7,9 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  ALL_USER_POSTS_REQUEST,
+  ALL_USER_POSTS_SUCCESS,
+  ALL_USER_POSTS_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -47,6 +50,34 @@ export const getPostDetails = (slug) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get all user's posts
+export const getUserPosts = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_USER_POSTS_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/me`,
+      config
+    )
+
+    dispatch({
+      type: ALL_USER_POSTS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ALL_USER_POSTS_FAIL,
       payload: error.response.data.message,
     })
   }

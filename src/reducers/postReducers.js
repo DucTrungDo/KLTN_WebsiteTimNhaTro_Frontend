@@ -5,6 +5,9 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  ALL_USER_POSTS_REQUEST,
+  ALL_USER_POSTS_SUCCESS,
+  ALL_USER_POSTS_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -57,6 +60,38 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case POST_DETAILS_FAIL:
       return {
         ...state,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const userPostsReducer = (state = { posts: [] }, action) => {
+  switch (action.type) {
+    case ALL_USER_POSTS_REQUEST:
+      return {
+        loading: true,
+        ...state,
+      }
+
+    case ALL_USER_POSTS_SUCCESS:
+      return {
+        loading: false,
+        posts: action.payload.data,
+      }
+
+    case ALL_USER_POSTS_FAIL:
+      return {
+        ...state,
+        loading: false,
         error: action.payload,
       }
 
