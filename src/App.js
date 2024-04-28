@@ -36,9 +36,9 @@ import ServicePriceList from './components/user/ServicePriceList'
 import ChangePassword from './components/user/ChangePassword'
 
 // Post import
-import AddNewPost from './components/user/Addnewpost'
+import AddNewPost from './components/post/Addnewpost'
 import PostDetail from './components/post/PostDetail'
-
+import EditPost from './components/post/EditPost'
 import ProtectedRoute from './components/route/ProtectedRoute'
 
 function App() {
@@ -58,6 +58,7 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/verify_register' element={<VerifyRegister />} />
               <Route path='/post/:slug' element={<PostDetail />} />
+              <Route path='/post/edit/:slug' element={<EditPost />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
             </Routes>
           </div>

@@ -10,6 +10,12 @@ import {
   ALL_USER_POSTS_REQUEST,
   ALL_USER_POSTS_SUCCESS,
   ALL_USER_POSTS_FAIL,
+  POST_EDIT_REQUEST,
+  POST_EDIT_SUCCESS,
+  POST_EDIT_FAIL,
+  ADD_NEW_POST_REQUEST,
+  ADD_NEW_POST_SUCCESS,
+  ADD_NEW_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -83,6 +89,57 @@ export const getUserPosts = (token) => async (dispatch) => {
   }
 }
 
+export const editPost = (token, slug, post) => async (dispatch) => {
+  try {
+    dispatch({ type: POST_EDIT_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+    const { data } = await axios.put(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/me`,
+      post,
+      config
+    )
+    dispatch({
+      type: POST_EDIT_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: POST_EDIT_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Add new post
+export const newPost = (token, post) => async (dispatch) => {
+  try {
+    dispatch({ type: ADD_NEW_POST_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+
+    const { data } = await axios.post(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/me`,
+      post,
+      config
+    )
+    dispatch({
+      type: ADD_NEW_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ADD_NEW_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
