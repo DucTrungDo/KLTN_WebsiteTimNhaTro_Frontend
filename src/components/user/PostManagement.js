@@ -201,8 +201,8 @@ const PostManagement = () => {
                             </svg>
                             Gắn nhãn
                           </a>
-                          <a
-                            href='https://phongtro123.com/quan-ly/sua-tin-dang/653234'
+                          <Link
+                            to={'user/edit/' + post.slug}
                             className='btn btn-sm mt-2'
                           >
                             <svg
@@ -220,7 +220,7 @@ const PostManagement = () => {
                               <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
                             </svg>
                             Sửa tin
-                          </a>
+                          </Link>
                           <a
                             href='https://phongtro123.com/quan-ly/tin-dang/day-tin/653234'
                             className='btn btn-sm mt-2'

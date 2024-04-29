@@ -36,9 +36,9 @@ import ServicePriceList from './components/user/ServicePriceList'
 import ChangePassword from './components/user/ChangePassword'
 
 // Post import
-import AddNewPost from './components/user/Addnewpost'
+import AddNewPost from './components/post/Addnewpost'
 import PostDetail from './components/post/PostDetail'
-
+import EditPost from './components/post/EditPost'
 import ProtectedRoute from './components/route/ProtectedRoute'
 
 function App() {
@@ -106,6 +106,7 @@ function UserRoutes() {
           <Routes>
             <Route path='dashboard' element={<UserDashboard />} />
             <Route path='post-management' element={<PostManagement />} />
+            <Route path='post/edit/:slug' element={<EditPost />} />
             <Route path='profile' element={<Profile />} />
             <Route path='recharge' element={<Recharge />} />
             <Route path='recharge-history' element={<RechargeHistory />} />

@@ -6,6 +6,8 @@ import {
   postDetailsReducer,
   userPostsReducer,
   userPostReducer,
+  postEditReducer,
+  newPostReducer,
 } from './reducers/postReducers'
 import {
   provinceReducer,
@@ -13,6 +15,7 @@ import {
   wardReducer,
   googleGeoReducer,
 } from './reducers/provinceReducer'
+import { categoriesReducer } from './reducers/categoriesReducer'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const reducer = combineReducers({
@@ -26,6 +29,9 @@ const reducer = combineReducers({
   district: districtReducer,
   ward: wardReducer,
   googleGeo: googleGeoReducer,
+  categories: categoriesReducer,
+  postEdit: postEditReducer,
+  newPost: newPostReducer,
 })
 
 const middleware = [thunk]

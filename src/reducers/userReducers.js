@@ -32,9 +32,6 @@ import {
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_RESET,
   UPDATE_PASSWORD_FAIL,
-  ADD_NEW_POST_REQUEST,
-  ADD_NEW_POST_SUCCESS,
-  ADD_NEW_POST_FAIL,
 } from '../constants/userConstants'
 
 export const authReducer = (state = { user: {} }, action) => {
@@ -49,7 +46,6 @@ export const authReducer = (state = { user: {} }, action) => {
     case FORGOT_PASSWORD_SEND_OTP_REQUEST:
     case FORGOT_PASSWORD_VERIFY_OTP_REQUEST:
     case FORGOT_PASSWORD_RESET_REQUEST:
-    case ADD_NEW_POST_REQUEST:
       return {
         ...state,
         loading: true,
@@ -59,7 +55,6 @@ export const authReducer = (state = { user: {} }, action) => {
     case FORGOT_PASSWORD_SEND_OTP_SUCCESS:
     case FORGOT_PASSWORD_VERIFY_OTP_SUCCESS:
     case FORGOT_PASSWORD_RESET_SUCCESS:
-    case ADD_NEW_POST_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -77,7 +72,6 @@ export const authReducer = (state = { user: {} }, action) => {
     case FORGOT_PASSWORD_SEND_OTP_FAIL:
     case FORGOT_PASSWORD_VERIFY_OTP_FAIL:
     case FORGOT_PASSWORD_RESET_FAIL:
-    case ADD_NEW_POST_FAIL:
       return {
         ...state,
         loading: false,

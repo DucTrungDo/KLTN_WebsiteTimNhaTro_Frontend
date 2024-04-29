@@ -1,28 +1,34 @@
-import { newPost } from '../../actions/userActions'
+import { editPost } from '../../actions/postActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
-import { Link, useNavigate } from 'react-router-dom'
+import { getPostDetails, clearErrors } from '../../actions/postActions'
+import { getCategories } from '../../actions/categoriesAction'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import MapD from '../googleMap/MapD'
-const AddNewPost = () => {
+import { POST_EDIT_RESET } from '../../constants/postConstants'
+const EditPost = () => {
   const navigate = useNavigate()
   const alert = useAlert()
+  const { slug } = useParams()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [categoryId, setCategoryId] = useState('')
   const [price, setprice] = useState(0)
   const [area, setArea] = useState(0)
-  const [province, setProvince] = useState('')
-  const [district, setDistrict] = useState('')
-  const [ward, setWard] = useState('')
+  const [category, setCategory] = useState('')
   const [street, setStreet] = useState('')
+
+  const [userName, setUserName] = useState('')
+  const [userPhone, setUserPhone] = useState('')
 
   const [provinceName, setProvinceName] = useState('')
   const [districtName, setDistrictName] = useState('')
   const [wardName, setWardName] = useState('')
+
+  const [loadDetailpostfirst, setLoadDetailPostFirst] = useState(0)
 
   const [address, setAddres] = useState({
     city: '',
@@ -31,86 +37,145 @@ const AddNewPost = () => {
     street: '',
   })
   const [addressAbsolute, setAddressAbsolute] = useState('')
-  useEffect(() => {
-    dispatch(getProvince())
-  }, [dispatch, navigate])
-  useEffect(() => {
-    dispatch(getdistrict(province))
-    dispatch(getWard(''))
-    setAddressAbsolute('')
-    setDistrictName('')
-    setWardName('')
-    setStreet('')
-    console.log(province)
-    if (provinces !== undefined) {
-      if (provinces.length !== 0 && province !== '') {
-        const proName = provinces.find(
-          (provinces) => provinces.province_id === province
-        ).province_name
-        setProvinceName(proName)
-        setAddressAbsolute(proName)
-      }
-    }
-  }, [province])
-  useEffect(() => {
-    dispatch(getWard(district))
-    setWardName('')
-    setStreet('')
-    if (districts.length !== 0 && district !== '') {
-      const disName = districts.find(
-        (districts) => districts.district_id === district
-      ).district_name
-      setDistrictName(disName)
-      setAddressAbsolute(provinceName + '/' + disName)
-    }
-  }, [district])
-  useEffect(() => {
-    setStreet('')
-    if (districts.length !== 0 && ward !== '') {
-      const warName = wards.find((wards) => wards.ward_id === ward).ward_name
-      setWardName(warName)
-      setAddressAbsolute(provinceName + '/' + districtName + '/' + warName)
-    }
-  }, [ward])
-  useEffect(() => {
-    if (street !== '')
-      setAddressAbsolute(
-        provinceName + '/' + districtName + '/' + wardName + '/' + street
-      )
-    setAddres({
-      city: provinceName,
-      district: districtName,
-      ward: wardName,
-      street: street,
-    })
-  }, [street])
-
   const { provinces } = useSelector((state) => state.province)
   const { districts } = useSelector((state) => state.district)
   const { wards } = useSelector((state) => state.ward)
-  const { user, loading } = useSelector((state) => state.auth)
+  const { categories } = useSelector((state) => state.categories)
+  const { post } = useSelector((state) => state.postDetails)
+  const { error, isSuccess } = useSelector((state) => state.postEdit)
+  useEffect(() => {
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+    if (isSuccess) {
+      alert.success('cập nhật thành công')
+      dispatch({
+        type: POST_EDIT_RESET,
+      })
+      navigate('/')
+    }
+  }, [dispatch, alert, error, isSuccess])
+  const getKeyOfSelectedOption = (type) => {
+    if (type === 'pro') {
+      const selectedOption = provinces.find(
+        (location) => location.province_name === provinceName
+      )
+      return selectedOption ? selectedOption.province_id : null
+    }
+    if (type === 'dis') {
+      const selectedOption = districts.find(
+        (location) => location.district_name === districtName
+      )
+      return selectedOption ? selectedOption.district_id : null
+    }
+  }
+  useEffect(() => {
+    if (provinces.length === 0) {
+      dispatch(getProvince())
+      dispatch(getCategories())
+      dispatch(getPostDetails(slug))
+    }
+  }, [dispatch, navigate, alert, error])
+  useEffect(() => {
+    setCategory(post.categoryId?._id)
+    setTitle(post?.title)
+    setDescription(post?.description)
+    setprice(post?.price)
+    setArea(post?.area)
+    setUserName(post.userId?.name)
+    setUserPhone(post.userId?.phone)
+    setAddres({
+      city: post.address?.city,
+      district: post.address?.district,
+      ward: post.address?.ward,
+      street: post.address?.street,
+    })
+    setProvinceName(post.address?.city)
+  }, [post])
+  useEffect(() => {
+    if (provinceName) {
+      dispatch(getdistrict(getKeyOfSelectedOption('pro')))
+      setDistrictName(post.address?.district)
+    }
+  }, [dispatch, getKeyOfSelectedOption('pro'), provinceName])
+
+  useEffect(() => {
+    if (districtName) {
+      dispatch(getWard(getKeyOfSelectedOption('dis')))
+      setWardName(post.address?.ward)
+    }
+  }, [dispatch, getKeyOfSelectedOption('dis'), districtName])
+
+  useEffect(() => {
+    if (loadDetailpostfirst === 1) {
+      setStreet(post.address?.street)
+    } else {
+      setStreet('')
+    }
+    setLoadDetailPostFirst(loadDetailpostfirst + 1)
+  }, [wardName])
+
+  useEffect(() => {
+    if (street !== '') {
+      if (provinceName === '' || districtName === '' || wardName === '') {
+        setAddressAbsolute('')
+      } else if (
+        provinceName !== '' &&
+        districtName !== '' &&
+        wardName !== ''
+      ) {
+        setAddressAbsolute(
+          provinceName + '/' + districtName + '/' + wardName + '/' + street
+        )
+      }
+      setAddres({
+        city: provinceName,
+        district: districtName,
+        ward: wardName,
+        street: street,
+      })
+    } else {
+      if (provinceName === '' || districtName === '' || wardName === '') {
+        setAddressAbsolute('')
+      } else if (
+        provinceName !== '' &&
+        districtName !== '' &&
+        wardName !== ''
+      ) {
+        setAddressAbsolute(provinceName + '/' + districtName + '/' + wardName)
+      }
+    }
+  }, [street, wardName])
+
   const submitHandler = (e) => {
     e.preventDefault()
-    const fields = [title, description, province, district, ward, street]
+    const fields = [
+      title,
+      description,
+      provinceName,
+      districtName,
+      wardName,
+      street,
+      category,
+    ]
     const isEmpty = fields.some((field) => field.trim() === '')
     if (isEmpty || price <= 100000 || area <= 10) {
       alert.error('thiếu thông tin')
     } else {
       const token = Cookies.get('accessToken')
       dispatch(
-        newPost(token, {
+        editPost(token, slug, {
           address: address,
           area: area,
           price: price,
-          categoryId: '507f191e810c19729de860ea',
+          categoryId: category,
           description: description,
           title: title,
         })
       )
-      alert.success('Đăng tin thành công')
     }
   }
-
   return (
     <div>
       <nav aria-label='breadcrumb' className='bg-body-secondary px-3 py-1 mb-3'>
@@ -155,13 +220,17 @@ const AddNewPost = () => {
                     data-msg-required='Chưa chọn Tỉnh/TP'
                     tabIndex='-1'
                     aria-hidden='true'
-                    value={province}
-                    onChange={(e) => setProvince(e.target.value)}
+                    value={provinceName}
+                    onChange={(e) => setProvinceName(e.target.value)}
                   >
                     <option value=''>-- Chọn Tỉnh/TP --</option>
+
                     {provinces &&
                       provinces.map((location) => (
-                        <option value={location.province_id}>
+                        <option
+                          key={location.province_id}
+                          value={location.province_name}
+                        >
                           {location.province_name}
                         </option>
                       ))}
@@ -181,13 +250,16 @@ const AddNewPost = () => {
                     data-msg-required='Chưa chọn Quận/Huyện'
                     tabIndex='-1'
                     aria-hidden='true'
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
+                    value={districtName}
+                    onChange={(e) => setDistrictName(e.target.value)}
                   >
                     <option value=''>chọn quận huyện</option>
                     {districts &&
                       districts.map((district) => (
-                        <option value={district.district_id}>
+                        <option
+                          key={district.district_id}
+                          value={district.district_name}
+                        >
                           {district.district_name}
                         </option>
                       ))}
@@ -205,13 +277,15 @@ const AddNewPost = () => {
                     id='phuongxa'
                     tabIndex='-1'
                     aria-hidden='true'
-                    value={ward}
-                    onChange={(e) => setWard(e.target.value)}
+                    value={wardName}
+                    onChange={(e) => setWardName(e.target.value)}
                   >
                     <option value=''>chọn phường xã</option>
                     {wards &&
                       wards.map((ward) => (
-                        <option value={ward.ward_id}>{ward.ward_name}</option>
+                        <option key={ward.ward_id} value={ward.ward_name}>
+                          {ward.ward_name}
+                        </option>
                       ))}
                   </select>
                 </div>
@@ -233,19 +307,6 @@ const AddNewPost = () => {
                   />
                 </div>
               </div>
-              <div className='col-md-3'>
-                <div className='form-group'>
-                  <label htmlFor='street_number' className='col-form-label'>
-                    Số nhà
-                  </label>
-                  <input
-                    type='text'
-                    className='form-control js-input-street-number'
-                    name='apartment_number'
-                    id='apartment_number'
-                  />
-                </div>
-              </div>
             </div>
             <div className='row'>
               <div className='col-md-12'>
@@ -255,8 +316,8 @@ const AddNewPost = () => {
                   </label>
                   <input
                     type='text'
-                    readOnly=''
                     className='form-control'
+                    readOnly='readOnly'
                     name='dia_chi'
                     id='diachi'
                     required=''
@@ -284,10 +345,15 @@ const AddNewPost = () => {
                   required=''
                   data-msg-required='Chưa chọn loại chuyên mục'
                   aria-invalid='false'
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value=''>-- Chọn loại chuyên mục --</option>
-
-                  <option value='1'>Phòng trọ, nhà trọ</option>
+                  {categories.length !== 0
+                    ? categories.cates.map((category) => (
+                        <option value={category._id}>{category.name}</option>
+                      ))
+                    : null}
                 </select>
               </div>
             </div>
@@ -348,7 +414,8 @@ const AddNewPost = () => {
                     readOnly='readOnly'
                     required=''
                     data-msg-required='Tên liên hệ'
-                    value={user.name}
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                   />
                 </div>
               </div>
@@ -367,7 +434,8 @@ const AddNewPost = () => {
                     readOnly='readOnly'
                     required=''
                     data-msg-required='Số điện thoại'
-                    value='0397260965'
+                    value={userPhone}
+                    onChange={(e) => setUserPhone(e.target.value)}
                   />
                 </div>
               </div>
@@ -496,78 +564,11 @@ const AddNewPost = () => {
             </div>
             <div className='form-group row mt-5'>
               <div className='col-md-12'>
-                <h3>Video</h3>
-              </div>
-            </div>
-            <div className='form-group row'>
-              <label htmlFor='youtube_url' className='col-md-12 col-form-label'>
-                Video Link (Youtube)
-              </label>
-              <div className='col-md-12'>
-                <input
-                  className='form-control'
-                  name='youtube_url'
-                  id='youtube_url'
-                />
-              </div>
-            </div>
-            <div className='form-group row'>
-              <div className='col-md-12'>
-                <p>Hoặc upload Video từ máy của bạn</p>
-                <div className='form-group'></div>
-                <div
-                  className='list_photos row dropzone-previews'
-                  id='list-videos-dropzone-previews'
-                ></div>
-                <div id='tpl-video' style={{ display: 'none' }}>
-                  <div className='photo_item col-md-2 col-3 js-video-manual'>
-                    <div className='photo'>
-                      <video width='100%' height='100%' controls='' id='video'>
-                        <source src='' />
-                      </video>
-                    </div>
-                    <div className='dz-progress'>
-                      <span
-                        className='dz-upload'
-                        data-dz-uploadprogress=''
-                      ></span>
-                    </div>
-                    <div className='bottom clearfix'>
-                      <span className='photo_name' data-dz-name=''></span>
-                      <span className='photo_delete' data-dz-remove=''>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width='24'
-                          height='24'
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth='2'
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='feather feather-trash-2'
-                        >
-                          <polyline points='3 6 5 6 21 6'></polyline>
-                          <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
-                          <line x1='10' y1='11' x2='10' y2='17'></line>
-                          <line x1='14' y1='11' x2='14' y2='17'></line>
-                        </svg>{' '}
-                        Xóa
-                      </span>
-                    </div>
-                    <input name='' value='' type='hidden' />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className='form-group row mt-5'>
-              <div className='col-md-12'>
                 <button
                   type='submit'
                   className='btn btn-success mb-5 btn-lg btn-block js-btn-hoan-tat'
                 >
-                  Tiếp tục
+                  Cập nhật
                 </button>
               </div>
             </div>
@@ -616,4 +617,4 @@ const AddNewPost = () => {
   )
 }
 
-export default AddNewPost
+export default EditPost

@@ -78,7 +78,7 @@ const Post = ({ post }) => {
                     icon={faUserAstronaut}
                     className='me-1 text-primary'
                   />
-                  Trình công lê
+                  {post.userId.name}
                 </small>
                 <small className='flex-fill text-center py-2'>
                   <FontAwesomeIcon
