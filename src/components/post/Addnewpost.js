@@ -122,7 +122,7 @@ const AddNewPost = () => {
       dispatch({
         type: ADD_NEW_POST_RESET,
       })
-      navigate('/')
+      navigate('/user/post-management')
     }
   }, [dispatch, alert, error, isSuccess])
   const submitHandler = (e) => {

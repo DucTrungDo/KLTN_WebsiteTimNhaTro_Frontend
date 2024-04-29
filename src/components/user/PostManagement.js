@@ -147,8 +147,7 @@ const PostManagement = () => {
                         </span>
                         <Link
                           className='post_title text-decoration-none'
-                          target='_blank'
-                          to={'post/' + post.slug}
+                          to={'/post/' + post.slug}
                           style={{ color: '#055699' }}
                         >
                           {post.title}
@@ -202,7 +201,7 @@ const PostManagement = () => {
                             Gắn nhãn
                           </a>
                           <Link
-                            to={'user/edit/' + post.slug}
+                            to={'/user/post/edit/' + post.slug}
                             className='btn btn-sm mt-2'
                           >
                             <svg

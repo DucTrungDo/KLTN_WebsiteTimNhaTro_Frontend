@@ -53,7 +53,7 @@ const EditPost = () => {
       dispatch({
         type: POST_EDIT_RESET,
       })
-      navigate('/')
+      navigate('/user/post-management')
     }
   }, [dispatch, alert, error, isSuccess])
   const getKeyOfSelectedOption = (type) => {
