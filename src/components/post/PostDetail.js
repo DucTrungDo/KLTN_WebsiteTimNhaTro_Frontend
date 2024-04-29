@@ -84,6 +84,23 @@ const PostDetail = () => {
     } else return `${daysAgo} ngày trước`
   }
 
+  const DescriptionDisplay = ({ description }) => {
+    if (!description) return null
+
+    // Tách chuỗi thành mảng các dòng
+    const descriptionLines = description.split('\n')
+
+    return (
+      <>
+        {descriptionLines.map((line, index) => (
+          <p className='lh-lg' key={index}>
+            {line}
+          </p>
+        ))}
+      </>
+    )
+  }
+
   return (
     <>
       <SearchFilter />
@@ -208,9 +225,9 @@ const PostDetail = () => {
               </div>
               <div>
                 <h4>Thông tin mô tả</h4>
-                <p className='lh-lg'>{post.description}</p>
+                <DescriptionDisplay description={post.description} />
               </div>
-              <div>
+              <div className='mt-4'>
                 <h4>Bản đồ</h4>
                 <p>
                   Dịa chỉ: 01 Võ Văn Ngân, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí
@@ -237,10 +254,9 @@ const PostDetail = () => {
                 </div>
                 <div className='d-grid gap-2 col-11 mx-auto'>
                   <a
-                    href='#'
+                    href={`tel:${post.userId?.phone}`}
                     className='btn btn-primary active fw-bold'
                     role='button'
-                    data-bs-toggle='button'
                     aria-pressed='true'
                   >
                     <span className='bi bi-telephone'></span>
@@ -251,6 +267,7 @@ const PostDetail = () => {
                     className='container-zalo border border-1  border-secondary btn btn-light fw-bold d-flex justify-content-center'
                     role='button'
                     aria-pressed='true'
+                    target='_blank'
                   >
                     <i className='iconzalo'></i> Zalo
                   </a>

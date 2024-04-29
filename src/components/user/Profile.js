@@ -40,6 +40,7 @@ const Profile = () => {
     if (isUpdated) {
       alert.success('User updated successfully')
       dispatch(loadUser(token))
+      navigate('/user/profile')
       dispatch({
         type: UPDATE_PROFILE_RESET,
       })

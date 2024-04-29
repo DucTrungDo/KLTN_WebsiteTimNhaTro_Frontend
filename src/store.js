@@ -5,6 +5,7 @@ import {
   postsReducer,
   postDetailsReducer,
   userPostsReducer,
+  userPostReducer,
 } from './reducers/postReducers'
 import {
   provinceReducer,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   posts: postsReducer,
   postDetails: postDetailsReducer,
   userPosts: userPostsReducer,
+  userPost: userPostReducer,
   auth: authReducer,
   user: userReducer,
   province: provinceReducer,

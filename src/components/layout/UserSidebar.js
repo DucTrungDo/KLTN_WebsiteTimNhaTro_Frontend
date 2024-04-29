@@ -15,19 +15,25 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink } from 'react-router-dom'
 
+import { logout } from '../../actions/userActions'
+import { resetUserPosts } from '../../actions/postActions'
+
 const UserSidebar = () => {
   const { user } = useSelector((state) => state.auth)
 
+  const logoutHandler = () => {
+    dispatch(logout())
+    dispatch(resetUserPosts())
+    Cookies.remove('accessToken')
+    alert.success('Logged out successfully.')
+  }
   return (
     <div className='user-sidebar col-lg-2 d-none d-lg-block bg-light border-end p-3'>
       <div className='mx-3'>
         <div className='user_info'>
           <Link to='/' className='clearfix'>
             <div className='user_avatar'>
-              <img
-                src='https://phongtro123.com/images/default-user.png'
-                className='user-info'
-              />
+              <img src='/images/default_avatar.jpg' className='user-info' />
             </div>
             <div className='welcome-text text-decoration-none'>
               <div className='ms-2'>
@@ -102,7 +108,11 @@ const UserSidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to='/' className='nav-link link-dark'>
+            <NavLink
+              to='/'
+              className='nav-link link-dark'
+              onClick={logoutHandler}
+            >
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className='me-2'

@@ -1,11 +1,13 @@
 import React from 'react'
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAlert } from 'react-alert'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
+
 import { logout } from '../../actions/userActions'
-import { useAlert } from 'react-alert'
+import { resetUserPosts } from '../../actions/postActions'
 
 import {
   faArrowRightToBracket,
@@ -18,8 +20,12 @@ const Header = () => {
   const { user, loading } = useSelector((state) => state.auth)
   const logoutHandler = () => {
     dispatch(logout())
+    dispatch(resetUserPosts())
     Cookies.remove('accessToken')
     alert.success('Logged out successfully.')
+  }
+  if (performance.getEntriesByType('navigation')[0].type == 2) {
+    location.reload(true)
   }
   return (
     <>
@@ -59,7 +65,7 @@ const Header = () => {
                         rel='nofollow'
                       >
                         <img
-                          src='https://phongtro123.com/images/default-user.png'
+                          src='/images/default_avatar.jpg'
                           className='user-info'
                         />
                         <div>
@@ -92,9 +98,12 @@ const Header = () => {
                         <a className='dropdown-item' href='#!'>
                           Thông tin cá nhân
                         </a>
-                        <a className='dropdown-item' href='#!'>
+                        <Link
+                          className='dropdown-item'
+                          to='/user/post-management'
+                        >
                           Quản lý tin đăng
-                        </a>
+                        </Link>
                         <div className='dropdown-divider'></div>
                         <Link
                           className='dropdown-item text-danger'

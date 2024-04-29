@@ -8,7 +8,7 @@ const ProtectedRoute = ({ isAdmin }) => {
   return (
     loading === false &&
     (isAuthenticated ? (
-      isAdmin && user.role !== 'admin' ? ( // Nếu đã đăng nhập và truy cập vào đường dẫn của admin mà user không phải admin thì trở về trang Home
+      isAdmin && !user.isAdmin ? ( // Nếu đã đăng nhập và truy cập vào đường dẫn của admin mà user không phải admin thì trở về trang Home
         <Navigate to='/' />
       ) : (
         <Outlet />
