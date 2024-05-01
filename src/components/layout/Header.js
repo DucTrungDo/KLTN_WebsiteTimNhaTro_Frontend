@@ -24,7 +24,9 @@ const Header = () => {
     Cookies.remove('accessToken')
     alert.success('Logged out successfully.')
   }
-  if (performance.getEntriesByType('navigation')[0].type == 2) {
+  if (
+    window.performance.getEntriesByType('navigation')[0].type === 'back_forward'
+  ) {
     location.reload(true)
   }
   return (
