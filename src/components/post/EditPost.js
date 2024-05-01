@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { editPost } from '../../actions/postActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import { getPostDetails, clearErrors } from '../../actions/postActions'
@@ -28,18 +29,21 @@ const EditPost = () => {
   const [districtName, setDistrictName] = useState('')
   const [wardName, setWardName] = useState('')
 
-  const [loadDetailpostfirst, setLoadDetailPostFirst] = useState(0)
+  const [kich, setKich] = useState(0)
+  const [endKich, setEndKich] = useState(0)
+  const [acceptDataCount, setAcceptDataCount] = useState(0)
 
-  const [address, setAddres] = useState({
+  const [address, setAddress] = useState({
     city: '',
     district: '',
     ward: '',
     street: '',
   })
   const [addressAbsolute, setAddressAbsolute] = useState('')
-  const { provinces } = useSelector((state) => state.province)
-  const { districts } = useSelector((state) => state.district)
-  const { wards } = useSelector((state) => state.ward)
+
+  const [provinces, setProvinces] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [wards, setWards] = useState([])
   const { categories } = useSelector((state) => state.categories)
   const { post } = useSelector((state) => state.postDetails)
   const { error, isSuccess } = useSelector((state) => state.postEdit)
@@ -56,26 +60,72 @@ const EditPost = () => {
       navigate('/user/post-management')
     }
   }, [dispatch, alert, error, isSuccess])
-  const getKeyOfSelectedOption = (type) => {
-    if (type === 'pro') {
-      const selectedOption = provinces.find(
-        (location) => location.province_name === provinceName
+
+  async function fetchDataInitialization() {
+    try {
+      const response = await axios.get('https://vapi.vnappmob.com/api/province')
+      await setProvinces(response.data.results)
+      await setProvinceName(post.address.city)
+      const keypro = await response.data.results.find(
+        (location) => location.province_name === post.address.city
+      ).province_id
+      const response2 = await axios.get(
+        `https://vapi.vnappmob.com/api/province/district/${keypro}`
       )
-      return selectedOption ? selectedOption.province_id : null
+      await setDistricts(response2.data.results)
+      await setDistrictName(post.address.district)
+      const keydis = await response2.data.results.find(
+        (location) => location.district_name === post.address.district
+      ).district_id
+      const response3 = await axios.get(
+        ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
+      )
+      await setWards(response3.data.results)
+      await setWardName(post.address.ward)
+      await setStreet(post.address.street)
+      await setKich(1)
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
-    if (type === 'dis') {
-      const selectedOption = districts.find(
-        (location) => location.district_name === districtName
+  }
+  async function fetchData(change) {
+    try {
+      const response = await axios.get('https://vapi.vnappmob.com/api/province')
+      await setProvinces(response.data.results)
+      const keypro = await response.data.results.find(
+        (location) => location.province_name === provinceName
+      ).province_id
+      const response2 = await axios.get(
+        `https://vapi.vnappmob.com/api/province/district/${keypro}`
       )
-      return selectedOption ? selectedOption.district_id : null
+      await setDistricts(response2.data.results)
+
+      if (change === 'provinceChange') {
+        await setDistrictName('')
+        await setWardName('')
+        await setStreet('')
+      }
+      const keydis = await response2.data.results.find(
+        (location) => location.district_name === districtName
+      ).district_id
+      const response3 = await axios.get(
+        ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
+      )
+      await setWards(response3.data.results)
+      if (change === 'districtChange') {
+        await setWardName('')
+        await setStreet('')
+      }
+      if (change === 'wardChange') {
+        await setStreet('')
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
   }
   useEffect(() => {
-    if (provinces.length === 0) {
-      dispatch(getProvince())
-      dispatch(getCategories())
-      dispatch(getPostDetails(slug))
-    }
+    dispatch(getCategories())
+    dispatch(getPostDetails(slug))
   }, [dispatch, navigate, alert, error])
   useEffect(() => {
     setCategory(post.categoryId?._id)
@@ -85,68 +135,68 @@ const EditPost = () => {
     setArea(post?.area)
     setUserName(post.userId?.name)
     setUserPhone(post.userId?.phone)
-    setAddres({
+    setAddress({
       city: post.address?.city,
       district: post.address?.district,
       ward: post.address?.ward,
       street: post.address?.street,
     })
-    setProvinceName(post.address?.city)
+    setAcceptDataCount(acceptDataCount + 1)
   }, [post])
   useEffect(() => {
-    if (provinceName) {
-      dispatch(getdistrict(getKeyOfSelectedOption('pro')))
-      setDistrictName(post.address?.district)
+    if (acceptDataCount === 2) {
+      fetchDataInitialization()
     }
-  }, [dispatch, getKeyOfSelectedOption('pro'), provinceName])
-
+  }, [acceptDataCount])
   useEffect(() => {
-    if (districtName) {
-      dispatch(getWard(getKeyOfSelectedOption('dis')))
-      setWardName(post.address?.ward)
+    if (endKich === 1 && provinceName !== '') {
+      fetchData('provinceChange')
     }
-  }, [dispatch, getKeyOfSelectedOption('dis'), districtName])
-
+    if (provinceName === '') {
+      setDistricts([])
+      setDistrictName('')
+    }
+  }, [provinceName])
   useEffect(() => {
-    if (loadDetailpostfirst === 1) {
-      setStreet(post.address?.street)
-    } else {
+    if (endKich === 1 && districtName !== '') {
+      fetchData('districtChange')
+    }
+    if (districtName === '') {
+      setWards([])
+      setWardName('')
+    }
+  }, [districtName])
+  useEffect(() => {
+    if (endKich === 1 && wardName !== '') {
+      fetchData('wardChange')
+    }
+    if (wardName === '') {
       setStreet('')
     }
-    setLoadDetailPostFirst(loadDetailpostfirst + 1)
   }, [wardName])
 
   useEffect(() => {
-    if (street !== '') {
-      if (provinceName === '' || districtName === '' || wardName === '') {
-        setAddressAbsolute('')
-      } else if (
-        provinceName !== '' &&
-        districtName !== '' &&
-        wardName !== ''
-      ) {
-        setAddressAbsolute(
-          provinceName + '/' + districtName + '/' + wardName + '/' + street
-        )
-      }
-      setAddres({
+    const fields = [provinceName, districtName, wardName, street]
+    console.log(fields)
+    const isEmpty = fields.some((field) => field.trim() === '')
+    if (isEmpty) {
+      setAddressAbsolute('')
+    } else {
+      setAddressAbsolute(
+        provinceName + '/' + districtName + '/' + wardName + '/' + street
+      )
+      setAddress({
         city: provinceName,
         district: districtName,
         ward: wardName,
         street: street,
       })
-    } else {
-      if (provinceName === '' || districtName === '' || wardName === '') {
-        setAddressAbsolute('')
-      } else if (
-        provinceName !== '' &&
-        districtName !== '' &&
-        wardName !== ''
-      ) {
-        setAddressAbsolute(provinceName + '/' + districtName + '/' + wardName)
-      }
     }
-  }, [street, wardName])
+  }, [provinceName, districtName, wardName, street])
+
+  useEffect(() => {
+    if (kich === 1) setEndKich(1)
+  }, [kich])
 
   const submitHandler = (e) => {
     e.preventDefault()
