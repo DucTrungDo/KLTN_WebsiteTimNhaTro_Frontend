@@ -9,6 +9,7 @@ import {
   postEditReducer,
   newPostReducer,
 } from './reducers/postReducers'
+import { favoriteReducer } from './reducers/favoriteReducers'
 import {
   provinceReducer,
   districtReducer,
@@ -21,6 +22,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const reducer = combineReducers({
   posts: postsReducer,
   postDetails: postDetailsReducer,
+  favorite: favoriteReducer,
   userPosts: userPostsReducer,
   userPost: userPostReducer,
   auth: authReducer,
@@ -34,9 +36,18 @@ const reducer = combineReducers({
   newPost: newPostReducer,
 })
 
+let initialState = {
+  favorite: {
+    favoritePosts: localStorage.getItem('favoritePosts')
+      ? JSON.parse(localStorage.getItem('favoritePosts'))
+      : [],
+  },
+}
+
 const middleware = [thunk]
 const store = createStore(
   reducer,
+  initialState,
   composeEnhancers(applyMiddleware(...middleware))
 )
 

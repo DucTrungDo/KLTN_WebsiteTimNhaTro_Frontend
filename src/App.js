@@ -39,6 +39,8 @@ import ChangePassword from './components/user/ChangePassword'
 import AddNewPost from './components/post/Addnewpost'
 import PostDetail from './components/post/PostDetail'
 import EditPost from './components/post/EditPost'
+import FavoritePost from './components/post/FavoritePost'
+
 import ProtectedRoute from './components/route/ProtectedRoute'
 
 function App() {
@@ -59,6 +61,7 @@ function App() {
               <Route path='/verify_register' element={<VerifyRegister />} />
               <Route path='/post/:slug' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
+              <Route path='/favorite_post' element={<FavoritePost />} />
             </Routes>
           </div>
         </main>

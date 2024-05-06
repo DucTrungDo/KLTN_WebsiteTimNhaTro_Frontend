@@ -1,18 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
+import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { useDispatch, useSelector } from 'react-redux'
+
+import {
+  addPostToFavorite,
+  removePostFromFavorite,
+} from '../../actions/favoriteActions'
+
 import {
   faLocationDot,
   faRulerCombined,
-  faUserAstronaut,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 const Post = ({ post }) => {
+  const dispatch = useDispatch()
+
+  // State to manage saved status
+  const [saved, setSaved] = useState(false)
+  const { favoritePosts } = useSelector((state) => state.favorite)
+
   useEffect(() => {
     function truncateText(selector, maxLength) {
-      var elements = document.querySelectorAll(selector)
+      let elements = document.querySelectorAll(selector)
       elements.forEach(function (element) {
-        var text = element.textContent
+        let text = element.textContent
         if (text.length > maxLength) {
           element.textContent = text.slice(0, maxLength) + '...'
         }
@@ -22,6 +34,24 @@ const Post = ({ post }) => {
     truncateText('.title', 50)
     truncateText('.address', 30)
   })
+
+  useEffect(() => {
+    // Kiểm tra xem post.slug có trong danh sách bài đăng yêu thích không
+    const isFavorite = favoritePosts.some(
+      (favoritePost) => favoritePost.slug === post.slug
+    )
+    // Cập nhật trạng thái của nút lưu (saved) dựa vào kết quả kiểm tra
+    setSaved(isFavorite)
+  }, [favoritePosts, post.slug])
+
+  const handleSaveClick = () => {
+    if (saved) {
+      dispatch(removePostFromFavorite(post.slug))
+    } else {
+      dispatch(addPostToFavorite(post.slug))
+    }
+    setSaved((prevSaved) => !prevSaved) // Đảo ngược trạng thái của nút lưu sau khi click
+  }
   return (
     <div className='col-lg-4 col-md-6 wow fadeInUp' data-wow-delay='0.5s'>
       <Link
@@ -41,7 +71,20 @@ const Post = ({ post }) => {
               alt=''
             />
             <div className='bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3'>
-              For Rent
+              For rent
+            </div>
+            <div className='rounded text-white position-absolute end-0 top-0 mx-4 py-0 px-3 homepage-post-listing'>
+              <span
+                className={`post-save ${saved ? 'saved' : ''}`}
+                title='Thêm vào danh sách yêu thích'
+                onClick={(e) => {
+                  e.preventDefault()
+                  // e.stopPropagation()
+                  handleSaveClick()
+                }}
+              >
+                <i></i>
+              </span>
             </div>
             <div className='bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3'>
               Shop
@@ -75,7 +118,7 @@ const Post = ({ post }) => {
               <div className='d-flex border-top'>
                 <small className='flex-fill text-center border-end py-2'>
                   <FontAwesomeIcon
-                    icon={faUserAstronaut}
+                    icon={faUser}
                     className='me-1 text-primary'
                   />
                   {post.userId.name}

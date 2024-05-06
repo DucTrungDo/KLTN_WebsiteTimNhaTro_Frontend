@@ -4,7 +4,6 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { differenceInDays } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import {
   faStar,
   faLocationDot,
@@ -18,13 +17,39 @@ import SearchFilter from '../layout/SearchFilter'
 import MapD from '../googleMap/MapD'
 import Loader from '../layout/Loader'
 import { getPostDetails, clearErrors } from '../../actions/postActions'
+import {
+  addPostToFavorite,
+  removePostFromFavorite,
+} from '../../actions/favoriteActions'
 
 const PostDetail = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
   const { slug } = useParams()
   const { loading, post, error } = useSelector((state) => state.postDetails)
+  const { favoritePosts } = useSelector((state) => state.favorite)
   const [addressPost, setaddressPost] = useState('')
+  const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    // Kiểm tra xem post.slug có trong danh sách bài đăng yêu thích không
+    const isFavorite = favoritePosts.some(
+      (favoritePost) => favoritePost.slug === slug
+    )
+    // Cập nhật trạng thái của nút lưu (saved) dựa vào kết quả kiểm tra
+    setSaved(isFavorite)
+  }, [favoritePosts, slug])
+
+  const handleSaveClick = () => {
+    if (saved) {
+      console.log('1')
+      dispatch(removePostFromFavorite(slug))
+    } else {
+      dispatch(addPostToFavorite(slug))
+    }
+    setSaved((prevSaved) => !prevSaved) // Đảo ngược trạng thái của nút lưu sau khi click
+  }
+
   useEffect(() => {
     dispatch(getPostDetails(slug))
 
@@ -33,6 +58,7 @@ const PostDetail = () => {
       dispatch(clearErrors())
     }
   }, [dispatch, alert, error])
+
   useEffect(() => {
     if (post.address !== undefined) {
       setaddressPost(
@@ -51,6 +77,7 @@ const PostDetail = () => {
     post.address?.district,
     post.address?.city,
   ])
+
   const PriceDisplay = ({ price }) => {
     if (!price) return
     if (price >= 1000000) {
@@ -271,16 +298,19 @@ const PostDetail = () => {
                   >
                     <i className='iconzalo'></i> Zalo
                   </a>
-                  <a
-                    href='#'
-                    className='btn btn-light border border-1  border-secondary fw-bold'
-                    role='button'
-                    data-bs-toggle='button'
+                  <button
+                    className='btn btn-light border border-1  border-secondary fw-bold post-details-save d-inline-flex justify-content-center'
                     aria-pressed='true'
+                    onClick={() => handleSaveClick()}
                   >
-                    <FontAwesomeIcon icon={faHeart} className='me-1' />
+                    <span
+                      className={`post-save ${saved ? 'saved' : ''} me-1`}
+                      title='Thêm vào danh sách yêu thích'
+                    >
+                      <i></i>
+                    </span>
                     Yêu thích
-                  </a>
+                  </button>
                 </div>
               </div>
               {/* <!-- card outstanding --> */}

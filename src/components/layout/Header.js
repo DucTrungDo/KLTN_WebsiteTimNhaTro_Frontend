@@ -12,12 +12,15 @@ import { resetUserPosts } from '../../actions/postActions'
 import {
   faArrowRightToBracket,
   faUserPlus,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
   const { user, loading } = useSelector((state) => state.auth)
+  const { favoritePosts } = useSelector((state) => state.favorite)
+
   const logoutHandler = () => {
     dispatch(logout())
     dispatch(resetUserPosts())
@@ -90,16 +93,16 @@ const Header = () => {
                         aria-haspopup='true'
                         aria-expanded='false'
                       >
-                        <FontAwesomeIcon icon={faHeart} className='me-1' />
+                        <FontAwesomeIcon icon={faUser} className='me-1' />
                         Quản lý tài khoản
                       </a>
                       <div
                         className='dropdown-menu dropdown-menu-end'
                         aria-labelledby='navbarDropdown'
                       >
-                        <a className='dropdown-item' href='#!'>
+                        <Link className='dropdown-item' to='/user/profile'>
                           Thông tin cá nhân
-                        </a>
+                        </Link>
                         <Link
                           className='dropdown-item'
                           to='/user/post-management'
@@ -148,13 +151,19 @@ const Header = () => {
 
                 {/* logic */}
 
-                <li className='nav-item'>
+                <li className='nav-item me-3'>
                   <Link
-                    to='/farvorite'
-                    className='nav-item nav-link align-content-center'
+                    to='/favorite_post'
+                    className='nav-item nav-link align-content-center position-relative'
                   >
                     <FontAwesomeIcon icon={faHeart} className='me-1' />
                     Yêu thích
+                    {favoritePosts.length > 0 ? (
+                      <span class='position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger'>
+                        {favoritePosts.length}
+                        <span class='visually-hidden'>Favorite post</span>
+                      </span>
+                    ) : null}
                   </Link>
                 </li>
                 <li className='nav-item'>

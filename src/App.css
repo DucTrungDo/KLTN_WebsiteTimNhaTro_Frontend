@@ -350,3 +350,279 @@
   cursor: pointer;
 }
 /* Property List */
+
+/* Favorite page */
+.container {
+  margin: 0 auto;
+  padding: 0;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: ' ';
+  clear: both;
+  height: 0;
+}
+
+#left-col {
+  float: left;
+  width: 100%;
+}
+
+.section {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+}
+
+.section-post-listing li,
+.section-post-listing ol,
+.section-post-listing ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section .section-header {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.section .section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.section .section-title.small {
+  font-size: 1.2rem;
+}
+
+.post-listing .post-item {
+  display: flex;
+  padding: 15px 0;
+  border-top: 1px solid #ddd;
+  margin: 0;
+  background-color: #fff;
+  z-index: 0;
+  position: relative;
+}
+
+.post-listing .post-item.vip1 {
+  z-index: 4;
+}
+
+figure {
+  margin: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.post-listing .post-item figure {
+  width: 170px;
+  height: 160px;
+  position: relative;
+  overflow: initial;
+}
+
+.post-listing img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 3px;
+}
+
+figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-listing .post-item figure img {
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 0;
+}
+
+.post-listing .post-item figure img.lazy_done {
+  opacity: 1;
+}
+
+.post-listing .post-item .images-number {
+  position: absolute;
+  bottom: 8px;
+  left: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.post-listing .post-item .has-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: url(/public/images/property-test.jpg) center no-repeat;
+  background-size: 45px;
+  pointer-events: none;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+}
+
+.post-listing .post-item .post-save {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.homepage-post-listing {
+  margin-top: 20px;
+}
+
+.post-details-save .post-save.saved i,
+.homepage-post-listing .post-save.saved i,
+.post-listing .post-item .post-save.saved i,
+.post-listing .post-item .post-save:hover i {
+  background: url(/public/images/love-full.png) center no-repeat;
+  background-size: contain;
+}
+
+.post-details-save .post-save i,
+.homepage-post-listing .post-save i,
+.post-listing .post-item .post-save i {
+  width: 23px;
+  height: 23px;
+  background: url(/public/images/love.png) center no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
+
+.post-details-save .post-save i {
+  margin-bottom: -5px;
+}
+
+.homepage-post-listing .post-save i {
+  width: 36px;
+  height: 36px;
+}
+
+.post-listing .post-item .post-meta {
+  margin-left: 15px;
+  -ms-flex: 1;
+  flex: 1;
+  position: relative;
+}
+
+.post-listing .post-item .post-title {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  display: block;
+  white-space: normal;
+  margin: 0 0 10px;
+}
+
+.post-listing .post-item .post-title a {
+  text-decoration: none;
+  display: block;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.star {
+  width: 14px;
+  height: 17px;
+  background: url(https://phongtro123.com/images/mobile/star2.png) left center
+    repeat-x;
+  background-size: 14px 14px;
+  display: inline-block;
+  margin-right: 3px;
+  float: left;
+}
+
+.star.star-4 {
+  width: 56px;
+  height: 17px;
+}
+
+.post-listing .post-item .post-acreage,
+.post-listing .post-item .post-location,
+.post-listing .post-item .post-price,
+.post-listing .post-item .post-summary {
+  float: left;
+  margin-right: 20px;
+  color: #333;
+  line-height: 19px;
+}
+
+.post-listing .post-item .meta-row {
+  margin-bottom: 10px;
+}
+
+.post-listing .post-item .post-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #16c784;
+}
+
+.post-listing .post-item .post-location a {
+  text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  max-width: 250px;
+  color: #333;
+}
+
+.post-listing .post-item .post-time {
+  float: right;
+  margin-right: 0;
+  color: #aaa;
+  line-height: 19px;
+  font-size: 0.9rem;
+}
+
+.post-listing .post-item .post-summary {
+  margin: 10px 0 0;
+  color: #8a8d91;
+  float: none;
+}
+
+.post-listing .post-item .meta-row:last-of-type {
+  margin-bottom: 0;
+}
+
+.post-listing .post-item .post-author {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #8a8d91;
+}
+
+.post-listing .post-item .post-author img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 5px;
+}
+/* Favorite page */
