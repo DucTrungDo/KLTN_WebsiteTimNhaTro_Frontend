@@ -15,9 +15,15 @@ const Login = () => {
   const { isAuthenticated, error, loading, token } = useSelector(
     (state) => state.auth
   )
+  const isAdmin = useSelector((state) => state.auth.user)
+
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/')
+      if (isAdmin) {
+        navigate('/admin/dashboard')
+      } else {
+        navigate('/')
+      }
       if (Cookies.get('accessToken') == undefined) {
         Cookies.set('accessToken', token)
       }

@@ -5,22 +5,21 @@ import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFileLines,
-  faPenToSquare,
-  faClock,
-  faCalendar,
   faFile,
   faComment,
 } from '@fortawesome/free-regular-svg-icons'
 import {
-  faDollarSign,
   faArrowRightFromBracket,
+  faList,
+  faReceipt,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink } from 'react-router-dom'
 
 import { logout } from '../../actions/userActions'
 import { resetUserPosts } from '../../actions/postActions'
 
-const UserSidebar = () => {
+const AdminSidebar = () => {
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const alert = useAlert()
@@ -32,7 +31,7 @@ const UserSidebar = () => {
     alert.success('Logged out successfully.')
   }
   return (
-    <div className='user-sidebar col-lg-2 d-none d-lg-block bg-light border-end p-3'>
+    <div className='admin-sidebar col-lg-2 d-none d-lg-block bg-light border-end p-3'>
       <div className='mx-3'>
         <div className='user_info'>
           <Link to='/' className='clearfix'>
@@ -53,9 +52,7 @@ const UserSidebar = () => {
               </div>
             </div>
           </Link>
-          <div>
-            <span>TK Chính:</span> <span style={{ fontWeight: '700' }}> 0</span>
-          </div>
+
           <div className='my-2'>
             <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
               Nạp tiền
@@ -67,33 +64,33 @@ const UserSidebar = () => {
         </div>
         <ul className='nav nav-pills flex-column mb-auto'>
           <li className='nav-item '>
-            <NavLink to='/user/post-management' className='nav-link link-dark'>
+            <NavLink to='/admin/post-management' className='nav-link link-dark'>
               <FontAwesomeIcon icon={faFileLines} className='me-2' />
               Quản lý tin đăng
             </NavLink>
           </li>
           <li>
-            <NavLink to='/user/profile' className='nav-link link-dark'>
-              <FontAwesomeIcon icon={faPenToSquare} className='me-2' />
-              Sửa thông tin cá nhân
+            <NavLink to='/admin/user-management' className='nav-link link-dark'>
+              <FontAwesomeIcon icon={faUser} className='me-2' />
+              Quản lý người dùng
             </NavLink>
           </li>
           <li>
-            <NavLink to='/user/recharge' className='nav-link link-dark'>
-              <FontAwesomeIcon icon={faDollarSign} className='me-2' />
-              Nạp tiền vào tài khoản
+            <NavLink
+              to='/admin/category-management'
+              className='nav-link link-dark'
+            >
+              <FontAwesomeIcon icon={faList} className='me-2' />
+              Quản lý danh mục
             </NavLink>
           </li>
           <li>
-            <NavLink to='/user/recharge-history' className='nav-link link-dark'>
-              <FontAwesomeIcon icon={faClock} className='me-2' />
-              Lịch sử nạp tiền
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/user/payment-history' className='nav-link link-dark'>
-              <FontAwesomeIcon icon={faCalendar} className='me-2' />
-              Lịch sử thanh toán
+            <NavLink
+              to='/admin/invoice-management'
+              className='nav-link link-dark'
+            >
+              <FontAwesomeIcon icon={faReceipt} className='me-2' />
+              Quản lý hóa đơn
             </NavLink>
           </li>
           <li>
@@ -130,4 +127,4 @@ const UserSidebar = () => {
   )
 }
 
-export default UserSidebar
+export default AdminSidebar

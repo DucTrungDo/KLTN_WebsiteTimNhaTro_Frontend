@@ -12,11 +12,15 @@ import { useSelector } from 'react-redux'
 
 import './App.css'
 
-// Home import
+// Layout import
 import MainHeader from './components/layout/Header'
 import MainFooter from './components/layout/Footer'
 import UserHeader from './components/layout/UserHeader'
 import UserSidebar from './components/layout/UserSidebar'
+import AdminHeader from './components/layout/AdminHeader'
+import AdminSidebar from './components/layout/AdminSidebar'
+
+// Home import
 import Home from './components/Home'
 
 // Auth import
@@ -34,6 +38,13 @@ import RechargeHistory from './components/user/RechargeHistory'
 import PaymentHistory from './components/user/PaymentHistory'
 import ServicePriceList from './components/user/ServicePriceList'
 import ChangePassword from './components/user/ChangePassword'
+
+// Admin import
+import AdminDashboard from './components/admin/Dashboard'
+import AdminPostManagement from './components/admin/PostManagement'
+import AdminUserManagement from './components/admin/UserManagement'
+import AdminCategoryManagement from './components/admin/CategoryManagement'
+import AdminInvoiceManagement from './components/admin/InvoiceManagement'
 
 // Post import
 import AddNewPost from './components/post/Addnewpost'
@@ -74,6 +85,13 @@ function App() {
           </Route>
         </Routes>
       </div>
+      <div>
+        <Routes>
+          <Route element={<ProtectedRoute isAdminRoute={true} />}>
+            <Route path='/admin/*' element={<AdminRoutes />} />
+          </Route>
+        </Routes>
+      </div>
     </Router>
   )
 }
@@ -81,11 +99,16 @@ function App() {
 function HeaderSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
-  const { loading, isAuthenticated } = useSelector((state) => state.auth)
+  const isAdminRoute = location.pathname.startsWith('/admin')
+  const { loading, isAuthenticated, user } = useSelector((state) => state.auth)
+
   return (
     <>
-      {loading && isUserRoute ? null : isUserRoute && isAuthenticated ? (
+      {loading && (isUserRoute || isAdminRoute) ? null : isUserRoute &&
+        isAuthenticated ? (
         <UserHeader />
+      ) : isAdminRoute && isAuthenticated && user.isAdmin ? (
+        <AdminHeader />
       ) : (
         <MainHeader />
       )}
@@ -96,8 +119,9 @@ function HeaderSwitcher() {
 function FooterSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
+  const isAdminRoute = location.pathname.startsWith('/admin')
 
-  return <>{isUserRoute ? null : <MainFooter />}</>
+  return <>{isUserRoute || isAdminRoute ? null : <MainFooter />}</>
 }
 
 function UserRoutes() {
@@ -117,6 +141,31 @@ function UserRoutes() {
             <Route path='service-price-list' element={<ServicePriceList />} />
             <Route path='change-password' element={<ChangePassword />} />
             <Route path='add-new-post' element={<AddNewPost />} />
+          </Routes>
+        </main>
+      </div>
+    </div>
+  )
+}
+
+function AdminRoutes() {
+  return (
+    <div className='container-fluid'>
+      <div className='row vh-100'>
+        <AdminSidebar />
+        <main className='ml-sm-auto col-lg-10 user-main'>
+          <Routes>
+            <Route path='dashboard' element={<AdminDashboard />} />
+            <Route path='post-management' element={<AdminPostManagement />} />
+            <Route path='user-management' element={<AdminUserManagement />} />
+            <Route
+              path='category-management'
+              element={<AdminCategoryManagement />}
+            />
+            <Route
+              path='invoice-management'
+              element={<AdminInvoiceManagement />}
+            />
           </Routes>
         </main>
       </div>
