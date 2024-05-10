@@ -1,6 +1,6 @@
 import { newPost, clearErrors } from '../../actions/postActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
-import { getCategories } from '../../actions/categoriesAction'
+import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react'

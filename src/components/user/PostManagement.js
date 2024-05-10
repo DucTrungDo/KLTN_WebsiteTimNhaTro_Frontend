@@ -96,7 +96,7 @@ const PostManagement = () => {
       {loading || !posts ? (
         <Loader />
       ) : (
-        <div className='d-none d-md-block'>
+        <div className='d-md-block'>
           <div className='table-responsive'>
             <table className='table table_post_listing table-bordered _table-hover'>
               <thead>

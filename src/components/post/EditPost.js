@@ -2,7 +2,7 @@ import axios from 'axios'
 import { editPost } from '../../actions/postActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import { getPostDetails, clearErrors } from '../../actions/postActions'
-import { getCategories } from '../../actions/categoriesAction'
+import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react'
@@ -64,26 +64,26 @@ const EditPost = () => {
   async function fetchDataInitialization() {
     try {
       const response = await axios.get('https://vapi.vnappmob.com/api/province')
-      await setProvinces(response.data.results)
-      await setProvinceName(post.address.city)
+      setProvinces(response.data.results)
+      setProvinceName(post.address.city)
       const keypro = await response.data.results.find(
         (location) => location.province_name === post.address.city
       ).province_id
       const response2 = await axios.get(
         `https://vapi.vnappmob.com/api/province/district/${keypro}`
       )
-      await setDistricts(response2.data.results)
-      await setDistrictName(post.address.district)
+      setDistricts(response2.data.results)
+      setDistrictName(post.address.district)
       const keydis = await response2.data.results.find(
         (location) => location.district_name === post.address.district
       ).district_id
       const response3 = await axios.get(
         ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
       )
-      await setWards(response3.data.results)
-      await setWardName(post.address.ward)
-      await setStreet(post.address.street)
-      await setKich(1)
+      setWards(response3.data.results)
+      setWardName(post.address.ward)
+      setStreet(post.address.street)
+      setKich(1)
     } catch (error) {
       console.error('Error fetching data:', error)
     }
@@ -91,19 +91,19 @@ const EditPost = () => {
   async function fetchData(change) {
     try {
       const response = await axios.get('https://vapi.vnappmob.com/api/province')
-      await setProvinces(response.data.results)
+      setProvinces(response.data.results)
       const keypro = await response.data.results.find(
         (location) => location.province_name === provinceName
       ).province_id
       const response2 = await axios.get(
         `https://vapi.vnappmob.com/api/province/district/${keypro}`
       )
-      await setDistricts(response2.data.results)
+      setDistricts(response2.data.results)
 
       if (change === 'provinceChange') {
-        await setDistrictName('')
-        await setWardName('')
-        await setStreet('')
+        setDistrictName('')
+        setWardName('')
+        setStreet('')
       }
       const keydis = await response2.data.results.find(
         (location) => location.district_name === districtName
@@ -111,13 +111,13 @@ const EditPost = () => {
       const response3 = await axios.get(
         ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
       )
-      await setWards(response3.data.results)
+      setWards(response3.data.results)
       if (change === 'districtChange') {
-        await setWardName('')
-        await setStreet('')
+        setWardName('')
+        setStreet('')
       }
       if (change === 'wardChange') {
-        await setStreet('')
+        setStreet('')
       }
     } catch (error) {
       console.error('Error fetching data:', error)

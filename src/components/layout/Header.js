@@ -159,9 +159,9 @@ const Header = () => {
                     <FontAwesomeIcon icon={faHeart} className='me-1' />
                     Yêu thích
                     {favoritePosts.length > 0 ? (
-                      <span class='position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger'>
+                      <span className='position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger'>
                         {favoritePosts.length}
-                        <span class='visually-hidden'>Favorite post</span>
+                        <span className='visually-hidden'>Favorite post</span>
                       </span>
                     ) : null}
                   </Link>
