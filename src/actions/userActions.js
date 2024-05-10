@@ -31,6 +31,18 @@ import {
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAIL,
+  GET_ALL_USER_REQUEST,
+  GET_ALL_USER_SUCCESS,
+  GET_ALL_USER_FAIL,
+  UPDATE_PROFILE_USER_ADMIN_REQUEST,
+  UPDATE_PROFILE_USER_ADMIN_SUCCESS,
+  UPDATE_PROFILE_USER_ADMIN_FAIL,
+  BLOCK_USER_REQUEST,
+  BLOCK_USER_SUCCESS,
+  BLOCK_USER_FAIL,
+  UN_BLOCK_USER_REQUEST,
+  UN_BLOCK_USER_SUCCESS,
+  UN_BLOCK_USER_FAIL,
 } from '../constants/userConstants'
 
 // Verify User for register
@@ -313,6 +325,126 @@ export const updatePassword =
       })
     }
   }
+
+// Get All Users
+export const getAlluser = (token, currentPage) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_ALL_USER_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/users?page=${currentPage}`,
+      config
+    )
+
+    dispatch({
+      type: GET_ALL_USER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_USER_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Update profile Role ADMIN
+export const updateProfileUserAdmin =
+  (token, User, _id) => async (dispatch) => {
+    try {
+      dispatch({ type: UPDATE_PROFILE_USER_ADMIN_REQUEST })
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.put(
+        `https://boardinghouse-api.onrender.com/api/v1/users/${_id}`,
+        User,
+        config
+      )
+
+      dispatch({
+        type: UPDATE_PROFILE_USER_ADMIN_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: UPDATE_PROFILE_USER_ADMIN_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+
+// Block user Role ADMIN
+export const blockUser = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: BLOCK_USER_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}/lock`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: BLOCK_USER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: BLOCK_USER_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Un block user Role ADMIN
+export const unBlockUser = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: UN_BLOCK_USER_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}/unlock`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: UN_BLOCK_USER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: UN_BLOCK_USER_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
