@@ -32,6 +32,21 @@ import {
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_RESET,
   UPDATE_PASSWORD_FAIL,
+  GET_ALL_USER_REQUEST,
+  GET_ALL_USER_SUCCESS,
+  GET_ALL_USER_FAIL,
+  UPDATE_PROFILE_USER_ADMIN_REQUEST,
+  UPDATE_PROFILE_USER_ADMIN_SUCCESS,
+  UPDATE_PROFILE_USER_ADMIN_RESET,
+  UPDATE_PROFILE_USER_ADMIN_FAIL,
+  BLOCK_USER_REQUEST,
+  BLOCK_USER_SUCCESS,
+  BLOCK_USER_RESET,
+  BLOCK_USER_FAIL,
+  UN_BLOCK_USER_REQUEST,
+  UN_BLOCK_USER_SUCCESS,
+  UN_BLOCK_USER_RESET,
+  UN_BLOCK_USER_FAIL,
 } from '../constants/userConstants'
 
 export const authReducer = (state = { user: {} }, action) => {
@@ -138,6 +153,8 @@ export const userReducer = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_PROFILE_REQUEST:
     case UPDATE_PASSWORD_REQUEST:
+    case BLOCK_USER_REQUEST:
+    case UN_BLOCK_USER_REQUEST:
       return {
         ...state,
         loading: true,
@@ -145,6 +162,8 @@ export const userReducer = (state = {}, action) => {
 
     case UPDATE_PROFILE_SUCCESS:
     case UPDATE_PASSWORD_SUCCESS:
+    case BLOCK_USER_SUCCESS:
+    case UN_BLOCK_USER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -152,7 +171,10 @@ export const userReducer = (state = {}, action) => {
       }
 
     case UPDATE_PROFILE_RESET:
+    case UPDATE_PROFILE_USER_ADMIN_RESET:
     case UPDATE_PASSWORD_RESET:
+    case BLOCK_USER_RESET:
+    case UN_BLOCK_USER_RESET:
       return {
         ...state,
         isUpdated: false,
@@ -160,12 +182,49 @@ export const userReducer = (state = {}, action) => {
 
     case UPDATE_PROFILE_FAIL:
     case UPDATE_PASSWORD_FAIL:
+    case BLOCK_USER_FAIL:
+    case UN_BLOCK_USER_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+    case GET_ALL_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case GET_ALL_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload.data,
+      }
+    case GET_ALL_USER_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload,
       }
 
+    case UPDATE_PROFILE_USER_ADMIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case UPDATE_PROFILE_USER_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: action.payload.data,
+        isUpdated: true,
+      }
+    case UPDATE_PROFILE_USER_ADMIN_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
     case CLEAR_ERRORS:
       return {
         ...state,
