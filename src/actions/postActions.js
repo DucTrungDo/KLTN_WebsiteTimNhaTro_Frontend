@@ -23,15 +23,18 @@ import {
   ALL_UNAPPROVED_POSTS_REQUEST,
   ALL_UNAPPROVED_POSTS_SUCCESS,
   ALL_UNAPPROVED_POSTS_FAIL,
+  DELETE_ADMIN_POST_REQUEST,
+  DELETE_ADMIN_POST_SUCCESS,
+  DELETE_ADMIN_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
 // Get all posts
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (currentPage) => async (dispatch) => {
   try {
     dispatch({ type: ALL_POSTS_REQUEST })
 
-    let link = `https://boardinghouse-api.onrender.com/api/v1/posts`
+    let link = `https://boardinghouse-api.onrender.com/api/v1/posts?page=${currentPage}`
 
     const { data } = await axios.get(link)
 
@@ -185,7 +188,7 @@ export const newPost = (token, post) => async (dispatch) => {
 }
 
 // Get all unapproved post (Moderator)
-export const getUnapprovedPosts = (token) => async (dispatch) => {
+export const getUnapprovedPosts = (token, currentPage) => async (dispatch) => {
   try {
     dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
 
@@ -196,7 +199,7 @@ export const getUnapprovedPosts = (token) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators`,
+      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators?page=${currentPage}`,
       config
     )
 
@@ -212,6 +215,33 @@ export const getUnapprovedPosts = (token) => async (dispatch) => {
   }
 }
 
+// Delete admin's post
+export const deleteAdminPost = (token, slug) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_ADMIN_POST_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.delete(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}`,
+      config
+    )
+
+    dispatch({
+      type: DELETE_ADMIN_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: DELETE_ADMIN_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({

@@ -47,6 +47,9 @@ import {
   UN_BLOCK_USER_SUCCESS,
   UN_BLOCK_USER_RESET,
   UN_BLOCK_USER_FAIL,
+  GET_USER_ADMIN_REQUEST,
+  GET_USER_ADMIN_SUCCESS,
+  GET_USER_ADMIN_FAIL,
 } from '../constants/userConstants'
 
 export const authReducer = (state = { user: {} }, action) => {
@@ -200,6 +203,7 @@ export const userReducer = (state = {}, action) => {
         loading: false,
         users: action.payload.data,
       }
+
     case GET_ALL_USER_FAIL:
       return {
         ...state,
@@ -208,11 +212,13 @@ export const userReducer = (state = {}, action) => {
       }
 
     case UPDATE_PROFILE_USER_ADMIN_REQUEST:
+    case GET_USER_ADMIN_REQUEST:
       return {
         ...state,
         loading: true,
       }
     case UPDATE_PROFILE_USER_ADMIN_SUCCESS:
+    case GET_USER_ADMIN_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -220,6 +226,7 @@ export const userReducer = (state = {}, action) => {
         isUpdated: true,
       }
     case UPDATE_PROFILE_USER_ADMIN_FAIL:
+    case GET_USER_ADMIN_FAIL:
       return {
         ...state,
         loading: false,

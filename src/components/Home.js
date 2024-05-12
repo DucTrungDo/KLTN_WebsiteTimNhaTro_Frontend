@@ -13,14 +13,38 @@ const Home = () => {
   const dispatch = useDispatch()
 
   const { loading, posts, error } = useSelector((state) => state.posts)
-
+  const [page, setPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
     if (error) {
       return alert.error(error)
     }
-    dispatch(getPosts())
+    dispatch(getPosts(1))
   }, [dispatch, alert, error])
-
+  useEffect(() => {
+    if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
+      setPage(
+        Math.round(
+          posts.count % 6 !== 0
+            ? Math.floor(posts.count / 6) + 1
+            : Math.floor(posts.count / 6)
+        )
+      )
+    }
+  }, [posts])
+  async function ChoisePage(indexPageCurrent) {
+    setCurrentPage(indexPageCurrent)
+    dispatch(getPosts(indexPageCurrent))
+  }
+  async function NextAndPrevious(Actions) {
+    if (Actions === 'next') {
+      setCurrentPage(currentPage + 1)
+      dispatch(getPosts(currentPage + 1))
+    } else {
+      setCurrentPage(currentPage - 1)
+      dispatch(getPosts(currentPage - 1))
+    }
+  }
   return (
     <>
       <SearchFilter />
@@ -84,9 +108,61 @@ const Home = () => {
                     className='col-12 text-center wow fadeInUp'
                     data-wow-delay='0.1s'
                   >
-                    <a className='btn btn-primary py-3 px-5' href=''>
-                      Browse More Property
-                    </a>
+                    <nav aria-label='...'>
+                      <ul class='pagination pagination-lg justify-content-center'>
+                        <li
+                          class={
+                            currentPage === 1
+                              ? 'page-item disabled'
+                              : 'page-item'
+                          }
+                        >
+                          <button
+                            onClick={() => {
+                              NextAndPrevious('previous')
+                            }}
+                            class='page-link'
+                          >
+                            Previous
+                          </button>
+                        </li>
+                        {Array.from({ length: page }, (_, index) => (
+                          <li
+                            key={index}
+                            className={
+                              currentPage === index + 1
+                                ? 'page-item active '
+                                : 'page-item'
+                            }
+                          >
+                            <button
+                              onClick={() => {
+                                ChoisePage(index + 1)
+                              }}
+                              className='page-link'
+                            >
+                              {index + 1}
+                            </button>
+                          </li>
+                        ))}
+                        <li
+                          class={
+                            currentPage === page
+                              ? 'page-item disabled'
+                              : 'page-item'
+                          }
+                        >
+                          <button
+                            onClick={() => {
+                              NextAndPrevious('next')
+                            }}
+                            class='page-link'
+                          >
+                            Next
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
                   </div>
                 </div>
               </div>
