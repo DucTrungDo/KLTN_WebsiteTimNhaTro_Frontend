@@ -20,6 +20,9 @@ import {
   ADD_NEW_POST_REQUEST,
   ADD_NEW_POST_SUCCESS,
   ADD_NEW_POST_FAIL,
+  ALL_UNAPPROVED_POSTS_REQUEST,
+  ALL_UNAPPROVED_POSTS_SUCCESS,
+  ALL_UNAPPROVED_POSTS_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -65,7 +68,7 @@ export const getPostDetails = (slug) => async (dispatch) => {
   }
 }
 
-// Get all user's posts
+// Get all user's posts (User)
 export const getUserPosts = (token) => async (dispatch) => {
   try {
     dispatch({ type: ALL_USER_POSTS_REQUEST })
@@ -154,7 +157,7 @@ export const editPost = (token, slug, post) => async (dispatch) => {
   }
 }
 
-// Add new post
+// Add new post (User)
 export const newPost = (token, post) => async (dispatch) => {
   try {
     dispatch({ type: ADD_NEW_POST_REQUEST })
@@ -176,6 +179,34 @@ export const newPost = (token, post) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADD_NEW_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get all unapproved post (Moderator)
+export const getUnapprovedPosts = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators`,
+      config
+    )
+
+    dispatch({
+      type: ALL_UNAPPROVED_POSTS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ALL_UNAPPROVED_POSTS_FAIL,
       payload: error.response.data.message,
     })
   }

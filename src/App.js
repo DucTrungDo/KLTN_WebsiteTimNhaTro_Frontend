@@ -19,6 +19,8 @@ import UserHeader from './components/layout/UserHeader'
 import UserSidebar from './components/layout/UserSidebar'
 import AdminHeader from './components/layout/AdminHeader'
 import AdminSidebar from './components/layout/AdminSidebar'
+import ModeratorHeader from './components/layout/ModeratorHeader'
+import ModeratorSidebar from './components/layout/ModeratorSidebar'
 
 // Home import
 import Home from './components/Home'
@@ -45,6 +47,10 @@ import AdminPostManagement from './components/admin/PostManagement'
 import AdminUserManagement from './components/admin/UserManagement'
 import AdminCategoryManagement from './components/admin/CategoryManagement'
 import AdminInvoiceManagement from './components/admin/InvoiceManagement'
+
+// Moderator import
+import ModeratorDashboard from './components/moderator/Dashboard'
+import PostModeration from './components/moderator/PostModeration'
 
 // Post import
 import AddNewPost from './components/post/Addnewpost'
@@ -92,6 +98,13 @@ function App() {
           </Route>
         </Routes>
       </div>
+      <div>
+        <Routes>
+          <Route element={<ProtectedRoute isModeratorRoute={true} />}>
+            <Route path='/moderator/*' element={<ModeratorRoutes />} />
+          </Route>
+        </Routes>
+      </div>
     </Router>
   )
 }
@@ -100,15 +113,21 @@ function HeaderSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
   const isAdminRoute = location.pathname.startsWith('/admin')
+  const isModeratorRoute = location.pathname.startsWith('/moderator')
   const { loading, isAuthenticated, user } = useSelector((state) => state.auth)
 
   return (
     <>
-      {loading && (isUserRoute || isAdminRoute) ? null : isUserRoute &&
+      {loading &&
+      (isUserRoute || isAdminRoute || isModeratorRoute) ? null : isUserRoute &&
         isAuthenticated ? (
         <UserHeader />
       ) : isAdminRoute && isAuthenticated && user.isAdmin ? (
         <AdminHeader />
+      ) : isModeratorRoute &&
+        isAuthenticated &&
+        (user.isModerator || user.isAdmin) ? (
+        <ModeratorHeader />
       ) : (
         <MainHeader />
       )}
@@ -120,8 +139,13 @@ function FooterSwitcher() {
   const location = useLocation()
   const isUserRoute = location.pathname.startsWith('/user')
   const isAdminRoute = location.pathname.startsWith('/admin')
+  const isModeratorRoute = location.pathname.startsWith('/moderator')
 
-  return <>{isUserRoute || isAdminRoute ? null : <MainFooter />}</>
+  return (
+    <>
+      {isUserRoute || isAdminRoute || isModeratorRoute ? null : <MainFooter />}
+    </>
+  )
 }
 
 function UserRoutes() {
@@ -166,6 +190,22 @@ function AdminRoutes() {
               path='invoice-management'
               element={<AdminInvoiceManagement />}
             />
+          </Routes>
+        </main>
+      </div>
+    </div>
+  )
+}
+
+function ModeratorRoutes() {
+  return (
+    <div className='container-fluid'>
+      <div className='row vh-100'>
+        <ModeratorSidebar />
+        <main className='ml-sm-auto col-lg-10 user-main'>
+          <Routes>
+            <Route path='dashboard' element={<ModeratorDashboard />} />
+            <Route path='post-moderation' element={<PostModeration />} />
           </Routes>
         </main>
       </div>

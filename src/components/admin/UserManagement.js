@@ -259,7 +259,7 @@ const UserManagement = () => {
                               onClick={() => {
                                 ViewDetail(user)
                               }}
-                              className='btn btn-secondary btn-sm '
+                              className='btn btn-warning btn-sm '
                             >
                               <FontAwesomeIcon
                                 className='me-1 '

@@ -8,6 +8,7 @@ import {
   userPostReducer,
   postEditReducer,
   newPostReducer,
+  unapprovedPostsReducer,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -22,6 +23,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const reducer = combineReducers({
   posts: postsReducer,
   postDetails: postDetailsReducer,
+  unapprovedPosts: unapprovedPostsReducer,
   favorite: favoriteReducer,
   userPosts: userPostsReducer,
   userPost: userPostReducer,
