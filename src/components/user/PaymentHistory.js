@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 import { format } from 'date-fns'
 
-import { getUserInvoices } from '../../actions/invoiceActions'
+import { getUserInvoices, clearErrors } from '../../actions/invoiceActions'
 
 import Loader from '../layout/Loader'
 

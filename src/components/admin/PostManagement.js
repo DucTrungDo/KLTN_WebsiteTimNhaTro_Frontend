@@ -85,7 +85,6 @@ const PostManagement = () => {
     }
   }, [unapprovedPosts, posts])
   async function ViewDetail(post) {
-    setPostDetail({})
     setPostDetail(post)
   }
   async function ResetOut() {
@@ -346,7 +345,7 @@ const PostManagement = () => {
                                     <line x1='5' y1='12' x2='19' y2='12'></line>
                                   </svg>
                                 </svg>{' '}
-                                Gia hạng
+                                Gia hạn
                               </a>
                               <button
                                 class='btn btn-sm '

@@ -9,6 +9,7 @@ import {
   postEditReducer,
   newPostReducer,
   unapprovedPostsReducer,
+  unapprovedPostReducer,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -26,6 +27,7 @@ const reducer = combineReducers({
   posts: postsReducer,
   postDetails: postDetailsReducer,
   unapprovedPosts: unapprovedPostsReducer,
+  unapprovedPost: unapprovedPostReducer,
   favorite: favoriteReducer,
   userPosts: userPostsReducer,
   userPost: userPostReducer,

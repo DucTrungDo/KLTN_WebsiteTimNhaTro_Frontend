@@ -10,7 +10,16 @@ import React, { useState, useEffect } from 'react'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import MapD from '../googleMap/MapD'
-import { POST_EDIT_RESET } from '../../constants/postConstants'
+import {
+  getUnapprovedPosts,
+  approvePost,
+  reportViolatingPost,
+} from '../../actions/postActions'
+import {
+  POST_EDIT_RESET,
+  MODERATOR_APPROVE_POST_RESET,
+  MODERATOR_REPORT_POST_RESET,
+} from '../../constants/postConstants'
 const DetailPostModal = ({ post }) => {
   const token = Cookies.get('accessToken')
   const navigate = useNavigate()
@@ -48,11 +57,23 @@ const DetailPostModal = ({ post }) => {
   const { error, isSuccess } = useSelector((state) => state.postEdit)
   const { user } = useSelector((state) => state.user)
   const { user: who } = useSelector((state) => state.auth)
+  const {
+    loading: unapprovedPostLoading,
+    isApproved,
+    isReported,
+    error: unapprovedPostError,
+  } = useSelector((state) => state.unapprovedPost)
   useEffect(() => {
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
     }
+
+    if (unapprovedPostError) {
+      alert.error(unapprovedPostError)
+      dispatch(clearErrors())
+    }
+
     if (isSuccess) {
       alert.success('cập nhật thành công')
       dispatch({
@@ -60,7 +81,25 @@ const DetailPostModal = ({ post }) => {
       })
       navigate('/user/post-management')
     }
-  }, [dispatch, alert, error, isSuccess])
+
+    if (isApproved) {
+      alert.success('Post approved successfully')
+      navigate('/moderator/post-moderation')
+      dispatch({
+        type: MODERATOR_APPROVE_POST_RESET,
+      })
+      dispatch(getUnapprovedPosts(token, 1))
+    }
+
+    if (isReported) {
+      alert.success('Post reported successfully')
+      navigate('/moderator/post-moderation')
+      dispatch({
+        type: MODERATOR_REPORT_POST_RESET,
+      })
+      dispatch(getUnapprovedPosts(token, 1))
+    }
+  }, [dispatch, alert, error, isSuccess, isApproved, isReported])
 
   async function fetchDataInitialization() {
     try {
@@ -142,7 +181,7 @@ const DetailPostModal = ({ post }) => {
       fetchDataInitialization()
       dispatch(getProfileUserAdmin(token, post.userId._id))
     }
-    console.log(post)
+    setWarningComment('')
   }, [post])
   useEffect(() => {
     if (user !== undefined) {
@@ -222,10 +261,18 @@ const DetailPostModal = ({ post }) => {
       //   )
     }
   }
-  async function approvedPost() {
-    console.log(who)
+  function approvePostHandler() {
+    console.log(token)
+    dispatch(approvePost(post.slug, token))
   }
-  async function warningPost() {}
+  function reportPostHandler() {
+    if (!warningComment.trim()) {
+      // Kiểm tra xem input có giá trị không
+      alert.error('Vui lòng nhập lý do từ chối duyệt.') // Hiển thị thông báo nếu input trống
+      return
+    }
+    dispatch(reportViolatingPost(post.slug, token, warningComment))
+  }
 
   return (
     <div>
@@ -265,11 +312,11 @@ const DetailPostModal = ({ post }) => {
                 <select
                   id='province_id'
                   name='province_id'
-                  className='form-control js-select-tinhthanhpho select2-hidden-accessible'
+                  className='form-control select2-hidden-accessible'
                   required=''
                   data-msg-required='Chưa chọn Tỉnh/TP'
                   tabIndex='-1'
-                  readOnly={who.isModerator === true ? 'readOnly' : ''}
+                  disabled={who.isModerator === true ? 'readOnly' : ''}
                   aria-hidden='true'
                   value={provinceName}
                   onChange={(e) => setProvinceName(e.target.value)}
@@ -296,12 +343,12 @@ const DetailPostModal = ({ post }) => {
                 <select
                   name='district_id'
                   id='district_id'
-                  className='form-control js-select-quanhuyen select2-hidden-accessible'
+                  className='form-control select2-hidden-accessible'
                   required=''
                   data-msg-required='Chưa chọn Quận/Huyện'
                   tabIndex='-1'
                   aria-hidden='true'
-                  readOnly={who.isModerator === true ? 'readOnly' : ''}
+                  disabled={who.isModerator === true ? 'readOnly' : ''}
                   value={districtName}
                   onChange={(e) => setDistrictName(e.target.value)}
                 >
@@ -324,8 +371,8 @@ const DetailPostModal = ({ post }) => {
                   Phường/Xã
                 </label>
                 <select
-                  readOnly={who.isModerator === true ? 'readOnly' : ''}
-                  className='form-control js-select-phuongxa select2-hidden-accessible'
+                  disabled={who.isModerator === true ? 'readOnly' : ''}
+                  className='form-control select2-hidden-accessible'
                   name='phuongxa'
                   id='phuongxa'
                   tabIndex='-1'
@@ -352,7 +399,7 @@ const DetailPostModal = ({ post }) => {
                 </label>
                 <input
                   type='text'
-                  className='form-control js-input-street-number'
+                  className='form-control'
                   name='street_number'
                   id='street_number'
                   readOnly={who.isModerator === true ? 'readOnly' : ''}
@@ -399,7 +446,7 @@ const DetailPostModal = ({ post }) => {
                 required=''
                 data-msg-required='Chưa chọn loại chuyên mục'
                 aria-invalid='false'
-                readOnly={who.isModerator === true ? 'readOnly' : ''}
+                disabled={who.isModerator === true ? 'readOnly' : ''}
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
@@ -419,7 +466,7 @@ const DetailPostModal = ({ post }) => {
             <div className='col-md-12'>
               <input
                 type='text'
-                className='form-control js-title'
+                className='form-control'
                 name='tieu_de'
                 id='post_title'
                 minLength='30'
@@ -440,7 +487,7 @@ const DetailPostModal = ({ post }) => {
             </label>
             <div className='col-md-12'>
               <textarea
-                className='form-control js-content'
+                className='form-control'
                 name='noi_dung'
                 id='post_content'
                 rows='10'
@@ -508,17 +555,13 @@ const DetailPostModal = ({ post }) => {
                   onChange={(e) => setprice(e.target.value)}
                   readOnly={who.isModerator === true ? 'readOnly' : ''}
                   type='text'
-                  className='form-control js-gia-cho-thue'
+                  className='form-control'
                   required=''
                   data-msg-required='Bạn chưa nhập giá phòng'
                   data-msg-min='Giá phòng chưa đúng'
                 />
                 <div className='input-group-append'>
-                  <select
-                    className='form-control js-unit'
-                    name='don_vi'
-                    id='don_vi'
-                  >
+                  <select className='form-control' name='don_vi' id='don_vi'>
                     <option value='0'>đồng/tháng</option>
                     <option value='1'>đồng/m2/tháng</option>
                   </select>
@@ -531,7 +574,7 @@ const DetailPostModal = ({ post }) => {
             <label
               htmlFor='text_giachothue'
               id='text_giachothue'
-              className='col-sm-12 control-label js-number-text'
+              className='col-sm-12 control-label'
               style={{ color: 'red' }}
             ></label>
           </div>
@@ -577,7 +620,7 @@ const DetailPostModal = ({ post }) => {
                 id='list-photos-dropzone-previews'
               ></div>
               <div id='tpl' style={{ display: 'none' }}>
-                <div className='photo_item col-md-2 col-3 js-photo-manual'>
+                <div className='photo_item col-md-2 col-3'>
                   <div className='photo'>
                     <img data-dz-thumbnail='' />
                   </div>
@@ -627,47 +670,51 @@ const DetailPostModal = ({ post }) => {
                 onClick={() => {
                   editPostAdmin()
                 }}
-                className='btn btn-success mb-5 btn-lg btn-block js-btn-hoan-tat'
+                className='btn btn-success mb-5 btn-lg btn-block'
               >
                 Cập nhật
               </button>
             </div>
           </div>
           <div className='form-group row'>
-            <div className='col-md-4'>
-              <button
-                onClick={() => {
-                  warningPost()
-                }}
-                className='btn btn-success btn-lg btn-block js-btn-hoan-tat'
-              >
-                Cảnh báo
-              </button>
-            </div>
-            <label htmlFor='post_content' className='col-md-12 col-form-label'>
-              Nội dung mô tả
+            <label htmlFor='post_warning' className='col-md-12 col-form-label'>
+              Từ chối duyệt {'('}nếu có{')'}:
             </label>
-            <div className='col-md-12'>
+            <div className='col-md-12 d-flex align-items-center'>
               <textarea
-                className='form-control js-content'
+                className='form-control'
                 name='noi_dung'
-                id='post_content'
-                rows='10'
+                id='post_warning'
+                placeholder='Lý do từ chối duyệt'
+                rows='5'
                 required=''
-                minLength='100'
                 value={warningComment}
                 onChange={(e) => setWarningComment(e.target.value)}
-                data-msg-required='Bạn chưa nhập nội dung'
-                data-msg-minlength='Nội dung tối thiểu 100 kí tự'
               ></textarea>
+              <div className='col-md-2 ms-3'>
+                <button
+                  onClick={() => {
+                    reportPostHandler()
+                  }}
+                  data-bs-dismiss='modal'
+                  aria-label='Close'
+                  className='btn btn-warning btn-lg btn-block'
+                  disabled={unapprovedPostLoading ? true : false}
+                >
+                  Từ chối duyệt
+                </button>
+              </div>
             </div>
           </div>
           <div className='col-md-4'>
             <button
               onClick={() => {
-                approvedPost()
+                approvePostHandler()
               }}
-              className='btn btn-success mt-5 btn-lg btn-block js-btn-hoan-tat'
+              data-bs-dismiss='modal'
+              aria-label='Close'
+              className='btn btn-success mt-4 btn-lg btn-block'
+              disabled={unapprovedPostLoading ? true : false}
             >
               Duyệt tin
             </button>

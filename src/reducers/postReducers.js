@@ -24,6 +24,14 @@ import {
   ALL_UNAPPROVED_POSTS_REQUEST,
   ALL_UNAPPROVED_POSTS_SUCCESS,
   ALL_UNAPPROVED_POSTS_FAIL,
+  MODERATOR_APPROVE_POST_REQUEST,
+  MODERATOR_APPROVE_POST_SUCCESS,
+  MODERATOR_APPROVE_POST_FAIL,
+  MODERATOR_APPROVE_POST_RESET,
+  MODERATOR_REPORT_POST_REQUEST,
+  MODERATOR_REPORT_POST_SUCCESS,
+  MODERATOR_REPORT_POST_FAIL,
+  MODERATOR_REPORT_POST_RESET,
   DELETE_ADMIN_POST_REQUEST,
   DELETE_ADMIN_POST_SUCCESS,
   DELETE_ADMIN_POST_RESET,
@@ -264,6 +272,60 @@ export const unapprovedPostsReducer = (
       }
 
     case ALL_UNAPPROVED_POSTS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const unapprovedPostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MODERATOR_APPROVE_POST_REQUEST:
+    case MODERATOR_REPORT_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case MODERATOR_APPROVE_POST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isApproved: action.payload,
+      }
+
+    case MODERATOR_REPORT_POST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isReported: action.payload,
+      }
+
+    case MODERATOR_APPROVE_POST_RESET:
+      return {
+        ...state,
+        isApproved: false,
+      }
+
+    case MODERATOR_REPORT_POST_RESET:
+      return {
+        ...state,
+        isReported: false,
+      }
+
+    case MODERATOR_APPROVE_POST_FAIL:
+    case MODERATOR_REPORT_POST_FAIL:
       return {
         ...state,
         loading: false,

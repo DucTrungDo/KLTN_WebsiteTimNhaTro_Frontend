@@ -23,6 +23,12 @@ import {
   ALL_UNAPPROVED_POSTS_REQUEST,
   ALL_UNAPPROVED_POSTS_SUCCESS,
   ALL_UNAPPROVED_POSTS_FAIL,
+  MODERATOR_APPROVE_POST_REQUEST,
+  MODERATOR_APPROVE_POST_SUCCESS,
+  MODERATOR_APPROVE_POST_FAIL,
+  MODERATOR_REPORT_POST_REQUEST,
+  MODERATOR_REPORT_POST_SUCCESS,
+  MODERATOR_REPORT_POST_FAIL,
   DELETE_ADMIN_POST_REQUEST,
   DELETE_ADMIN_POST_SUCCESS,
   DELETE_ADMIN_POST_FAIL,
@@ -215,7 +221,66 @@ export const getUnapprovedPosts = (token, currentPage) => async (dispatch) => {
   }
 }
 
-// Delete admin's post
+// Approve post (Moderator)
+export const approvePost = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: MODERATOR_APPROVE_POST_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/approved`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: MODERATOR_APPROVE_POST_SUCCESS,
+      payload: data.success,
+    })
+  } catch (error) {
+    dispatch({
+      type: MODERATOR_APPROVE_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Report violating post (Moderator)
+export const reportViolatingPost =
+  (slug, token, violation) => async (dispatch) => {
+    try {
+      dispatch({ type: MODERATOR_REPORT_POST_REQUEST })
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axios.patch(
+        `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/violated`,
+        { violation },
+        config
+      )
+
+      dispatch({
+        type: MODERATOR_REPORT_POST_SUCCESS,
+        payload: data.success,
+      })
+    } catch (error) {
+      dispatch({
+        type: MODERATOR_REPORT_POST_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+
+// Delete post (Admin)
 export const deleteAdminPost = (token, slug) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_ADMIN_POST_REQUEST })
@@ -228,6 +293,7 @@ export const deleteAdminPost = (token, slug) => async (dispatch) => {
 
     const { data } = await axios.delete(
       `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}`,
+      {},
       config
     )
 
@@ -242,6 +308,7 @@ export const deleteAdminPost = (token, slug) => async (dispatch) => {
     })
   }
 }
+
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({

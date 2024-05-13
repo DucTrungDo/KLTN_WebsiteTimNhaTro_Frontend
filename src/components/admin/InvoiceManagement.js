@@ -5,10 +5,10 @@ import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 import { format } from 'date-fns'
 
-import { getAllrInvoices } from '../../actions/invoiceActions'
+import { getAllInvoices, clearErrors } from '../../actions/invoiceActions'
 
 import Loader from '../layout/Loader'
 
