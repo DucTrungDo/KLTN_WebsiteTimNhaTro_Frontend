@@ -387,7 +387,7 @@ const PostDetail = () => {
                 </div>
               </div>
               {/* <!-- card outstanding --> */}
-              <div className='border border-1 rounded mt-2'>
+              {/* <div className='border border-1 rounded mt-2'>
                 <h5 className='ms-3 me-3 mt-1'>Tin nổi bật</h5>
                 <div
                   className='card-list ms-3 me-3 mb-2'
@@ -554,11 +554,11 @@ const PostDetail = () => {
                     </div>
                   </a>
                 </div>
-              </div>
+              </div> */}
               {/* <!-- card end outstanding -->
             
             <!-- card relation --> */}
-              <div className='border border-1 rounded mt-2'>
+              {/* <div className='border border-1 rounded mt-2'>
                 <h5 className='ms-3 me-3 mt-1'>Tin liên quan</h5>
                 <div
                   className='card-list-relation ms-3 me-3 mb-2'
@@ -705,8 +705,126 @@ const PostDetail = () => {
                     </div>
                   </a>
                 </div>
-              </div>
+              </div> */}
               {/* <!-- card end relation --> */}
+              <section className='section section-aside-tinmoidang mt-3'>
+                <div class='section-header'>
+                  <span class='section-title'>Tin nổi bật</span>
+                </div>
+                <ul className='post-listing aside clearfix'>
+                  <li class='post-item clearfix tin-vip vip1' post-id='654398'>
+                    <a href='/' className='text-decoration-none'>
+                      <figure>
+                        <img
+                          class='lazy_done'
+                          src='../images/property-test.jpg'
+                          data-src='../images/property-test.jpg'
+                          alt='Khai trương phòng giá rẻ, duplex siêu phẩm BanCol, đầy đủ nội thất, tại Tân Bình, giáp Quận 10'
+                          height='100'
+                          width='100'
+                          layout='responsive'
+                          data-loaded='true'
+                        />
+                      </figure>
+                      <div class='post-meta'>
+                        <span class='post-title' style={{ color: '#ea2e9d' }}>
+                          <span class='star star-4'></span> Khai trương phòng
+                          giá rẻ, duplex siêu phẩm…{' '}
+                        </span>
+                        <span class='post-price'>5 triệu/tháng</span>
+                        <time class='post-time' title='Thứ 7, 19:49 11/05/2024'>
+                          Hôm nay
+                        </time>
+                      </div>
+                    </a>
+                  </li>
+                  <li class='post-item clearfix tin-vip vip2' post-id='596753'>
+                    <a href='/' className='text-decoration-none'>
+                      <figure>
+                        <img
+                          class='lazy_done'
+                          src='../images/property-test.jpg'
+                          data-src='../images/property-test.jpg'
+                          alt='Phòng mới xây 572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr'
+                          height='100'
+                          width='100'
+                          layout='responsive'
+                          data-loaded='true'
+                        />
+                      </figure>
+                      <div class='post-meta'>
+                        <span class='post-title' style={{ color: '#f60' }}>
+                          <span class='star star-3'></span> Phòng mới xây 572/9
+                          Âu Cơ, P10, Tân Bình 3.5tr-4,7tr{' '}
+                        </span>
+                        <span class='post-price'>3.6 triệu/tháng</span>
+                        <time class='post-time' title='Thứ 2, 14:33 13/05/2024'>
+                          5 giờ trước
+                        </time>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </section>
+              <section className='section section-aside-tinmoidang'>
+                <div class='section-header'>
+                  <span class='section-title'>Tin mới đăng</span>
+                </div>
+                <ul className='post-listing aside clearfix'>
+                  <li class='post-item clearfix normal' post-id='654608'>
+                    <a href='/' className='text-decoration-none'>
+                      <figure>
+                        <img
+                          class='lazy_done'
+                          src='../images/property-test.jpg'
+                          data-src='../images/property-test.jpg'
+                          alt='phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN ngay khu Bàu Cát'
+                          height='100'
+                          width='100'
+                          layout='responsive'
+                          data-loaded='true'
+                        />
+                      </figure>
+                      <div class='post-meta'>
+                        <span class='post-title' style={{ color: '#055699' }}>
+                          {' '}
+                          phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN…{' '}
+                        </span>
+                        <span class='post-price'>3.5 triệu/tháng</span>
+                        <time class='post-time' title='Thứ 2, 12:27 13/05/2024'>
+                          7 giờ trước
+                        </time>
+                      </div>
+                    </a>
+                  </li>
+                  <li class='post-item clearfix normal' post-id='654606'>
+                    <a href='/' className='text-decoration-none'>
+                      <figure>
+                        <img
+                          class='lazy_done'
+                          src='../images/property-test.jpg'
+                          data-src='../images/property-test.jpg'
+                          alt='PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3'
+                          height='100'
+                          width='100'
+                          layout='responsive'
+                          data-loaded='true'
+                        />
+                      </figure>
+                      <div class='post-meta'>
+                        <span class='post-title' style={{ color: '#055699' }}>
+                          {' '}
+                          PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3{' '}
+                        </span>
+                        <span class='post-price'>3.7 triệu/tháng</span>
+                        <time class='post-time' title='Thứ 2, 11:35 13/05/2024'>
+                          8 giờ trước
+                        </time>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </section>
             </div>
           </div>
         </div>

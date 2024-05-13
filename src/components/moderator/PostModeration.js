@@ -302,9 +302,7 @@ const PostModeration = () => {
                 Modal title
               </h5>
               <button
-                onClick={() => {
-                  ResetOut()
-                }}
+                onClick={ResetOut}
                 type='button'
                 className='btn-close'
                 data-bs-dismiss='modal'
@@ -316,9 +314,7 @@ const PostModeration = () => {
             </div>
             <div className='modal-footer'>
               <button
-                onClick={() => {
-                  ResetOut()
-                }}
+                onClick={ResetOut}
                 type='button'
                 className='btn btn-secondary'
                 data-bs-dismiss='modal'
