@@ -43,6 +43,9 @@ import {
   UN_BLOCK_USER_REQUEST,
   UN_BLOCK_USER_SUCCESS,
   UN_BLOCK_USER_FAIL,
+  GET_USER_ADMIN_REQUEST,
+  GET_USER_ADMIN_SUCCESS,
+  GET_USER_ADMIN_FAIL,
 } from '../constants/userConstants'
 
 // Verify User for register
@@ -441,6 +444,35 @@ export const unBlockUser = (token, _id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UN_BLOCK_USER_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get user information ADMin
+export const getProfileUserAdmin = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_USER_ADMIN_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}`,
+      config
+    )
+
+    dispatch({
+      type: GET_USER_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_USER_ADMIN_FAIL,
       payload: error.response.data.message,
     })
   }

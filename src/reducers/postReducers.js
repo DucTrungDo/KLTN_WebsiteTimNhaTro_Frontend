@@ -24,6 +24,10 @@ import {
   ALL_UNAPPROVED_POSTS_REQUEST,
   ALL_UNAPPROVED_POSTS_SUCCESS,
   ALL_UNAPPROVED_POSTS_FAIL,
+  DELETE_ADMIN_POST_REQUEST,
+  DELETE_ADMIN_POST_SUCCESS,
+  DELETE_ADMIN_POST_RESET,
+  DELETE_ADMIN_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -131,25 +135,29 @@ export const userPostsReducer = (state = { posts: [] }, action) => {
 export const userPostReducer = (state = {}, action) => {
   switch (action.type) {
     case DELETE_USER_POST_REQUEST:
+    case DELETE_ADMIN_POST_REQUEST:
       return {
         ...state,
         postLoading: true,
       }
 
     case DELETE_USER_POST_SUCCESS:
+    case DELETE_ADMIN_POST_SUCCESS:
       return {
         ...state,
         postLoading: false,
-        isDeleted: action.payload,
+        isDeleted: true,
       }
 
     case DELETE_USER_POST_FAIL:
+    case DELETE_ADMIN_POST_FAIL:
       return {
         ...state,
         postError: action.payload,
       }
 
     case DELETE_USER_POST_RESET:
+    case DELETE_ADMIN_POST_RESET:
       return {
         ...state,
         isDeleted: false,
@@ -238,7 +246,10 @@ export const postEditReducer = (state = { post: {} }, action) => {
   }
 }
 
-export const unapprovedPostsReducer = (state = { unapprovedPosts: [] }, action) => {
+export const unapprovedPostsReducer = (
+  state = { unapprovedPosts: [] },
+  action
+) => {
   switch (action.type) {
     case ALL_UNAPPROVED_POSTS_REQUEST:
       return {
