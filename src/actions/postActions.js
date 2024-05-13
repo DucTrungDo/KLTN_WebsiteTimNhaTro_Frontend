@@ -185,7 +185,7 @@ export const newPost = (token, post) => async (dispatch) => {
 }
 
 // Get all unapproved post (Moderator)
-export const getUnapprovedPosts = (token) => async (dispatch) => {
+export const getUnapprovedPosts = (token, currentPage) => async (dispatch) => {
   try {
     dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
 
@@ -196,7 +196,7 @@ export const getUnapprovedPosts = (token) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators`,
+      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators?page=${currentPage}`,
       config
     )
 

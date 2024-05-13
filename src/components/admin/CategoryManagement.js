@@ -10,7 +10,6 @@ import {
   faTrashCan,
   faSquarePlus,
 } from '@fortawesome/free-regular-svg-icons'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
 import {
   getCategories,
@@ -131,7 +130,7 @@ const CategoryManagement = () => {
             </Link>
           </li>
           <li className='breadcrumb-item'>
-            <Link to='/user/dashboard' className='text-decoration-none'>
+            <Link to='/admin/dashboard' className='text-decoration-none'>
               Quản lý
             </Link>
           </li>
@@ -175,16 +174,7 @@ const CategoryManagement = () => {
               <tbody>
                 {categories.count === 0 || !categories.cates ? (
                   <tr>
-                    <td colSpan='7'>
-                      Bạn chưa có tin đăng nào. Bấm{' '}
-                      <Link
-                        className='text-decoration-none'
-                        to='/user/add-new-post'
-                      >
-                        vào đây
-                      </Link>{' '}
-                      để bắt đầu đăng tin
-                    </td>
+                    <td colSpan='5'>Bạn chưa có danh mục nào.</td>
                   </tr>
                 ) : (
                   categories.cates?.map((cate) => (

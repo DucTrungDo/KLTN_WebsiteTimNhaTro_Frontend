@@ -17,8 +17,10 @@ const ProtectedRoute = ({ isAdminRoute, isModeratorRoute }) => {
           <Navigate to='/' />
         )
       ) : isModeratorRoute ? (
-        user.isModerator || user.isAdmin ? (
+        user.isModerator ? (
           <Outlet />
+        ) : user.isAdmin ? (
+          <Navigate to='/admin/dashboard' />
         ) : (
           <Navigate to='/' />
         )

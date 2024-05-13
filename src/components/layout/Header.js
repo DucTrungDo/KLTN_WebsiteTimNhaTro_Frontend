@@ -109,6 +109,18 @@ const Header = () => {
                         >
                           Quản lý tin đăng
                         </Link>
+                        {user.isModerator ? (
+                          <Link
+                            className='dropdown-item'
+                            to='/moderator/dashboard'
+                          >
+                            Trang Moderator
+                          </Link>
+                        ) : user.isAdmin ? (
+                          <Link className='dropdown-item' to='/admin/dashboard'>
+                            Trang Admin
+                          </Link>
+                        ) : null}
                         <div className='dropdown-divider'></div>
                         <Link
                           className='dropdown-item text-danger'

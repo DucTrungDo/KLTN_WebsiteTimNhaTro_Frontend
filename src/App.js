@@ -124,9 +124,7 @@ function HeaderSwitcher() {
         <UserHeader />
       ) : isAdminRoute && isAuthenticated && user.isAdmin ? (
         <AdminHeader />
-      ) : isModeratorRoute &&
-        isAuthenticated &&
-        (user.isModerator || user.isAdmin) ? (
+      ) : isModeratorRoute && isAuthenticated && user.isModerator ? (
         <ModeratorHeader />
       ) : (
         <MainHeader />

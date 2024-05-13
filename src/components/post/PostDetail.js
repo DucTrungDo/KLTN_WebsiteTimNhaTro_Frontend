@@ -12,6 +12,7 @@ import {
   faClock,
   faHashtag,
 } from '@fortawesome/free-solid-svg-icons'
+import { format } from 'date-fns'
 
 import SearchFilter from '../layout/SearchFilter'
 import MapD from '../googleMap/MapD'
@@ -253,6 +254,78 @@ const PostDetail = () => {
               <div>
                 <h4>Thông tin mô tả</h4>
                 <DescriptionDisplay description={post.description} />
+              </div>
+              <div>
+                <h5>Đặc điểm tin đăng</h5>
+                <table className='table table-striped mt-3 mb-4'>
+                  <tbody>
+                    <tr>
+                      <td className='name'>Mã tin:</td>
+                      <td>#{post._id}</td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Khu vực</td>
+                      <td> Cho thuê phòng trọ {post.address?.city} </td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Loại tin rao:</td>
+                      <td>{post.categoryId?.name}</td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Đối tượng thuê:</td>
+                      <td>Tất cả</td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Gói tin:</td>
+                      <td>
+                        <span style={{ color: '#055699' }}>Tin miễn phí</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Ngày đăng:</td>
+                      {post.createdAt && (
+                        <td>
+                          {format(post.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
+                        </td>
+                      )}
+                    </tr>
+                    <tr>
+                      <td className='name'>Ngày hết hạn:</td>
+                      <td>
+                        <time title='Thứ 6, 15:15 17/05/2024'>
+                          Thứ 6, 15:15 17/05/2024
+                        </time>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <h5>Thông tin liên hệ</h5>
+                <table className='table table-striped mt-3'>
+                  <tbody>
+                    <tr>
+                      <td className='name'>Liên hệ:</td>
+                      <td> {post.userId?.name} </td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Điện thoại:</td>
+                      <td> {post.userId?.phone} </td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Zalo</td>
+                      <td> {post.userId?.zalo} </td>
+                    </tr>
+                    <tr>
+                      <td className='name'>Facebook</td>
+                      <td>
+                        <a href={post.userId?.facebook} target='_blank'>
+                          {post.userId?.facebook}
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <div className='mt-4'>
                 <h4>Bản đồ</h4>

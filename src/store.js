@@ -18,6 +18,8 @@ import {
   googleGeoReducer,
 } from './reducers/provinceReducer'
 import { categoriesReducer, categoryReducer } from './reducers/categoryReducers'
+import { invoicesReducer } from './reducers/invoiceReducers'
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const reducer = combineReducers({
@@ -29,6 +31,7 @@ const reducer = combineReducers({
   userPost: userPostReducer,
   auth: authReducer,
   user: userReducer,
+  invoices: invoicesReducer,
   province: provinceReducer,
   district: districtReducer,
   ward: wardReducer,
