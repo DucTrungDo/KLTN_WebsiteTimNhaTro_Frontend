@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { editPost } from '../../actions/postActions'
 import { getProfileUserAdmin } from '../../actions/userActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
-import { getPostDetails, clearErrors } from '../../actions/postActions'
+import { editPostAdmin, getPosts, clearErrors } from '../../actions/postActions'
 import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,7 +15,7 @@ import {
   reportViolatingPost,
 } from '../../actions/postActions'
 import {
-  POST_EDIT_RESET,
+  UPDATE_ADMIN_POST_RESET,
   MODERATOR_APPROVE_POST_RESET,
   MODERATOR_REPORT_POST_RESET,
 } from '../../constants/postConstants'
@@ -24,7 +23,6 @@ const DetailPostModal = ({ post }) => {
   const token = Cookies.get('accessToken')
   const navigate = useNavigate()
   const alert = useAlert()
-  const { slug } = useParams()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -32,7 +30,7 @@ const DetailPostModal = ({ post }) => {
   const [area, setArea] = useState(0)
   const [category, setCategory] = useState('')
   const [street, setStreet] = useState('')
-
+  const [slug, setSlug] = useState('')
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
 
@@ -77,14 +75,13 @@ const DetailPostModal = ({ post }) => {
     if (isSuccess) {
       alert.success('cập nhật thành công')
       dispatch({
-        type: POST_EDIT_RESET,
+        type: UPDATE_ADMIN_POST_RESET,
       })
-      navigate('/user/post-management')
+      dispatch(getPosts(1))
     }
 
     if (isApproved) {
       alert.success('Post approved successfully')
-      navigate('/moderator/post-moderation')
       dispatch({
         type: MODERATOR_APPROVE_POST_RESET,
       })
@@ -93,7 +90,6 @@ const DetailPostModal = ({ post }) => {
 
     if (isReported) {
       alert.success('Post reported successfully')
-      navigate('/moderator/post-moderation')
       dispatch({
         type: MODERATOR_REPORT_POST_RESET,
       })
@@ -166,11 +162,12 @@ const DetailPostModal = ({ post }) => {
     dispatch(getCategories())
   }, [dispatch, navigate, alert, error])
   useEffect(() => {
-    setCategory(post.categoryId)
+    setCategory(post?.categoryId)
     setTitle(post?.title)
     setDescription(post?.description)
     setprice(post?.price)
     setArea(post?.area)
+    setSlug(post?.slug)
     setAddress({
       city: post.address?.city,
       district: post.address?.district,
@@ -234,7 +231,7 @@ const DetailPostModal = ({ post }) => {
       })
     }
   }, [provinceName, districtName, wardName, street])
-  async function editPostAdmin() {
+  function editPostAdminHandler() {
     const fields = [
       title,
       description,
@@ -244,21 +241,24 @@ const DetailPostModal = ({ post }) => {
       street,
       category,
     ]
+
     const isEmpty = fields.some((field) => field.trim() === '')
+    console.log(isEmpty)
     if (isEmpty || price <= 100000 || area <= 10) {
       alert.error('thiếu thông tin')
     } else {
+      console.log('ok')
       const token = Cookies.get('accessToken')
-      //   dispatch(
-      //     editPost(token, slug, {
-      //       address: address,
-      //       area: area,
-      //       price: price,
-      //       categoryId: category,
-      //       description: description,
-      //       title: title,
-      //     })
-      //   )
+      dispatch(
+        editPostAdmin(token, slug, {
+          address: address,
+          area: area,
+          price: price,
+          categoryId: category,
+          description: description,
+          title: title,
+        })
+      )
     }
   }
   function approvePostHandler() {
@@ -668,9 +668,11 @@ const DetailPostModal = ({ post }) => {
             <div className='col-md-4'>
               <button
                 onClick={() => {
-                  editPostAdmin()
+                  editPostAdminHandler()
                 }}
                 className='btn btn-success mb-5 btn-lg btn-block'
+                data-bs-dismiss='modal'
+                aria-label='Close'
               >
                 Cập nhật
               </button>

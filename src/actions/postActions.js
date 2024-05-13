@@ -32,6 +32,12 @@ import {
   DELETE_ADMIN_POST_REQUEST,
   DELETE_ADMIN_POST_SUCCESS,
   DELETE_ADMIN_POST_FAIL,
+  UPDATE_ADMIN_POST_REQUEST,
+  UPDATE_ADMIN_POST_SUCCESS,
+  UPDATE_ADMIN_POST_FAIL,
+  ADD_NEW_POST_ADMIN_REQUEST,
+  ADD_NEW_POST_ADMIN_SUCCESS,
+  ADD_NEW_POST_ADMIN_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -304,6 +310,59 @@ export const deleteAdminPost = (token, slug) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_ADMIN_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Edit post user Admin
+export const editPostAdmin = (token, slug, post) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_ADMIN_POST_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+    const { data } = await axios.put(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}`,
+      post,
+      config
+    )
+    dispatch({
+      type: UPDATE_ADMIN_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ADMIN_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Add new post (Admin)
+export const newPostAdmin = (token, post) => async (dispatch) => {
+  try {
+    dispatch({ type: ADD_NEW_POST_ADMIN_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
+    }
+
+    const { data } = await axios.post(
+      `https://boardinghouse-api.onrender.com/api/v1/posts`,
+      post,
+      config
+    )
+    dispatch({
+      type: ADD_NEW_POST_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ADD_NEW_POST_ADMIN_FAIL,
       payload: error.response.data.message,
     })
   }

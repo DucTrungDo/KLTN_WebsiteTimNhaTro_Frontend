@@ -218,12 +218,17 @@ export const userReducer = (state = {}, action) => {
         loading: true,
       }
     case UPDATE_PROFILE_USER_ADMIN_SUCCESS:
-    case GET_USER_ADMIN_SUCCESS:
       return {
         ...state,
         loading: false,
         user: action.payload.data,
         isUpdated: true,
+      }
+    case GET_USER_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: action.payload.data,
       }
     case UPDATE_PROFILE_USER_ADMIN_FAIL:
     case GET_USER_ADMIN_FAIL:

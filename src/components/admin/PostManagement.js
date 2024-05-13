@@ -13,6 +13,7 @@ import Loader from '../layout/Loader'
 import Cookies from 'js-cookie'
 import { DELETE_ADMIN_POST_RESET } from '../../constants/postConstants'
 import DetailPostModal from './DetailPostModal'
+
 const PostManagement = () => {
   const tokenModerator =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY2MTE1NzI1ODJlNTQyOWZiZjQ5Y2UzMSIsImlzQWRtaW4iOmZhbHNlLCJpc01vZGVyYXRvciI6dHJ1ZX0sImlhdCI6MTcxNTQ5Mjg2MCwiZXhwIjoxNzE2MDk3NjYwfQ.SihWyar-EhYA8xKwBTxYKBDgVTmAkX-I0dXXEQ4X6J0'
@@ -83,7 +84,9 @@ const PostManagement = () => {
         )
       }
     }
+    setCurrentPage(1)
   }, [unapprovedPosts, posts])
+
   async function ViewDetail(post) {
     setPostDetail(post)
   }
@@ -169,12 +172,6 @@ const PostManagement = () => {
             <h1 className='h2'>Quản lý Bài đăng</h1>
           </div>
           <div class='d-flex bd-highlight mb-2 justify-content-end align-items-center'>
-            <div class='bd-highlight'>
-              {' '}
-              <Link className='btn btn-success btn-sm me-2' to='/user/recharge'>
-                Hộ trợ đăng tin
-              </Link>
-            </div>
             <div class='bd-highlight'>
               <select
                 class='form-select'

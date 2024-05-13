@@ -13,6 +13,7 @@ import {
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import Loader from '../layout/Loader'
+import NewpostModal from './NewpostModal'
 import React, { useState, useEffect } from 'react'
 import { UPDATE_PROFILE_USER_ADMIN_RESET } from '../../constants/userConstants'
 const UserManagement = () => {
@@ -33,6 +34,7 @@ const UserManagement = () => {
       dispatch(clearErrors())
     }
     if (isUpdated) {
+      console.log(isUpdated)
       alert.success('Cập nhật thành công')
       dispatch({
         type: UPDATE_PROFILE_USER_ADMIN_RESET,
@@ -51,7 +53,9 @@ const UserManagement = () => {
       )
     }
   }, [users])
-
+  async function ResetOut() {
+    setUserDetail({})
+  }
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
     dispatch(getAlluser(token, indexPageCurrent))
@@ -66,7 +70,6 @@ const UserManagement = () => {
     }
   }
   async function ViewDetail(user) {
-    setUserDetail({})
     setUserDetail(user)
   }
   async function updateProfile() {
@@ -289,6 +292,22 @@ const UserManagement = () => {
                               khoá tài khoản
                             </button>
                           )}
+                          <button
+                            data-bs-toggle='modal'
+                            data-bs-target='#modalnewpost'
+                            style={{
+                              textAlign: 'left',
+                              marginTop: '5px',
+                              width: '100%',
+                            }}
+                            onClick={() => {
+                              ViewDetail(user)
+                            }}
+                            className='btn btn-success btn-sm '
+                          >
+                            <FontAwesomeIcon className='me-1 ' icon={faLock} />
+                            Hỗ trợ đăng tin
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -768,6 +787,49 @@ const UserManagement = () => {
                     data-bs-dismiss='modal'
                   >
                     Xác nhận Khoá
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class='modal fade modal-xl'
+            id='modalnewpost'
+            data-bs-backdrop='static'
+            data-bs-keyboard='false'
+            tabindex='-1'
+            aria-labelledby='modalnewpost'
+            aria-hidden='true'
+          >
+            <div class='modal-dialog'>
+              <div class='modal-content'>
+                <div class='modal-header'>
+                  <h5 class='modal-title' id='modalnewpost'>
+                    Modal title
+                  </h5>
+                  <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                    onClick={() => {
+                      ResetOut()
+                    }}
+                  ></button>
+                </div>
+                <div class='modal-body'>
+                  <NewpostModal user={userDetail} />
+                </div>
+                <div class='modal-footer'>
+                  <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                    onClick={() => {
+                      ResetOut()
+                    }}
+                  >
+                    Close
                   </button>
                 </div>
               </div>

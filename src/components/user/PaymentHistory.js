@@ -90,9 +90,9 @@ const PaymentHistory = () => {
                         <button
                           className='btn btn-danger btn-sm text-center w-100'
                           type='button'
-                          data-bs-toggle='modal'
-                          data-bs-target='#deleteModal'
-                          onClick={() => setCateId(cate._id)}
+                          // data-bs-toggle='modal'
+                          // data-bs-target='#deleteModal'
+                          // onClick={() => setCateId(cate._id)}
                         >
                           <FontAwesomeIcon
                             className='me-1 '
