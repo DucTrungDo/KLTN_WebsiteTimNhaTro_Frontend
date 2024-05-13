@@ -36,6 +36,14 @@ import {
   DELETE_ADMIN_POST_SUCCESS,
   DELETE_ADMIN_POST_RESET,
   DELETE_ADMIN_POST_FAIL,
+  UPDATE_ADMIN_POST_REQUEST,
+  UPDATE_ADMIN_POST_SUCCESS,
+  UPDATE_ADMIN_POST_RESET,
+  UPDATE_ADMIN_POST_FAIL,
+  ADD_NEW_POST_ADMIN_REQUEST,
+  ADD_NEW_POST_ADMIN_SUCCESS,
+  ADD_NEW_POST_ADMIN_RESET,
+  ADD_NEW_POST_ADMIN_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -185,23 +193,27 @@ export const userPostReducer = (state = {}, action) => {
 export const newPostReducer = (state = { post: {} }, action) => {
   switch (action.type) {
     case ADD_NEW_POST_REQUEST:
+    case ADD_NEW_POST_ADMIN_REQUEST:
       return {
         ...state,
         loading: true,
       }
     case ADD_NEW_POST_SUCCESS:
+    case ADD_NEW_POST_ADMIN_SUCCESS:
       return {
         loading: false,
         post: action.payload.data,
         isSuccess: action.payload.success,
       }
     case ADD_NEW_POST_RESET:
+    case ADD_NEW_POST_ADMIN_RESET:
       return {
         ...state,
         loading: false,
         isSuccess: false,
       }
     case ADD_NEW_POST_FAIL:
+    case ADD_NEW_POST_ADMIN_FAIL:
       return {
         ...state,
         loading: false,
@@ -221,23 +233,27 @@ export const newPostReducer = (state = { post: {} }, action) => {
 export const postEditReducer = (state = { post: {} }, action) => {
   switch (action.type) {
     case POST_EDIT_REQUEST:
+    case UPDATE_ADMIN_POST_REQUEST:
       return {
         ...state,
         loading: true,
       }
     case POST_EDIT_SUCCESS:
+    case UPDATE_ADMIN_POST_SUCCESS:
       return {
         loading: false,
         post: action.payload.data,
         isSuccess: action.payload.success,
       }
     case POST_EDIT_RESET:
+    case UPDATE_ADMIN_POST_RESET:
       return {
         ...state,
         error: action.payload,
         isSuccess: false,
       }
     case POST_EDIT_FAIL:
+    case UPDATE_ADMIN_POST_FAIL:
       return {
         ...state,
         error: action.payload,

@@ -68,6 +68,7 @@ const PostModeration = () => {
         )
       )
     }
+    setCurrentPage(1)
   }, [unapprovedPosts])
 
   const ChoosePage = (indexPageCurrent) => {
