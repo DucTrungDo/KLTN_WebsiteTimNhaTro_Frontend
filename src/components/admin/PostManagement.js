@@ -84,7 +84,6 @@ const PostManagement = () => {
         )
       }
     }
-    setCurrentPage(1)
   }, [unapprovedPosts, posts])
 
   async function ViewDetail(post) {
@@ -710,7 +709,10 @@ const PostManagement = () => {
                   ></button>
                 </div>
                 <div class='modal-body'>
-                  <DetailPostModal post={postDetail} />
+                  <DetailPostModal
+                    post={postDetail}
+                    setCurrentPage={setCurrentPage}
+                  />
                 </div>
                 <div class='modal-footer'>
                   <button

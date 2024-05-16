@@ -68,7 +68,6 @@ const PostModeration = () => {
         )
       )
     }
-    setCurrentPage(1)
   }, [unapprovedPosts])
 
   const ChoosePage = (indexPageCurrent) => {
@@ -162,7 +161,7 @@ const PostModeration = () => {
                     // Load all post here
                     unapprovedPosts.posts?.map((post, idx) => (
                       <tr key={post._id}>
-                        <td>{index + idx}</td>
+                        <td>{idx + 1 + 6 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
                             <a
@@ -311,7 +310,10 @@ const PostModeration = () => {
               ></button>
             </div>
             <div className='modal-body'>
-              <DetailPostModal post={postDetail} />
+              <DetailPostModal
+                post={postDetail}
+                setCurrentPage={setCurrentPage}
+              />
             </div>
             <div className='modal-footer'>
               <button

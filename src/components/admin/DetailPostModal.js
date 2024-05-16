@@ -19,7 +19,7 @@ import {
   MODERATOR_APPROVE_POST_RESET,
   MODERATOR_REPORT_POST_RESET,
 } from '../../constants/postConstants'
-const DetailPostModal = ({ post }) => {
+const DetailPostModal = ({ post, setCurrentPage }) => {
   const token = Cookies.get('accessToken')
   const navigate = useNavigate()
   const alert = useAlert()
@@ -78,6 +78,7 @@ const DetailPostModal = ({ post }) => {
         type: UPDATE_ADMIN_POST_RESET,
       })
       dispatch(getPosts(1))
+      setCurrentPage(1)
     }
 
     if (isApproved) {
@@ -86,6 +87,7 @@ const DetailPostModal = ({ post }) => {
         type: MODERATOR_APPROVE_POST_RESET,
       })
       dispatch(getUnapprovedPosts(token, 1))
+      setCurrentPage(1)
     }
 
     if (isReported) {
@@ -94,6 +96,7 @@ const DetailPostModal = ({ post }) => {
         type: MODERATOR_REPORT_POST_RESET,
       })
       dispatch(getUnapprovedPosts(token, 1))
+      setCurrentPage(1)
     }
   }, [dispatch, alert, error, isSuccess, isApproved, isReported])
 

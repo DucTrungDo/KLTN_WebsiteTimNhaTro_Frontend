@@ -56,7 +56,6 @@ const PostManagement = () => {
         )
       )
     }
-    setCurrentPage(1)
   }, [posts])
 
   const ChoosePage = (indexPageCurrent) => {
