@@ -37,7 +37,13 @@ const ChangePassword = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updatePassword(token, oldPassword, newPassword))
+    if (oldPassword.trim() === '') {
+      alert.error('Vui lòng nhập mật khẩu cũ!')
+    } else if (newPassword.trim() === '') {
+      alert.error('Vui lòng nhập mật khẩu mới!')
+    } else {
+      dispatch(updatePassword(token, oldPassword, newPassword))
+    }
   }
   return (
     <div>

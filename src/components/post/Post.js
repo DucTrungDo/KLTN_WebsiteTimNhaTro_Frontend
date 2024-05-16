@@ -128,7 +128,7 @@ const Post = ({ post }) => {
                     icon={faRulerCombined}
                     className='me-1 text-primary'
                   />
-                  3{post.area} m²
+                  {post.area} m²
                 </small>
               </div>
             </div>

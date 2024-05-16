@@ -344,13 +344,13 @@ const PostDetail = () => {
                     className='avata rounded-circle mx-auto d-block'
                   ></img>
                 </div>
-                <div className='text-center'>
+                <div className='text-center mb-3'>
                   <span className='fs-4 fw-bold'>{post.userId?.name}</span>
-                  <div>
+                  {/* <div>
                     <p className='mb-1'>
                       <i className='bi bi-dot'></i>Đang hoạt động
                     </p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className='d-grid gap-2 col-11 mx-auto'>
                   <a
@@ -707,16 +707,19 @@ const PostDetail = () => {
                 </div>
               </div> */}
               {/* <!-- card end relation --> */}
-              <section className='section section-aside-tinmoidang mt-3'>
-                <div class='section-header'>
-                  <span class='section-title'>Tin nổi bật</span>
+              <section className='section section-aside-tinmoidang mt-3 pb-0'>
+                <div className='section-header'>
+                  <span className='section-title'>Tin nổi bật</span>
                 </div>
                 <ul className='post-listing aside clearfix'>
-                  <li class='post-item clearfix tin-vip vip1' post-id='654398'>
+                  <li
+                    className='post-item clearfix tin-vip vip1'
+                    post-id='654398'
+                  >
                     <a href='/' className='text-decoration-none'>
                       <figure>
                         <img
-                          class='lazy_done'
+                          className='lazy_done'
                           src='../images/property-test.jpg'
                           data-src='../images/property-test.jpg'
                           alt='Khai trương phòng giá rẻ, duplex siêu phẩm BanCol, đầy đủ nội thất, tại Tân Bình, giáp Quận 10'
@@ -726,23 +729,32 @@ const PostDetail = () => {
                           data-loaded='true'
                         />
                       </figure>
-                      <div class='post-meta'>
-                        <span class='post-title' style={{ color: '#ea2e9d' }}>
-                          <span class='star star-4'></span> Khai trương phòng
-                          giá rẻ, duplex siêu phẩm…{' '}
+                      <div className='post-meta'>
+                        <span
+                          className='post-title'
+                          style={{ color: '#ea2e9d' }}
+                        >
+                          <span className='star star-4'></span> Khai trương
+                          phòng giá rẻ, duplex siêu phẩm…
                         </span>
-                        <span class='post-price'>5 triệu/tháng</span>
-                        <time class='post-time' title='Thứ 7, 19:49 11/05/2024'>
+                        <span className='post-price'>5 triệu/tháng</span>
+                        <time
+                          className='post-time'
+                          title='Thứ 7, 19:49 11/05/2024'
+                        >
                           Hôm nay
                         </time>
                       </div>
                     </a>
                   </li>
-                  <li class='post-item clearfix tin-vip vip2' post-id='596753'>
+                  <li
+                    className='post-item clearfix tin-vip vip2'
+                    post-id='596753'
+                  >
                     <a href='/' className='text-decoration-none'>
                       <figure>
                         <img
-                          class='lazy_done'
+                          className='lazy_done'
                           src='../images/property-test.jpg'
                           data-src='../images/property-test.jpg'
                           alt='Phòng mới xây 572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr'
@@ -752,13 +764,16 @@ const PostDetail = () => {
                           data-loaded='true'
                         />
                       </figure>
-                      <div class='post-meta'>
-                        <span class='post-title' style={{ color: '#f60' }}>
-                          <span class='star star-3'></span> Phòng mới xây 572/9
-                          Âu Cơ, P10, Tân Bình 3.5tr-4,7tr{' '}
+                      <div className='post-meta'>
+                        <span className='post-title' style={{ color: '#f60' }}>
+                          <span className='star star-3'></span> Phòng mới xây
+                          572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr
                         </span>
-                        <span class='post-price'>3.6 triệu/tháng</span>
-                        <time class='post-time' title='Thứ 2, 14:33 13/05/2024'>
+                        <span className='post-price'>3.6 triệu/tháng</span>
+                        <time
+                          className='post-time'
+                          title='Thứ 2, 14:33 13/05/2024'
+                        >
                           5 giờ trước
                         </time>
                       </div>
@@ -766,16 +781,16 @@ const PostDetail = () => {
                   </li>
                 </ul>
               </section>
-              <section className='section section-aside-tinmoidang'>
-                <div class='section-header'>
-                  <span class='section-title'>Tin mới đăng</span>
+              <section className='section section-aside-tinmoidang pb-0'>
+                <div className='section-header'>
+                  <span className='section-title'>Tin mới đăng</span>
                 </div>
                 <ul className='post-listing aside clearfix'>
-                  <li class='post-item clearfix normal' post-id='654608'>
+                  <li className='post-item clearfix normal' post-id='654608'>
                     <a href='/' className='text-decoration-none'>
                       <figure>
                         <img
-                          class='lazy_done'
+                          className='lazy_done'
                           src='../images/property-test.jpg'
                           data-src='../images/property-test.jpg'
                           alt='phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN ngay khu Bàu Cát'
@@ -785,23 +800,28 @@ const PostDetail = () => {
                           data-loaded='true'
                         />
                       </figure>
-                      <div class='post-meta'>
-                        <span class='post-title' style={{ color: '#055699' }}>
-                          {' '}
-                          phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN…{' '}
+                      <div className='post-meta'>
+                        <span
+                          className='post-title'
+                          style={{ color: '#055699' }}
+                        >
+                          phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN…
                         </span>
-                        <span class='post-price'>3.5 triệu/tháng</span>
-                        <time class='post-time' title='Thứ 2, 12:27 13/05/2024'>
+                        <span className='post-price'>3.5 triệu/tháng</span>
+                        <time
+                          className='post-time'
+                          title='Thứ 2, 12:27 13/05/2024'
+                        >
                           7 giờ trước
                         </time>
                       </div>
                     </a>
                   </li>
-                  <li class='post-item clearfix normal' post-id='654606'>
+                  <li className='post-item clearfix normal' post-id='654606'>
                     <a href='/' className='text-decoration-none'>
                       <figure>
                         <img
-                          class='lazy_done'
+                          className='lazy_done'
                           src='../images/property-test.jpg'
                           data-src='../images/property-test.jpg'
                           alt='PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3'
@@ -811,13 +831,18 @@ const PostDetail = () => {
                           data-loaded='true'
                         />
                       </figure>
-                      <div class='post-meta'>
-                        <span class='post-title' style={{ color: '#055699' }}>
-                          {' '}
-                          PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3{' '}
+                      <div className='post-meta'>
+                        <span
+                          className='post-title'
+                          style={{ color: '#055699' }}
+                        >
+                          PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3
                         </span>
-                        <span class='post-price'>3.7 triệu/tháng</span>
-                        <time class='post-time' title='Thứ 2, 11:35 13/05/2024'>
+                        <span className='post-price'>3.7 triệu/tháng</span>
+                        <time
+                          className='post-time'
+                          title='Thứ 2, 11:35 13/05/2024'
+                        >
                           8 giờ trước
                         </time>
                       </div>

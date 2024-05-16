@@ -134,7 +134,7 @@ export const userPostsReducer = (state = { posts: [] }, action) => {
     case RESET_USER_POST:
       return {
         loading: false,
-        posts: null,
+        posts: [],
       }
 
     case CLEAR_ERRORS:

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { verifyRegister, clearErrors } from '../../actions/userActions'
@@ -8,13 +9,15 @@ import Loader from '../layout/Loader'
 
 const VerifyRegister = () => {
   const [otp, setOtp] = useState('')
-  const { message, isAuthenticated, error, user_temp, loading } = useSelector(
+  const { message, isAuthenticated, error, loading } = useSelector(
     (state) => state.auth
   )
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const alert = useAlert()
+  const { email } = useParams()
+  console.log(email)
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -22,26 +25,30 @@ const VerifyRegister = () => {
     }
 
     if (!loading) {
-      console.log('0')
       // Nếu nhập opt sai sẽ hiện thông báo lỗi và phải nhập lại
       if (error === 'Verified code is incorrect') {
         alert.error(error)
         return
-      } else if (message === 'Mail sent, please verify email') { // Trường hợp tài khoản chưa có người đăng ký sau khi bấm đăng ký tài khoản => gửi opt qua mail và xác nhận gửi mail thành công
-        console.log('1')
+      } else if (message === 'Mail sent, please verify email') {
+        // Trường hợp tài khoản chưa có người đăng ký sau khi bấm đăng ký tài khoản => gửi opt qua mail và xác nhận gửi mail thành công
         alert.success(message)
-      } else if (message !== 'Email verified') { // Trường hợp tài khoản đã có người đăng ký sau khi bấm đăng ký tài khoản hoặc chưa yêu cầu gửi otp mà đã truy cập /verify_register => chuyển lại về trang register
-        console.log('2')
-        navigate('/register')
-      } else { // Trường hợp verify otp thành công => chuyển về trang login để đăng nhập
-        console.log('3')
+      } else if (message !== 'Email verified') {
+        // Trường hợp tài khoản đã có người đăng ký sau khi bấm đăng ký tài khoản hoặc chưa yêu cầu gửi otp mà đã truy cập /verify_register => chuyển lại về trang register
+        if (error === 'Email is already registered') {
+          navigate('/register')
+        }
+        // Trường hợp người dùng muốn xác thực cho một email nào đó
+        if (email) {
+          return
+        }
+      } else {
+        // Trường hợp verify otp thành công => chuyển về trang login để đăng nhập
         navigate('/login')
         alert.success(message)
       }
     }
 
     if (error && error !== 'Request failed with status code 401') {
-      console.log('Verify Register page error')
       if (error !== 'Verified code is incorrect') {
         alert.error(error)
       }
@@ -51,7 +58,7 @@ const VerifyRegister = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(verifyRegister(user_temp.email, otp))
+    dispatch(verifyRegister(email, otp))
   }
 
   return (

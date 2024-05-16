@@ -17,7 +17,8 @@ const PostManagement = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const [page, setPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const token = Cookies.get('accessToken')
 
   const { loading, posts, error } = useSelector((state) => state.userPosts)
@@ -26,7 +27,7 @@ const PostManagement = () => {
   )
 
   useEffect(() => {
-    dispatch(getUserPosts(token))
+    dispatch(getUserPosts(token, currentPage))
 
     if (error) {
       alert.error(error)
@@ -44,6 +45,33 @@ const PostManagement = () => {
       dispatch({ type: DELETE_USER_POST_RESET })
     }
   }, [dispatch, alert, isDeleted, error, postError, navigate])
+
+  useEffect(() => {
+    if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
+      setPage(
+        Math.round(
+          posts.count % 6 !== 0
+            ? Math.floor(posts.count / 6) + 1
+            : Math.floor(posts.count / 6)
+        )
+      )
+    }
+    setCurrentPage(1)
+  }, [posts])
+
+  const ChoosePage = (indexPageCurrent) => {
+    setCurrentPage(indexPageCurrent)
+    dispatch(getUserPosts(token, indexPageCurrent))
+  }
+  const NextAndPrevious = (Actions) => {
+    if (Actions === 'next') {
+      setCurrentPage(currentPage + 1)
+      dispatch(getUserPosts(token, currentPage + 1))
+    } else {
+      setCurrentPage(currentPage - 1)
+      dispatch(getUserPosts(token, currentPage - 1))
+    }
+  }
 
   const PriceDisplay = ({ price }) => {
     if (!price) return
@@ -346,6 +374,57 @@ const PostManagement = () => {
                 )}
               </tbody>
             </table>
+            <nav aria-label='...'>
+              <ul className='pagination justify-content-end'>
+                <li
+                  className={
+                    currentPage === 1 ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('previous')
+                    }}
+                    className='page-link'
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from({ length: page }, (_, index) => (
+                  <li
+                    key={index}
+                    className={
+                      currentPage === index + 1
+                        ? 'page-item active '
+                        : 'page-item'
+                    }
+                  >
+                    <button
+                      onClick={() => {
+                        ChoosePage(index + 1)
+                      }}
+                      className='page-link'
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+                <li
+                  className={
+                    currentPage === page ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('next')
+                    }}
+                    className='page-link'
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       )}

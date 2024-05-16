@@ -98,7 +98,7 @@ function MapD({ direction, useDirect }) {
               placeholder='DisTance'
               aria-label='DisTance'
               aria-describedby='basic-addon1'
-              value={distance}
+              defaultValue={distance}
             />
           </InputGroup>
         </div>
@@ -109,7 +109,7 @@ function MapD({ direction, useDirect }) {
               placeholder='Duration'
               aria-label='Duration'
               aria-describedby='basic-addon1'
-              value={duration}
+              defaultValue={duration}
             />
           </InputGroup>
         </div>

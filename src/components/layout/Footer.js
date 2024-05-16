@@ -10,7 +10,7 @@ const Footer = () => {
         <div className='container text-center text-md-start mt-5'>
           <div className='row mt-3'>
             <div className='col-md-3 col-lg-4 col-xl-3 mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold'>Company name</h6>
+              <h6 className='text-uppercase fw-bold'>TroTot123</h6>
               <hr
                 className='mb-4 mt-0 d-inline-block mx-auto'
                 style={{
@@ -20,14 +20,14 @@ const Footer = () => {
                 }}
               />
               <p>
-                Here you can use rows and columns to organize your footer
-                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit.
+                Here you can find good boarding houses and apartments in many
+                provinces and cities with the most reasonable location and
+                price.
               </p>
             </div>
 
             <div className='col-md-2 col-lg-2 col-xl-2 mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold'>Products</h6>
+              <h6 className='text-uppercase fw-bold'>Posts</h6>
               <hr
                 className='mb-4 mt-0 d-inline-block mx-auto'
                 style={{
@@ -59,7 +59,7 @@ const Footer = () => {
             </div>
 
             <div className='col-md-3 col-lg-2 col-xl-2 mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold'>Useful links</h6>
+              <h6 className='text-uppercase fw-bold'>Links</h6>
               <hr
                 className='mb-4 mt-0 d-inline-block mx-auto'
                 style={{
@@ -101,16 +101,16 @@ const Footer = () => {
                 }}
               />
               <p>
-                <i className='fas fa-home mr-3'></i> New York, NY 10012, US
+                <i className='fas fa-home mr-3'></i> Viet Nam, HCMC 70000, VN
               </p>
               <p>
-                <i className='fas fa-envelope mr-3'></i> info@example.com
+                <i className='fas fa-envelope mr-3'></i> ducdt1192@gmail.com
               </p>
               <p>
-                <i className='fas fa-phone mr-3'></i> + 01 234 567 88
+                <i className='fas fa-phone mr-3'></i> +84964822216
               </p>
               <p>
-                <i className='fas fa-print mr-3'></i> + 01 234 567 89
+                <i className='fas fa-print mr-3'></i> +84346952975
               </p>
             </div>
           </div>

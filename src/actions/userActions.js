@@ -1,6 +1,5 @@
 import axios from 'axios'
 import {
-  REGISTER_USER_SAVE_TEMP_DATA,
   REGISTER_USER_SEND_OTP_REQUEST,
   REGISTER_USER_SEND_OTP_SUCCESS,
   REGISTER_USER_SEND_OTP_FAIL,
@@ -76,14 +75,6 @@ export const verifyRegister = (email, otp) => async (dispatch) => {
       payload: error.response.data.message,
     })
   }
-}
-
-// Save the email temporarily to perform the registration account authentication process
-export const saveTempEmail = (email) => (dispatch) => {
-  dispatch({
-    type: REGISTER_USER_SAVE_TEMP_DATA,
-    payload: { email },
-  })
 }
 
 // Save temp user data for verify register

@@ -84,7 +84,7 @@ export const getPostDetails = (slug) => async (dispatch) => {
 }
 
 // Get all user's posts (User)
-export const getUserPosts = (token) => async (dispatch) => {
+export const getUserPosts = (token, currentPage) => async (dispatch) => {
   try {
     dispatch({ type: ALL_USER_POSTS_REQUEST })
 
@@ -95,7 +95,7 @@ export const getUserPosts = (token) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/posts/me`,
+      `https://boardinghouse-api.onrender.com/api/v1/posts/me?page=${currentPage}`,
       config
     )
 

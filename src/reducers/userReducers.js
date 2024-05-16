@@ -1,5 +1,4 @@
 import {
-  REGISTER_USER_SAVE_TEMP_DATA,
   REGISTER_USER_SEND_OTP_REQUEST,
   REGISTER_USER_SEND_OTP_SUCCESS,
   REGISTER_USER_SEND_OTP_FAIL,
@@ -54,11 +53,6 @@ import {
 
 export const authReducer = (state = { user: {} }, action) => {
   switch (action.type) {
-    case REGISTER_USER_SAVE_TEMP_DATA:
-      return {
-        user_temp: action.payload,
-      }
-
     case REGISTER_USER_SEND_OTP_REQUEST:
     case REGISTER_USER_VERIFY_REQUEST:
     case FORGOT_PASSWORD_SEND_OTP_REQUEST:

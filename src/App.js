@@ -75,7 +75,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/verify_register' element={<VerifyRegister />} />
+              <Route path='/verify_register/:email' element={<VerifyRegister />} />
               <Route path='/post/:slug' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
               <Route path='/favorite_post' element={<FavoritePost />} />

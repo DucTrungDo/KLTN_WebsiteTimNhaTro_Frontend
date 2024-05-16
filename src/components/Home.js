@@ -109,9 +109,9 @@ const Home = () => {
                     data-wow-delay='0.1s'
                   >
                     <nav aria-label='...'>
-                      <ul class='pagination pagination-lg justify-content-center'>
+                      <ul className='pagination pagination-lg justify-content-center'>
                         <li
-                          class={
+                          className={
                             currentPage === 1
                               ? 'page-item disabled'
                               : 'page-item'
@@ -121,7 +121,7 @@ const Home = () => {
                             onClick={() => {
                               NextAndPrevious('previous')
                             }}
-                            class='page-link'
+                            className='page-link'
                           >
                             Previous
                           </button>
@@ -146,7 +146,7 @@ const Home = () => {
                           </li>
                         ))}
                         <li
-                          class={
+                          className={
                             currentPage === page
                               ? 'page-item disabled'
                               : 'page-item'
@@ -156,7 +156,7 @@ const Home = () => {
                             onClick={() => {
                               NextAndPrevious('next')
                             }}
-                            class='page-link'
+                            className='page-link'
                           >
                             Next
                           </button>

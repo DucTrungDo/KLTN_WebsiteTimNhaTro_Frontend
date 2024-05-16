@@ -100,6 +100,10 @@
   border-bottom: 1px solid #eee;
 }
 
+.post-listing.aside .post-item:last-of-type {
+  border-bottom: 0;
+}
+
 .post-listing.aside .post-item a {
   display: flex;
 }

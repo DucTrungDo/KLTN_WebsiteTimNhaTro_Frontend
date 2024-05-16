@@ -30,7 +30,6 @@ const Login = () => {
     }
 
     if (error && error !== 'Request failed with status code 401') {
-      console.log(error)
       alert.error(error)
       dispatch(clearErrors())
     }
@@ -154,7 +153,7 @@ const Login = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='row'>
+                    {/* <div className='row'>
                       <div className='col-12'>
                         <p className='my-4'>Hoặc đăng nhập với</p>
                         <div className='d-flex gap-3 flex-column flex-xl-row'>
@@ -208,7 +207,7 @@ const Login = () => {
                           </a>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
