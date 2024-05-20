@@ -42,11 +42,17 @@ import {
 } from '../constants/postConstants'
 
 // Get all posts
-export const getPosts = (currentPage) => async (dispatch) => {
+export const getPosts = (currentPage, FilterData) => async (dispatch) => {
   try {
+    console.log(FilterData)
     dispatch({ type: ALL_POSTS_REQUEST })
-
     let link = `https://boardinghouse-api.onrender.com/api/v1/posts?page=${currentPage}`
+
+    if (JSON.stringify(FilterData) !== '{}') {
+      link =
+        link +
+        `&minPrice=${FilterData.minPrice}&maxPrice=${FilterData.maxPrice}&minArea=${FilterData.minArea}&maxArea=${FilterData.maxArea}&city=${FilterData.province}&district=${FilterData.district}&ward=${FilterData.ward}`
+    }
 
     const { data } = await axios.get(link)
 

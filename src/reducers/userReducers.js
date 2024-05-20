@@ -49,6 +49,18 @@ import {
   GET_USER_ADMIN_REQUEST,
   GET_USER_ADMIN_SUCCESS,
   GET_USER_ADMIN_FAIL,
+  DELETE_USER_ADMIN_REQUEST,
+  DELETE_USER_ADMIN_SUCCESS,
+  DELETE_USER_ADMIN_RESET,
+  DELETE_USER_ADMIN_FAIL,
+  DELETE_USER_PERMANENTLY_ADMIN_REQUEST,
+  DELETE_USER_PERMANENTLY_ADMIN_SUCCESS,
+  DELETE_USER_PERMANENTLY_ADMIN_RESET,
+  DELETE_USER_PERMANENTLY_ADMIN_FAIL,
+  RESTORE_USER_ADMIN_REQUEST,
+  RESTORE_USER_ADMIN_SUCCESS,
+  RESTORE_USER_ADMIN_RESET,
+  RESTORE_USER_ADMIN_FAIL,
 } from '../constants/userConstants'
 
 export const authReducer = (state = { user: {} }, action) => {
@@ -152,6 +164,9 @@ export const userReducer = (state = {}, action) => {
     case UPDATE_PASSWORD_REQUEST:
     case BLOCK_USER_REQUEST:
     case UN_BLOCK_USER_REQUEST:
+    case DELETE_USER_ADMIN_REQUEST:
+    case RESTORE_USER_ADMIN_REQUEST:
+    case DELETE_USER_PERMANENTLY_ADMIN_REQUEST:
       return {
         ...state,
         loading: true,
@@ -161,6 +176,9 @@ export const userReducer = (state = {}, action) => {
     case UPDATE_PASSWORD_SUCCESS:
     case BLOCK_USER_SUCCESS:
     case UN_BLOCK_USER_SUCCESS:
+    case DELETE_USER_ADMIN_SUCCESS:
+    case RESTORE_USER_ADMIN_SUCCESS:
+    case DELETE_USER_PERMANENTLY_ADMIN_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -172,6 +190,9 @@ export const userReducer = (state = {}, action) => {
     case UPDATE_PASSWORD_RESET:
     case BLOCK_USER_RESET:
     case UN_BLOCK_USER_RESET:
+    case DELETE_USER_ADMIN_RESET:
+    case RESTORE_USER_ADMIN_RESET:
+    case DELETE_USER_PERMANENTLY_ADMIN_RESET:
       return {
         ...state,
         isUpdated: false,
@@ -181,6 +202,9 @@ export const userReducer = (state = {}, action) => {
     case UPDATE_PASSWORD_FAIL:
     case BLOCK_USER_FAIL:
     case UN_BLOCK_USER_FAIL:
+    case DELETE_USER_ADMIN_FAIL:
+    case DELETE_USER_PERMANENTLY_ADMIN_FAIL:
+    case RESTORE_USER_ADMIN_FAIL:
       return {
         ...state,
         loading: false,

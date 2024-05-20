@@ -21,7 +21,7 @@ const EditPost = () => {
   const [area, setArea] = useState(0)
   const [category, setCategory] = useState('')
   const [street, setStreet] = useState('')
-
+  const [gender, setGender] = useState('')
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
 
@@ -135,6 +135,7 @@ const EditPost = () => {
     setArea(post?.area)
     setUserName(post.userId?.name)
     setUserPhone(post.userId?.phone)
+    setGender(post?.renters)
     setAddress({
       city: post.address?.city,
       district: post.address?.district,
@@ -208,6 +209,7 @@ const EditPost = () => {
       wardName,
       street,
       category,
+      gender,
     ]
     const isEmpty = fields.some((field) => field.trim() === '')
     if (isEmpty || price <= 100000 || area <= 10) {
@@ -404,6 +406,29 @@ const EditPost = () => {
                         <option value={category._id}>{category.name}</option>
                       ))
                     : null}
+                </select>
+              </div>
+            </div>
+            <div className='form-group row mt-3'>
+              <label htmlFor='post_cat' className='col-md-12 col-form-label'>
+                Đối tượng cho thuê
+              </label>
+              <div className='col-md-6'>
+                <select
+                  id='province_id'
+                  name='province_id'
+                  className='form-control js-select-tinhthanhpho select2-hidden-accessible'
+                  required=''
+                  data-msg-required='Chưa chọn Tỉnh/TP'
+                  tabIndex='-1'
+                  aria-hidden='true'
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <option value=''>Chọn đối tượng cho thuê</option>
+                  <option value='all'>Tất cả</option>
+                  <option value='male'>Nam</option>
+                  <option value='female'>Nữ</option>
                 </select>
               </div>
             </div>

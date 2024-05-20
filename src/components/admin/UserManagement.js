@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faTrashCan } from '@fortawesome/free-regular-svg-icons'
-import { faLock } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -9,6 +9,9 @@ import {
   getAlluser,
   clearErrors,
   unBlockUser,
+  deleteUserTemporary,
+  deleteUserPermanently,
+  restoreUserDelete,
 } from '../../actions/userActions'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
@@ -23,6 +26,9 @@ const UserManagement = () => {
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
 
+  const [searchText, setSearchText] = useState('')
+  const [statusGet, setStatusGet] = useState('allUser')
+
   const [userDetail, setUserDetail] = useState({})
 
   const { error, loading, users, isUpdated, user } = useSelector(
@@ -34,39 +40,44 @@ const UserManagement = () => {
       dispatch(clearErrors())
     }
     if (isUpdated) {
-      console.log(isUpdated)
       alert.success('Cập nhật thành công')
       dispatch({
         type: UPDATE_PROFILE_USER_ADMIN_RESET,
       })
     }
-    dispatch(getAlluser(token, currentPage))
+    dispatch(getAlluser(token, currentPage, statusGet, searchText))
   }, [dispatch, alert, error, isUpdated])
   useEffect(() => {
     if (JSON.stringify(users) !== '{}' && users !== undefined) {
       setPage(
         Math.round(
-          users.count % 6 !== 0
-            ? Math.floor(users.count / 6) + 1
-            : Math.floor(users.count / 6)
+          users.total % 10 !== 0
+            ? Math.floor(users.total / 10) + 1
+            : Math.floor(users.total / 10)
         )
       )
     }
   }, [users])
+
+  useEffect(() => {
+    dispatch(getAlluser(token, 1, statusGet, searchText))
+    setCurrentPage(1)
+  }, [statusGet])
+
   async function ResetOut() {
     setUserDetail({})
   }
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
-    dispatch(getAlluser(token, indexPageCurrent))
+    dispatch(getAlluser(token, indexPageCurrent, statusGet, searchText))
   }
   async function NextAndPrevious(Actions) {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getAlluser(token, currentPage + 1))
+      dispatch(getAlluser(token, currentPage + 1, statusGet, searchText))
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getAlluser(token, currentPage - 1))
+      dispatch(getAlluser(token, currentPage - 1, statusGet, searchText))
     }
   }
   async function ViewDetail(user) {
@@ -86,6 +97,27 @@ const UserManagement = () => {
   }
   async function UnBlockUser() {
     dispatch(unBlockUser(token, userDetail._id))
+    setCurrentPage(1)
+  }
+  async function DeleteUserTemporary() {
+    dispatch(deleteUserTemporary(token, userDetail._id))
+    setCurrentPage(1)
+  }
+  async function DeleteUserPermanently() {
+    dispatch(deleteUserPermanently(token, userDetail._id))
+    setCurrentPage(1)
+  }
+  async function RestoreUserDeleted() {
+    dispatch(restoreUserDelete(token, userDetail._id))
+    setCurrentPage(1)
+  }
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      Search()
+    }
+  }
+  async function Search() {
+    dispatch(getAlluser(token, 1, statusGet, searchText))
     setCurrentPage(1)
   }
   return (
@@ -116,6 +148,44 @@ const UserManagement = () => {
           </nav>
           <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
             <h1 className='h2'>Quản lý người dùng</h1>
+          </div>
+          <div class='d-flex bd-highlight mb-2 justify-content-end align-items-center'>
+            <div className='me-2'>
+              <div class='input-group me-3 '>
+                <input
+                  type='text'
+                  class='form-control'
+                  placeholder='Tìm Kiếm'
+                  aria-label='Tìm kiếm'
+                  aria-describedby='button-addon2'
+                  onKeyPress={handleKeyPress}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    Search()
+                  }}
+                  class='btn btn-outline-secondary'
+                  type='button'
+                  id='button-addon2'
+                >
+                  <FontAwesomeIcon className='me-1 ' icon={faMagnifyingGlass} />
+                </button>
+              </div>
+            </div>
+            <div class='bd-highlight'>
+              <select
+                class='form-select'
+                aria-label='Default select example'
+                value={statusGet}
+                onChange={(e) => setStatusGet(e.target.value)}
+              >
+                <option value='allUser'>User đang hoạt động</option>
+                <option value='delete'>Thùng rác</option>
+                <option value='moderator'>Danh sách Moderator</option>
+              </select>
+            </div>
           </div>
           <div class='d-md-block'>
             <div class='table-responsive'>
@@ -158,7 +228,7 @@ const UserManagement = () => {
                   {users &&
                     users.users?.map((user, index) => (
                       <tr>
-                        <td>{index + 1 + 6 * (currentPage - 1)}</td>
+                        <td>{index + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='user_avatar'>
                             <img
@@ -235,20 +305,72 @@ const UserManagement = () => {
                             <FontAwesomeIcon className='me-1 ' icon={faEye} />
                             Xem chi tiết
                           </button>
-                          <button
-                            style={{
-                              textAlign: 'left',
-                              marginTop: '5px',
-                              width: '100%',
-                            }}
-                            className='btn btn-danger btn-sm '
-                          >
-                            <FontAwesomeIcon
-                              className='me-1 '
-                              icon={faTrashCan}
-                            />
-                            Xoá tài khoản
-                          </button>
+                          {statusGet === 'delete' ? (
+                            <>
+                              <button
+                                data-bs-toggle='modal'
+                                data-bs-target='#deletedPermanently'
+                                data-bs-whatever='@mdo'
+                                style={{
+                                  textAlign: 'left',
+                                  marginTop: '5px',
+                                  width: '100%',
+                                }}
+                                onClick={() => {
+                                  ViewDetail(user)
+                                }}
+                                className='btn btn-danger btn-sm '
+                              >
+                                <FontAwesomeIcon
+                                  className='me-1 '
+                                  icon={faTrashCan}
+                                />
+                                Xoá vĩnh viễn
+                              </button>
+                              <button
+                                data-bs-toggle='modal'
+                                data-bs-target='#restoreuser'
+                                data-bs-whatever='@mdo'
+                                style={{
+                                  textAlign: 'left',
+                                  marginTop: '5px',
+                                  width: '100%',
+                                }}
+                                onClick={() => {
+                                  ViewDetail(user)
+                                }}
+                                className='btn btn-success btn-sm '
+                              >
+                                <FontAwesomeIcon
+                                  className='me-1 '
+                                  icon={faTrashCan}
+                                />
+                                Khôi phục
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              data-bs-toggle='modal'
+                              data-bs-target='#deletetemporary'
+                              data-bs-whatever='@mdo'
+                              style={{
+                                textAlign: 'left',
+                                marginTop: '5px',
+                                width: '100%',
+                              }}
+                              onClick={() => {
+                                ViewDetail(user)
+                              }}
+                              className='btn btn-danger btn-sm '
+                            >
+                              <FontAwesomeIcon
+                                className='me-1 '
+                                icon={faTrashCan}
+                              />
+                              Xoá tài khoản
+                            </button>
+                          )}
+
                           {user.isLocked ? (
                             <button
                               data-bs-toggle='modal'
@@ -262,7 +384,11 @@ const UserManagement = () => {
                               onClick={() => {
                                 ViewDetail(user)
                               }}
-                              className='btn btn-warning btn-sm '
+                              className={
+                                statusGet === 'delete'
+                                  ? 'btn btn-warning btn-sm d-none'
+                                  : 'btn btn-warning btn-sm'
+                              }
                             >
                               <FontAwesomeIcon
                                 className='me-1 '
@@ -283,7 +409,11 @@ const UserManagement = () => {
                               onClick={() => {
                                 ViewDetail(user)
                               }}
-                              className='btn btn-secondary btn-sm '
+                              className={
+                                statusGet === 'delete'
+                                  ? 'btn btn-warning btn-sm d-none'
+                                  : 'btn btn-warning btn-sm'
+                              }
                             >
                               <FontAwesomeIcon
                                 className='me-1 '
@@ -303,7 +433,11 @@ const UserManagement = () => {
                             onClick={() => {
                               ViewDetail(user)
                             }}
-                            className='btn btn-success btn-sm '
+                            className={
+                              statusGet === 'delete'
+                                ? 'btn btn-success btn-sm d-none'
+                                : 'btn btn-success btn-sm'
+                            }
                           >
                             <FontAwesomeIcon className='me-1 ' icon={faLock} />
                             Hỗ trợ đăng tin
@@ -685,6 +819,159 @@ const UserManagement = () => {
                     }}
                   >
                     Cập nhật
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class='modal fade'
+            id='restoreuser'
+            tabindex='-1'
+            aria-labelledby='exampleModalLabel'
+            aria-hidden='true'
+          >
+            <div class='modal-dialog'>
+              <div class='modal-content'>
+                <div class='modal-header'>
+                  <h5 class='modal-title' id='exampleModalLabel'>
+                    Bạn muốn khôi phục tài khoản Người dùng này ?
+                  </h5>
+                  <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                  ></button>
+                </div>
+                <div class='modal-body'>
+                  <div>
+                    <span className='fw-bold'>ID: </span> {userDetail._id}
+                  </div>
+                  <div>
+                    <span className='fw-bold'>Tên người dùng: </span>{' '}
+                    {userDetail.name}
+                  </div>
+                </div>
+                <div class='modal-footer'>
+                  <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                  >
+                    Huỷ
+                  </button>
+                  <button
+                    onClick={() => {
+                      RestoreUserDeleted()
+                    }}
+                    type='button'
+                    class='btn btn-primary'
+                    data-bs-dismiss='modal'
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class='modal fade'
+            id='deletedPermanently'
+            tabindex='-1'
+            aria-labelledby='exampleModalLabel'
+            aria-hidden='true'
+          >
+            <div class='modal-dialog'>
+              <div class='modal-content'>
+                <div class='modal-header'>
+                  <h5 class='modal-title' id='exampleModalLabel'>
+                    Bạn có chắc Xoá tài khoản này!
+                  </h5>
+                  <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                  ></button>
+                </div>
+                <div class='modal-body'>
+                  <div>
+                    <span className='fw-bold'>ID: </span> {userDetail._id}
+                  </div>
+                  <div>
+                    <span className='fw-bold'>Tên người dùng: </span>{' '}
+                    {userDetail.name}
+                  </div>
+                </div>
+                <div class='modal-footer'>
+                  <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                  >
+                    Huỷ
+                  </button>
+                  <button
+                    onClick={() => {
+                      DeleteUserPermanently()
+                    }}
+                    type='button'
+                    class='btn btn-primary'
+                    data-bs-dismiss='modal'
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class='modal fade'
+            id='deletetemporary'
+            tabindex='-1'
+            aria-labelledby='exampleModalLabel'
+            aria-hidden='true'
+          >
+            <div class='modal-dialog'>
+              <div class='modal-content'>
+                <div class='modal-header'>
+                  <h5 class='modal-title' id='exampleModalLabel'>
+                    Đưa tài khoản này vào thùng rác
+                  </h5>
+                  <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                  ></button>
+                </div>
+                <div class='modal-body'>
+                  <div>
+                    <span className='fw-bold'>ID: </span> {userDetail._id}
+                  </div>
+                  <div>
+                    <span className='fw-bold'>Tên người dùng: </span>{' '}
+                    {userDetail.name}
+                  </div>
+                </div>
+                <div class='modal-footer'>
+                  <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                  >
+                    Huỷ
+                  </button>
+                  <button
+                    onClick={() => {
+                      DeleteUserTemporary()
+                    }}
+                    type='button'
+                    class='btn btn-primary'
+                    data-bs-dismiss='modal'
+                  >
+                    Xác nhận
                   </button>
                 </div>
               </div>

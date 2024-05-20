@@ -45,6 +45,15 @@ import {
   GET_USER_ADMIN_REQUEST,
   GET_USER_ADMIN_SUCCESS,
   GET_USER_ADMIN_FAIL,
+  DELETE_USER_ADMIN_REQUEST,
+  DELETE_USER_ADMIN_SUCCESS,
+  DELETE_USER_ADMIN_FAIL,
+  DELETE_USER_PERMANENTLY_ADMIN_REQUEST,
+  DELETE_USER_PERMANENTLY_ADMIN_SUCCESS,
+  DELETE_USER_PERMANENTLY_ADMIN_FAIL,
+  RESTORE_USER_ADMIN_REQUEST,
+  RESTORE_USER_ADMIN_SUCCESS,
+  RESTORE_USER_ADMIN_FAIL,
 } from '../constants/userConstants'
 
 // Verify User for register
@@ -321,33 +330,40 @@ export const updatePassword =
   }
 
 // Get All Users
-export const getAlluser = (token, currentPage) => async (dispatch) => {
-  try {
-    dispatch({ type: GET_ALL_USER_REQUEST })
+export const getAlluser =
+  (token, currentPage, statusGet, searchText) => async (dispatch) => {
+    try {
+      dispatch({ type: GET_ALL_USER_REQUEST })
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+      let url = `https://boardinghouse-api.onrender.com/api/v1/users?page=${currentPage}`
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-        'Content-Type': 'application/json',
-      },
+      if (statusGet === 'delete') {
+        url += '&deleted=true'
+      }
+      if (statusGet === 'moderator') {
+        url += '&role=moderator'
+      }
+      if (searchText !== '') {
+        url += `&search=${searchText}`
+      }
+      const { data } = await axios.get(url, config)
+
+      dispatch({
+        type: GET_ALL_USER_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: GET_ALL_USER_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/users?page=${currentPage}`,
-      config
-    )
-
-    dispatch({
-      type: GET_ALL_USER_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_ALL_USER_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Update profile Role ADMIN
 export const updateProfileUserAdmin =
@@ -469,6 +485,91 @@ export const getProfileUserAdmin = (token, _id) => async (dispatch) => {
   }
 }
 
+// Delete user role ADMin
+export const deleteUserTemporary = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_USER_ADMIN_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.delete(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}`,
+      config
+    )
+
+    dispatch({
+      type: DELETE_USER_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: DELETE_USER_ADMIN_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+// Delete user Permanently role ADMin
+export const deleteUserPermanently = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_USER_PERMANENTLY_ADMIN_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.delete(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}/force`,
+      config
+    )
+
+    dispatch({
+      type: DELETE_USER_PERMANENTLY_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: DELETE_USER_PERMANENTLY_ADMIN_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+// Delete user Permanently role ADMin
+export const restoreUserDelete = (token, _id) => async (dispatch) => {
+  try {
+    dispatch({ type: RESTORE_USER_ADMIN_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/users/${_id}/restore`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: RESTORE_USER_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: RESTORE_USER_ADMIN_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
