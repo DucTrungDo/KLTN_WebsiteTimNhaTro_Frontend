@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Loader from './layout/Loader'
-
 import Post from './post/Post'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
@@ -11,23 +10,23 @@ import SearchFilter from './layout/SearchFilter'
 const Home = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
-
   const { loading, posts, error } = useSelector((state) => state.posts)
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const [filterData, setFilterData] = useState({})
   useEffect(() => {
     if (error) {
       return alert.error(error)
     }
-    dispatch(getPosts(1))
+    dispatch(getPosts(1, {}))
   }, [dispatch, alert, error])
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
         Math.round(
-          posts.count % 6 !== 0
-            ? Math.floor(posts.count / 6) + 1
-            : Math.floor(posts.count / 6)
+          posts.count % 10 !== 0
+            ? Math.floor(posts.count / 10) + 1
+            : Math.floor(posts.count / 10)
         )
       )
     }
@@ -39,15 +38,15 @@ const Home = () => {
   async function NextAndPrevious(Actions) {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getPosts(currentPage + 1))
+      dispatch(getPosts(currentPage + 1, filterData))
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getPosts(currentPage - 1))
+      dispatch(getPosts(currentPage - 1, filterData))
     }
   }
   return (
     <>
-      <SearchFilter />
+      <SearchFilter setFilterData={setFilterData} />
       {loading ? (
         <Loader />
       ) : (
