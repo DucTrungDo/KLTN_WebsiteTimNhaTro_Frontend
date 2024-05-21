@@ -23,9 +23,18 @@ const ForgotPassword = () => {
     (state) => state.auth
   )
 
+  const user = useSelector((state) => state.auth.user || {})
+  const { isAdmin, isModerator } = user
+
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/')
+      if (isAdmin) {
+        navigate('/admin/dashboard')
+      } else if (isModerator) {
+        navigate('/moderator/dashboard')
+      } else {
+        navigate('/')
+      }
     }
     if (error && error !== 'Request failed with status code 401') {
       if (error === 'Request failed with status code 400') {
@@ -154,7 +163,7 @@ const ForgotPassword = () => {
                   {loading && showpaswordInput ? (
                     <Loader />
                   ) : (
-                    showpaswordInput && ( // Render phần nhập OTP chỉ khi biến trạng thái showOtpInput là true
+                    showpaswordInput && ( // Render phần nhập Password chỉ khi biến trạng thái showpaswordInput là true
                       <div className='col-12'>
                         <label htmlFor='password' className='form-label'>
                           Mật khẩu <span className='text-danger'>*</span>

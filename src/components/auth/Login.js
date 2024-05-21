@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Loader from '../layout/Loader'
@@ -15,12 +15,15 @@ const Login = () => {
   const { isAuthenticated, error, loading, token } = useSelector(
     (state) => state.auth
   )
-  const isAdmin = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user || {})
+  const { isAdmin, isModerator } = user
 
   useEffect(() => {
     if (isAuthenticated) {
       if (isAdmin) {
         navigate('/admin/dashboard')
+      } else if (isModerator) {
+        navigate('/moderator/dashboard')
       } else {
         navigate('/')
       }
@@ -41,119 +44,128 @@ const Login = () => {
   }
 
   return (
-    <Fragment>
+    <>
       {loading ? (
         <Loader />
       ) : (
-        <Fragment>
-          <section className='bg-light p-3 p-md-4 p-xl-5'>
-            <div className='container'>
-              <div className='row'>
-                <div className='bg-gradient col-12 col-md-6 bsb-tpl-bg-platinum'>
-                  <div className='d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5'>
-                    <img
-                      className='img-fluid rounded mx-auto my-4'
-                      loading='lazy'
-                      src='./images/loginlogo.png'
-                      width='245'
-                      height='80'
-                      alt='BootstrapBrain Logo'
-                    />
-                    <hr className='border-primary-subtle mb-4' />
-                    <h2 className='h1 mb-4'>
-                      Discover Ideal Accommodations Quickly and Conveniently.
-                    </h2>
-                    <p className='lead mb-5'>
-                      We support you in searching and posting according to your
-                      requirements.
-                    </p>
-                    <div className='text-endx'>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='48'
-                        height='48'
-                        fill='currentColor'
-                        className='bi bi-grip-horizontal'
-                        viewBox='0 0 16 16'
-                      >
-                        <path d='M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
-                      </svg>
-                    </div>
-                    <p className='mb-0'>
-                      Chưa có tài khoản?{' '}
-                      <Link
-                        to='/register'
-                        className='link-secondary text-decoration-none'
-                      >
-                        Đăng ký ngay!
-                      </Link>
-                    </p>
+        <section className='bg-light p-3 p-md-4 p-xl-5'>
+          <div className='container'>
+            <div className='row'>
+              <div className='bg-gradient col-12 col-md-6 bsb-tpl-bg-platinum'>
+                <div className='d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5'>
+                  <img
+                    className='img-fluid rounded mx-auto my-4'
+                    loading='lazy'
+                    src='./images/loginlogo.png'
+                    width='245'
+                    height='80'
+                    alt='BootstrapBrain Logo'
+                  />
+                  <hr className='border-primary-subtle mb-4' />
+                  <h2 className='h1 mb-4'>
+                    Discover Ideal Accommodations Quickly and Conveniently.
+                  </h2>
+                  <p className='lead mb-5'>
+                    We support you in searching and posting according to your
+                    requirements.
+                  </p>
+                  <div className='text-endx'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='48'
+                      height='48'
+                      fill='currentColor'
+                      className='bi bi-grip-horizontal'
+                      viewBox='0 0 16 16'
+                    >
+                      <path d='M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
+                    </svg>
                   </div>
+                  <p className='mb-0'>
+                    Chưa có tài khoản?{' '}
+                    <Link
+                      to='/register'
+                      className='link-secondary text-decoration-none'
+                    >
+                      Đăng ký ngay!
+                    </Link>
+                  </p>
                 </div>
-                <div className='shadow-lg col-12 col-md-6 bsb-tpl-bg-lotion'>
-                  <div className='p-3 p-md-4 p-xl-5'>
-                    <div className='row'>
-                      <div className='col-12'>
-                        <div className='mb-5'>
-                          <h3>Đăng nhập</h3>
-                        </div>
+              </div>
+              <div className='shadow-lg col-12 col-md-6 bsb-tpl-bg-lotion'>
+                <div className='p-3 p-md-4 p-xl-5'>
+                  <div className='row'>
+                    <div className='col-12'>
+                      <div className='mb-5'>
+                        <h3>Đăng nhập</h3>
                       </div>
                     </div>
-                    <form onSubmit={submitHandler}>
-                      <div className='row gy-3 gy-md-4 overflow-hidden'>
-                        <div className='col-12'>
-                          <label htmlFor='email' className='form-label'>
-                            Email <span className='text-danger'>*</span>
-                          </label>
-                          <input
-                            type='email'
-                            className='form-control'
-                            name='email'
-                            id='email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className='col-12'>
-                          <label htmlFor='password' className='form-label'>
-                            Mật khẩu <span className='text-danger'>*</span>
-                          </label>
-                          <input
-                            type='password'
-                            className='form-control'
-                            name='password'
-                            id='password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className='col-12'>
-                          <div className='d-grid'>
-                            <button
-                              className='btn bsb-btn-xl btn-primary'
-                              type='submit'
-                            >
-                              Đăng nhập
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                    <div className='row'>
+                  </div>
+                  <form onSubmit={submitHandler}>
+                    <div className='row gy-3 gy-md-4 overflow-hidden'>
                       <div className='col-12'>
-                        <div className='mt-5 text-end'>
-                          <Link
-                            to='/forgot_password'
-                            className='link-secondary text-decoration-none'
+                        <label htmlFor='email' className='form-label'>
+                          Email <span className='text-danger'>*</span>
+                        </label>
+                        <input
+                          type='email'
+                          className='form-control'
+                          name='email'
+                          id='email'
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className='col-12'>
+                        <label htmlFor='password' className='form-label'>
+                          Mật khẩu <span className='text-danger'>*</span>
+                        </label>
+                        <input
+                          type='password'
+                          className='form-control'
+                          name='password'
+                          id='password'
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className='col-12'>
+                        <div className='d-grid'>
+                          <button
+                            className='btn bsb-btn-xl btn-primary'
+                            type='submit'
                           >
-                            Quên mật khẩu
-                          </Link>
+                            Đăng nhập
+                          </button>
                         </div>
                       </div>
                     </div>
-                    {/* <div className='row'>
+                  </form>
+                  <div className='d-flex justify-content-between'>
+                    <div className='col-6'>
+                      <div className='mt-5 text-start'>
+                        <Link
+                          to='/resend-otp'
+                          className='link-secondary text-decoration-none'
+                        >
+                          Chưa xác thực tài khoản?
+                        </Link>
+                      </div>
+                    </div>
+                    <div className='col-6'>
+                      <div className='mt-5 text-end'>
+                        <Link
+                          to='/forgot_password'
+                          className='link-secondary text-decoration-none'
+                        >
+                          Quên mật khẩu
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <div className='row'>
                       <div className='col-12'>
                         <p className='my-4'>Hoặc đăng nhập với</p>
                         <div className='d-flex gap-3 flex-column flex-xl-row'>
@@ -208,14 +220,13 @@ const Login = () => {
                         </div>
                       </div>
                     </div> */}
-                  </div>
                 </div>
               </div>
             </div>
-          </section>
-        </Fragment>
+          </div>
+        </section>
       )}
-    </Fragment>
+    </>
   )
 }
 

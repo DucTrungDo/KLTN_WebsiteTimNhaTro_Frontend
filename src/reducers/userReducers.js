@@ -5,6 +5,9 @@ import {
   REGISTER_USER_VERIFY_REQUEST,
   REGISTER_USER_VERIFY_SUCCESS,
   REGISTER_USER_VERIFY_FAIL,
+  REGISTER_RESEND_OTP_REQUEST,
+  REGISTER_RESEND_OTP_SUCCESS,
+  REGISTER_RESEND_OTP_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -54,6 +57,7 @@ import {
 export const authReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case REGISTER_USER_SEND_OTP_REQUEST:
+    case REGISTER_RESEND_OTP_REQUEST:
     case REGISTER_USER_VERIFY_REQUEST:
     case FORGOT_PASSWORD_SEND_OTP_REQUEST:
     case FORGOT_PASSWORD_VERIFY_OTP_REQUEST:
@@ -64,6 +68,7 @@ export const authReducer = (state = { user: {} }, action) => {
       }
 
     case REGISTER_USER_SEND_OTP_SUCCESS:
+    case REGISTER_RESEND_OTP_SUCCESS:
     case FORGOT_PASSWORD_SEND_OTP_SUCCESS:
     case FORGOT_PASSWORD_VERIFY_OTP_SUCCESS:
     case FORGOT_PASSWORD_RESET_SUCCESS:
@@ -76,10 +81,10 @@ export const authReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         loading: false,
-        user_temp: null,
         message: action.payload,
       }
     case REGISTER_USER_SEND_OTP_FAIL:
+    case REGISTER_RESEND_OTP_FAIL:
     case REGISTER_USER_VERIFY_FAIL:
     case FORGOT_PASSWORD_SEND_OTP_FAIL:
     case FORGOT_PASSWORD_VERIFY_OTP_FAIL:

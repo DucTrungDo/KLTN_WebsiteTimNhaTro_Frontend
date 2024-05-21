@@ -28,6 +28,7 @@ import Home from './components/Home'
 // Auth import
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
+import ResendOtp from './components/auth/ResendOtp'
 import VerifyRegister from './components/auth/VerifyRegister'
 import ForgotPassword from './components/auth/ForgotPassWord'
 
@@ -75,7 +76,11 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/verify_register/:email' element={<VerifyRegister />} />
+              <Route path='/resend-otp' element={<ResendOtp />} />
+              <Route
+                path='/verify_register/:email'
+                element={<VerifyRegister />}
+              />
               <Route path='/post/:slug' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
               <Route path='/favorite_post' element={<FavoritePost />} />

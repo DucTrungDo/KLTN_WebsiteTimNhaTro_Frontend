@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { verifyRegister, clearErrors } from '../../actions/userActions'
+import {
+  verifyRegister,
+  resendOtpRegister,
+  clearErrors,
+} from '../../actions/userActions'
 import { useAlert } from 'react-alert'
 import Loader from '../layout/Loader'
 
@@ -17,11 +21,18 @@ const VerifyRegister = () => {
   const navigate = useNavigate()
   const alert = useAlert()
   const { email } = useParams()
-  console.log(email)
+  const user = useSelector((state) => state.auth.user || {})
+  const { isAdmin, isModerator } = user
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/')
+      if (isAdmin) {
+        navigate('/admin/dashboard')
+      } else if (isModerator) {
+        navigate('/moderator/dashboard')
+      } else {
+        navigate('/')
+      }
     }
 
     if (!loading) {
@@ -36,6 +47,13 @@ const VerifyRegister = () => {
         // Trường hợp tài khoản đã có người đăng ký sau khi bấm đăng ký tài khoản hoặc chưa yêu cầu gửi otp mà đã truy cập /verify_register => chuyển lại về trang register
         if (error === 'Email is already registered') {
           navigate('/register')
+        }
+        if (
+          error === 'Email is already verified' ||
+          error === 'Email not found' ||
+          error === 'User not register account'
+        ) {
+          navigate('/resend-otp')
         }
         // Trường hợp người dùng muốn xác thực cho một email nào đó
         if (email) {
@@ -56,9 +74,26 @@ const VerifyRegister = () => {
     }
   }, [dispatch, loading, message, alert, isAuthenticated, error, navigate])
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(verifyRegister(email, otp))
+    if (!isValidEmail(email)) {
+      alert.error('Email không hợp lệ!')
+    } else if (otp.trim() === '') {
+      alert.error('Vui lòng nhập OTP!')
+    } else dispatch(verifyRegister(email, otp))
+  }
+
+  const resendOtpHandler = () => {
+    if (!isValidEmail(email)) {
+      alert.error('Email không hợp lệ!')
+    } else {
+      dispatch(resendOtpRegister(email))
+    }
   }
 
   return (
@@ -148,6 +183,19 @@ const VerifyRegister = () => {
                       </div>
                     </div>
                   </form>
+                  <div className='row'>
+                    <div className='col-12'>
+                      <div className='mt-3 text-end'>
+                        <div
+                          className='link-secondary text-decoration-none'
+                          role='button'
+                          onClick={() => resendOtpHandler()}
+                        >
+                          Gửi lại mã xác thực
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

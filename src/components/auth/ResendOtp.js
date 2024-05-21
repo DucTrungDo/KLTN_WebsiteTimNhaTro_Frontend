@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAlert } from 'react-alert'
-
+import { resendOtpRegister, clearErrors } from '../../actions/userActions'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerSendOTP, clearErrors } from '../../actions/userActions'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useAlert } from 'react-alert'
 import Loader from '../layout/Loader'
 
-const Register = () => {
+const ResendOtp = () => {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const alert = useAlert()
-
-  const { loading, isAuthenticated, error } = useSelector((state) => state.auth)
-
+  const { isAuthenticated, error, loading } = useSelector((state) => state.auth)
   const user = useSelector((state) => state.auth.user || {})
   const { isAdmin, isModerator } = user
 
@@ -41,17 +33,10 @@ const Register = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (name.trim() === '') {
-      alert.error('Vui lòng nhập tên!')
-    } else if (phone.trim() === '') {
-      alert.error('Vui lòng nhập số điện thoại!')
-    } else if (password.trim() === '') {
-      alert.error('Vui lòng nhập mật khẩu!')
-    } else {
-      dispatch(registerSendOTP(name, phone, email, password))
-      navigate('/verify_register/' + email)
-    }
+    dispatch(resendOtpRegister(email))
+    navigate('/verify_register/' + email)
   }
+
   return (
     <>
       {loading ? (
@@ -105,44 +90,17 @@ const Register = () => {
                 <div className='p-3 p-md-4 p-xl-5'>
                   <div className='row'>
                     <div className='col-12'>
-                      <div className='mb-4'>
-                        <h3>Đăng Ký</h3>
+                      <div className='mb-5'>
+                        <h3>Xác thực tài khoản</h3>
                       </div>
                     </div>
                   </div>
                   <form onSubmit={submitHandler}>
                     <div className='row gy-3 gy-md-4 overflow-hidden'>
                       <div className='col-12'>
-                        <label htmlFor='name' className='form-label'>
-                          Họ tên <span className='text-danger'>*</span>
-                        </label>
-                        <input
-                          type='text'
-                          className='form-control'
-                          name='name'
-                          id='name'
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className='col-12'>
-                        <label htmlFor='phone' className='form-label'>
-                          Số điện thoại <span className='text-danger'>*</span>
-                        </label>
-                        <input
-                          type='text'
-                          className='form-control'
-                          name='phone'
-                          id='phone'
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className='col-12'>
                         <label htmlFor='email' className='form-label'>
-                          Email <span className='text-danger'>*</span>
+                          Nhập Email muốn xác thực{' '}
+                          <span className='text-danger'>*</span>
                         </label>
                         <input
                           type='email'
@@ -155,39 +113,15 @@ const Register = () => {
                         />
                       </div>
                       <div className='col-12'>
-                        <label htmlFor='password' className='form-label'>
-                          Mật khẩu <span className='text-danger'>*</span>
-                        </label>
-                        <input
-                          type='password'
-                          className='form-control'
-                          name='password'
-                          id='password'
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className='col-12'>
                         <div className='d-grid'>
                           <button
                             className='btn bsb-btn-xl btn-primary'
                             type='submit'
                           >
-                            Tạo tài khoản
+                            Gửi mã xác thực
                           </button>
                         </div>
                       </div>
-                      <p className='mt-4'>
-                        Bấm vào nút đăng ký tức là bạn đã đồng ý với{' '}
-                        <Link
-                          to='/login'
-                          className='link-secondary text-primary text-decoration-none'
-                        >
-                          quy định sử dụng
-                        </Link>{' '}
-                        của chúng tôi
-                      </p>
                     </div>
                   </form>
                 </div>
@@ -200,4 +134,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default ResendOtp
