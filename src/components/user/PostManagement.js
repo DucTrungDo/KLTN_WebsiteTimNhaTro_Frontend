@@ -10,16 +10,43 @@ import {
 } from '../../actions/postActions'
 import { DELETE_USER_POST_RESET } from '../../constants/postConstants'
 import Cookies from 'js-cookie'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import Loader from '../layout/Loader'
+import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
+import { getCategories } from '../../actions/categoryActions'
 
 const PostManagement = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getProvince())
+    dispatch(getCategories())
+  }, [dispatch])
+  const { provinces } = useSelector((state) => state.province)
+  const { districts } = useSelector((state) => state.district)
+  const { wards } = useSelector((state) => state.ward)
+  const { categories } = useSelector((state) => state.categories)
   const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const token = Cookies.get('accessToken')
+  const [postSlug, setPostSlug] = useState('')
+  const [search] = useState('')
+  const [categoryId] = useState('')
+  const [province] = useState('')
+  const [district] = useState('')
+  const [ward] = useState('')
+  const [tab] = useState('')
+  const [filterData, setFilterData] = useState({
+    search: search,
+    categoryId: categoryId,
+    province: province,
+    district: district,
+    ward: ward,
+    tab: tab,
+  })
 
   const { loading, posts, error } = useSelector((state) => state.userPosts)
   const { postLoading, postError, isDeleted } = useSelector(
@@ -27,7 +54,62 @@ const PostManagement = () => {
   )
 
   useEffect(() => {
-    dispatch(getUserPosts(token, currentPage))
+    if (
+      provinces.length !== 0 &&
+      provinces !== undefined &&
+      filterData.province !== ''
+    ) {
+      console.log('1')
+      const keypro = provinces.find(
+        (location) => location.province_name === filterData.province
+      ).province_id
+      dispatch(getdistrict(keypro))
+    }
+    if (filterData.province === '') {
+      dispatch(getdistrict(''))
+    }
+    dispatch(getWard(''))
+    setFilterData((prevState) => ({
+      ...prevState,
+      district: '',
+      ward: '',
+    }))
+  }, [filterData.province])
+
+  useEffect(() => {
+    if (
+      districts.length !== 0 &&
+      districts !== undefined &&
+      filterData.district !== ''
+    ) {
+      const keydis = districts.find(
+        (location) => location.district_name === filterData.district
+      ).district_id
+      dispatch(getWard(keydis))
+    }
+    if (filterData.district === '') {
+      dispatch(getWard(''))
+    }
+    setFilterData((prevState) => ({
+      ...prevState,
+      ward: '',
+    }))
+  }, [filterData.district])
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      Search()
+    }
+  }
+  const Search = () => {
+    dispatch(getUserPosts(token, currentPage, filterData))
+    setCurrentPage(1)
+  }
+
+  console.log(filterData)
+
+  useEffect(() => {
+    dispatch(getUserPosts(token, currentPage, filterData))
 
     if (error) {
       alert.error(error)
@@ -44,15 +126,15 @@ const PostManagement = () => {
       navigate('/user/post-management')
       dispatch({ type: DELETE_USER_POST_RESET })
     }
-  }, [dispatch, alert, isDeleted, error, postError, navigate])
+  }, [dispatch, alert, isDeleted, error, postError, navigate, filterData])
 
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
         Math.round(
-          posts.count % 6 !== 0
-            ? Math.floor(posts.count / 6) + 1
-            : Math.floor(posts.count / 6)
+          posts.total % 10 !== 0
+            ? Math.floor(posts.total / 10) + 1
+            : Math.floor(posts.total / 10)
         )
       )
     }
@@ -60,15 +142,15 @@ const PostManagement = () => {
 
   const ChoosePage = (indexPageCurrent) => {
     setCurrentPage(indexPageCurrent)
-    dispatch(getUserPosts(token, indexPageCurrent))
+    dispatch(getUserPosts(token, indexPageCurrent, filterData))
   }
   const NextAndPrevious = (Actions) => {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getUserPosts(token, currentPage + 1))
+      dispatch(getUserPosts(token, currentPage + 1, filterData))
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getUserPosts(token, currentPage - 1))
+      dispatch(getUserPosts(token, currentPage - 1, filterData))
     }
   }
 
@@ -120,6 +202,153 @@ const PostManagement = () => {
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
         <h1 className='h2'>Quản lý tin đăng</h1>
       </div>
+      <div className='d-flex justify-content-between'>
+        <div className='d-flex bd-highlight mb-2 align-items-center'>
+          <div className='bd-highlight me-2'>
+            <select
+              className='form-select'
+              aria-label='Default select example'
+              value={filterData.province}
+              onChange={(e) =>
+                setFilterData((prevState) => ({
+                  ...prevState,
+                  province: e.target.value,
+                }))
+              }
+            >
+              <option value=''>--Chọn Tỉnh/TP--</option>
+              {provinces &&
+                provinces.map((location) => (
+                  <option
+                    key={location.province_id}
+                    value={location.province_name}
+                  >
+                    {location.province_name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className='bd-highlight me-2'>
+            <select
+              className='form-select'
+              aria-label='Default select example'
+              value={filterData.district}
+              onChange={(e) =>
+                setFilterData((prevState) => ({
+                  ...prevState,
+                  district: e.target.value,
+                }))
+              }
+            >
+              <option value=''>--Chọn Quận/Huyện--</option>
+              {districts &&
+                districts.map((district) => (
+                  <option
+                    key={district.district_id}
+                    value={district.district_name}
+                  >
+                    {district.district_name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className='bd-highlight me-5'>
+            <select
+              className='form-select'
+              aria-label='Default select example'
+              value={filterData.ward}
+              onChange={(e) =>
+                setFilterData((prevState) => ({
+                  ...prevState,
+                  ward: e.target.value,
+                }))
+              }
+            >
+              <option value=''>--Chọn Phường/Xã--</option>
+              {wards &&
+                wards.map((ward) => (
+                  <option key={ward.ward_id} value={ward.ward_name}>
+                    {ward.ward_name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+        <div className='d-flex bd-highlight mb-2 align-items-center'>
+          <div className='me-2'>
+            <div className='input-group me-3 '>
+              <input
+                type='text'
+                className='form-control'
+                placeholder='Tìm Kiếm'
+                aria-label='Tìm kiếm'
+                aria-describedby='button-addon2'
+                onKeyDown={handleKeyPress}
+                value={filterData.search}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    search: e.target.value,
+                  }))
+                }
+              />
+              <button
+                onClick={() => {
+                  Search()
+                }}
+                className='btn btn-outline-secondary'
+                type='button'
+                id='button-addon2'
+              >
+                <FontAwesomeIcon className='me-1 ' icon={faMagnifyingGlass} />
+              </button>
+            </div>
+          </div>
+          <div className='bd-highlight me-2'>
+            <select
+              className='form-select'
+              aria-label='Default select example'
+              value={filterData.categoryId}
+              onChange={(e) =>
+                setFilterData((prevState) => ({
+                  ...prevState,
+                  categoryId: e.target.value,
+                }))
+              }
+            >
+              <option value=''>--Lọc theo danh mục--</option>
+              {categories.length !== 0
+                ? categories.cates.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))
+                : null}
+            </select>
+          </div>
+          <div className='bd-highlight'>
+            <select
+              className='form-select'
+              aria-label='Default select example'
+              value={filterData.tab}
+              onChange={(e) =>
+                setFilterData((prevState) => ({
+                  ...prevState,
+                  tab: e.target.value,
+                }))
+              }
+            >
+              <option value=''>--Lọc theo trạng thái--</option>
+              <option value='posted'>Các bài đã được duyệt</option>
+              <option value='inPay'>Các bài chờ thanh toán</option>
+              <option value='inApprove'>Các bài chờ duyệt</option>
+              <option value='inViolation'>Các bài vi phạm</option>
+              <option value='inHide'>Các bài đã ẩn</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {loading || !posts ? (
         <Loader />
       ) : (
@@ -143,7 +372,7 @@ const PostManagement = () => {
                 {posts.posts?.length === 0 || !posts.posts ? (
                   <tr>
                     <td colSpan='7'>
-                      Bạn chưa có tin đăng nào. Bấm{' '}
+                      Không tìm thấy tin nào. Bấm{' '}
                       <Link
                         className='text-decoration-none'
                         to='/user/add-new-post'
@@ -160,17 +389,14 @@ const PostManagement = () => {
                       <td>{index + idx}</td>
                       <td>
                         <div className='post_thumb'>
-                          <a
-                            href='https://phongtro123.com/cho-thue-phong-rong-mat-duong-man-thien-q-9-pr653234.html'
-                            target='_blank'
-                          >
-                            <img src='https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2024/04/23/439979152-377368798623213-8314998822001744453-n_1713882276.jpg' />
-                          </a>
+                          <Link to={'/post/' + post.slug} target='_blank'>
+                            <img src='../images/property-test.jpg' />
+                          </Link>
                         </div>
                       </td>
                       <td>
                         <span className='badge text-bg-warning me-1'>
-                          Phòng trọ
+                          {post.categoryId?.name}
                         </span>
                         <Link
                           className='post_title text-decoration-none'
@@ -309,9 +535,12 @@ const PostManagement = () => {
                             </svg>
                             Ẩn tin
                           </a>
-                          <a
+                          <button
                             className='btn btn-sm mt-2'
-                            onClick={() => deletePostHandler(post.slug)}
+                            type='button'
+                            data-bs-toggle='modal'
+                            data-bs-target='#deleteModal'
+                            onClick={() => setPostSlug(post.slug)}
                             disabled={postLoading ? true : false}
                           >
                             <svg
@@ -332,7 +561,7 @@ const PostManagement = () => {
                               <line x1='14' y1='11' x2='14' y2='17'></line>
                             </svg>
                             Xóa tin
-                          </a>
+                          </button>
                         </div>
                         <span
                           style={{
@@ -365,7 +594,15 @@ const PostManagement = () => {
                           className='text-success label-success'
                           style={{ whiteSpace: 'nowrap' }}
                         >
-                          Đang hiển thị
+                          {post.isHided
+                            ? 'Tin đã ẩn'
+                            : post.isViolated
+                            ? 'Tin bị cảnh báo'
+                            : !post.isPaid
+                            ? 'Tin chưa thanh toán'
+                            : !post.isApproved
+                            ? 'Tin chưa được duyệt'
+                            : 'Tin đã được duyệt'}
                         </span>
                       </td>
                     </tr>
@@ -427,6 +664,49 @@ const PostManagement = () => {
           </div>
         </div>
       )}
+      <div
+        className='modal fade'
+        id='deleteModal'
+        tabIndex='-1'
+        aria-labelledby='deleteModalLabel'
+        aria-hidden='true'
+      >
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='deleteModalLabel'>
+                Xác nhận xóa
+              </h1>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              ></button>
+            </div>
+            <div className='modal-body'>Bạn có chắc là muốn xóa post chứ?</div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                className='btn btn-danger'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => deletePostHandler(postSlug)}
+                disabled={postLoading ? true : false}
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

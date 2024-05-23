@@ -3,7 +3,7 @@ import Loader from './layout/Loader'
 import Post from './post/Post'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { getPosts } from '../actions/postActions'
+import { getPosts, clearErrors } from '../actions/postActions'
 
 import SearchFilter from './layout/SearchFilter'
 
@@ -15,10 +15,13 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [filterData, setFilterData] = useState({})
   useEffect(() => {
-    if (error) {
-      return alert.error(error)
-    }
     dispatch(getPosts(1, {}))
+  }, [dispatch])
+  useEffect(() => {
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
   }, [dispatch, alert, error])
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {

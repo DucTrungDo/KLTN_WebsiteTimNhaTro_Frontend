@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { differenceInDays } from 'date-fns'
@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
 
-import SearchFilter from '../layout/SearchFilter'
+// import SearchFilter from '../layout/SearchFilter'
 import MapD from '../googleMap/MapD'
 import Loader from '../layout/Loader'
 import { getPostDetails, clearErrors } from '../../actions/postActions'
@@ -26,6 +26,7 @@ import {
 const PostDetail = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { slug } = useParams()
   const { loading, post, error } = useSelector((state) => state.postDetails)
   const { favoritePosts } = useSelector((state) => state.favorite)
@@ -43,7 +44,6 @@ const PostDetail = () => {
 
   const handleSaveClick = () => {
     if (saved) {
-      console.log('1')
       dispatch(removePostFromFavorite(slug))
     } else {
       dispatch(addPostToFavorite(slug))
@@ -53,12 +53,15 @@ const PostDetail = () => {
 
   useEffect(() => {
     dispatch(getPostDetails(slug))
+  }, [dispatch])
 
+  useEffect(() => {
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
+      navigate('/')
     }
-  }, [dispatch, alert, error])
+  }, [dispatch, error, alert])
 
   useEffect(() => {
     if (post.address !== undefined) {
@@ -131,7 +134,7 @@ const PostDetail = () => {
 
   return (
     <>
-      <SearchFilter />
+      {/* <SearchFilter /> */}
       {loading ? (
         <Loader />
       ) : (
@@ -273,7 +276,13 @@ const PostDetail = () => {
                     </tr>
                     <tr>
                       <td className='name'>Đối tượng thuê:</td>
-                      <td>Tất cả</td>
+                      <td>
+                        {post.renters === 'male'
+                          ? 'Nam'
+                          : post.renter === 'female'
+                          ? 'Nữ'
+                          : 'Tất cả'}
+                      </td>
                     </tr>
                     <tr>
                       <td className='name'>Gói tin:</td>

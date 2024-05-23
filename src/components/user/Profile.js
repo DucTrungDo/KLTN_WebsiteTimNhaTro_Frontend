@@ -123,11 +123,11 @@ const Profile = () => {
           </label>
           <div className='col-md-6'>
             <input
-              type='phone'
-              className='form-control'
+              type='text'
+              className='form-control disable'
               id='user_phone'
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              defaultValue={user.phone}
+              readOnly
             />
           </div>
         </div>

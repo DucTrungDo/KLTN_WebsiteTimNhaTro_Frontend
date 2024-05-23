@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import SearchFilter from '../layout/SearchFilter'
+// import SearchFilter from '../layout/SearchFilter'
 import { useDispatch, useSelector } from 'react-redux'
 import { differenceInDays } from 'date-fns'
 import { removePostFromFavorite } from '../../actions/favoriteActions'
@@ -59,7 +59,7 @@ const FavoritePost = () => {
   }
   return (
     <div>
-      <SearchFilter />
+      {/* <SearchFilter /> */}
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4'>
         <h1 className='h2'>Tin đã lưu</h1>
       </div>
@@ -106,7 +106,7 @@ const FavoritePost = () => {
                     post-id='650734'
                   >
                     <figure className='post-thumb'>
-                      <Link className='clearfix' to={'post/' + post.slug}>
+                      <Link className='clearfix' to={'/post/' + post.slug}>
                         <img
                           className='lazy_done'
                           src='../images/property-test.jpg'
@@ -130,13 +130,13 @@ const FavoritePost = () => {
                     </figure>
                     <div className='post-meta'>
                       <h3 className='post-title'>
-                        <a
+                        <Link
                           style={{ color: '#055699' }}
-                          href='/cho-thue-ky-tuc-xa-sleepbox-cao-cap-thu-duc-gia-cuc-re-pr650734.html'
+                          to={'/post/' + post.slug}
                         >
                           {/* <span className='star star-4'></span>  */}
                           {post.title}
-                        </a>
+                        </Link>
                       </h3>
                       <div className='meta-row clearfix'>
                         <span className='post-price'>

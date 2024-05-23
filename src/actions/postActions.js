@@ -90,32 +90,33 @@ export const getPostDetails = (slug) => async (dispatch) => {
 }
 
 // Get all user's posts (User)
-export const getUserPosts = (token, currentPage) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_USER_POSTS_REQUEST })
+export const getUserPosts =
+  (token, currentPage, FilterData) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_USER_POSTS_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/posts/me?page=${currentPage}&search=${FilterData.search}&categoryId=${FilterData.categoryId}&city=${FilterData.province}&district=${FilterData.district}&tab=${FilterData.tab}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_USER_POSTS_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_USER_POSTS_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/posts/me?page=${currentPage}`,
-      config
-    )
-
-    dispatch({
-      type: ALL_USER_POSTS_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: ALL_USER_POSTS_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Reset user's posts
 export const resetUserPosts = () => async (dispatch) => {
@@ -206,32 +207,33 @@ export const newPost = (token, post) => async (dispatch) => {
 }
 
 // Get all unapproved post (Moderator)
-export const getUnapprovedPosts = (token, currentPage) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
+export const getUnapprovedPosts =
+  (token, currentPage, FilterData) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/posts/moderators?page=${currentPage}&search=${FilterData.search}&categoryId=${FilterData.categoryId}&city=${FilterData.province}&district=${FilterData.district}&tab=${FilterData.tab}&moderatedFilter=${FilterData.moderatedFilter}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_UNAPPROVED_POSTS_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_UNAPPROVED_POSTS_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/posts/moderators?page=${currentPage}`,
-      config
-    )
-
-    dispatch({
-      type: ALL_UNAPPROVED_POSTS_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: ALL_UNAPPROVED_POSTS_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Approve post (Moderator)
 export const approvePost = (slug, token) => async (dispatch) => {

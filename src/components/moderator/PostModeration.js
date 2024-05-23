@@ -6,33 +6,114 @@ import { useAlert } from 'react-alert'
 import { format } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck } from '@fortawesome/free-regular-svg-icons'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { getUnapprovedPosts, clearErrors } from '../../actions/postActions'
 import Cookies from 'js-cookie'
 import DetailPostModal from '../admin/DetailPostModal'
-
+import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
+import { getCategories } from '../../actions/categoryActions'
 import Loader from '../layout/Loader'
 
 const PostModeration = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getProvince())
+    dispatch(getCategories())
+  }, [dispatch])
+  const { provinces } = useSelector((state) => state.province)
+  const { districts } = useSelector((state) => state.district)
+  const { wards } = useSelector((state) => state.ward)
+  const { categories } = useSelector((state) => state.categories)
   const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [postDetail, setPostDetail] = useState({})
 
   const token = Cookies.get('accessToken')
-
+  const [search] = useState('')
+  const [categoryId] = useState('')
+  const [province] = useState('')
+  const [district] = useState('')
+  const [ward] = useState('')
+  const [tab] = useState('')
+  const [moderatedFilter] = useState('')
+  const [filterData, setFilterData] = useState({
+    search: search,
+    categoryId: categoryId,
+    province: province,
+    district: district,
+    ward: ward,
+    tab: tab,
+    moderatedFilter: moderatedFilter,
+  })
   const { loading, unapprovedPosts, error } = useSelector(
     (state) => state.unapprovedPosts
   )
+
   useEffect(() => {
-    dispatch(getUnapprovedPosts(token, currentPage))
+    if (
+      provinces.length !== 0 &&
+      provinces !== undefined &&
+      filterData.province !== ''
+    ) {
+      console.log('1')
+      const keypro = provinces.find(
+        (location) => location.province_name === filterData.province
+      ).province_id
+      dispatch(getdistrict(keypro))
+    }
+    if (filterData.province === '') {
+      dispatch(getdistrict(''))
+    }
+    dispatch(getWard(''))
+    setFilterData((prevState) => ({
+      ...prevState,
+      district: '',
+      ward: '',
+    }))
+  }, [filterData.province])
+
+  useEffect(() => {
+    if (
+      districts.length !== 0 &&
+      districts !== undefined &&
+      filterData.district !== ''
+    ) {
+      const keydis = districts.find(
+        (location) => location.district_name === filterData.district
+      ).district_id
+      dispatch(getWard(keydis))
+    }
+    if (filterData.district === '') {
+      dispatch(getWard(''))
+    }
+    setFilterData((prevState) => ({
+      ...prevState,
+      ward: '',
+    }))
+  }, [filterData.district])
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      Search()
+    }
+  }
+  const Search = () => {
+    dispatch(getUnapprovedPosts(token, currentPage, filterData))
+    setCurrentPage(1)
+  }
+
+  console.log(filterData)
+
+  useEffect(() => {
+    dispatch(getUnapprovedPosts(token, currentPage, filterData))
 
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
     }
-  }, [dispatch, alert, error, navigate])
+  }, [dispatch, alert, error, navigate, filterData])
 
   const PriceDisplay = ({ price }) => {
     if (!price) return
@@ -62,9 +143,9 @@ const PostModeration = () => {
     ) {
       setPage(
         Math.round(
-          unapprovedPosts.count % 6 !== 0
-            ? Math.floor(unapprovedPosts.count / 6) + 1
-            : Math.floor(unapprovedPosts.count / 6)
+          unapprovedPosts.total % 10 !== 0
+            ? Math.floor(unapprovedPosts.total / 10) + 1
+            : Math.floor(unapprovedPosts.total / 10)
         )
       )
     }
@@ -72,15 +153,15 @@ const PostModeration = () => {
 
   const ChoosePage = (indexPageCurrent) => {
     setCurrentPage(indexPageCurrent)
-    dispatch(getUnapprovedPosts(token, indexPageCurrent))
+    dispatch(getUnapprovedPosts(token, indexPageCurrent, filterData))
   }
   const NextAndPrevious = (Actions) => {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getUnapprovedPosts(token, currentPage + 1))
+      dispatch(getUnapprovedPosts(token, currentPage + 1, filterData))
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getUnapprovedPosts(token, currentPage - 1))
+      dispatch(getUnapprovedPosts(token, currentPage - 1, filterData))
     }
   }
 
@@ -107,7 +188,7 @@ const PostModeration = () => {
               </Link>
             </li>
             <li className='breadcrumb-item'>
-              <Link to='/user/dashboard' className='text-decoration-none'>
+              <Link to='/moderator/dashboard' className='text-decoration-none'>
                 Quản lý
               </Link>
             </li>
@@ -118,6 +199,169 @@ const PostModeration = () => {
         </nav>
         <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
           <h1 className='h2'>Quản lý tin đăng</h1>
+        </div>
+        <div className='d-flex justify-content-between'>
+          <div className='d-flex bd-highlight mb-2 align-items-center'>
+            <div className='bd-highlight me-2'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.province}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    province: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Chọn Tỉnh/TP--</option>
+                {provinces &&
+                  provinces.map((location) => (
+                    <option
+                      key={location.province_id}
+                      value={location.province_name}
+                    >
+                      {location.province_name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className='bd-highlight me-2'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.district}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    district: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Chọn Quận/Huyện--</option>
+                {districts &&
+                  districts.map((district) => (
+                    <option
+                      key={district.district_id}
+                      value={district.district_name}
+                    >
+                      {district.district_name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className='bd-highlight me-2'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.ward}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    ward: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Chọn Phường/Xã--</option>
+                {wards &&
+                  wards.map((ward) => (
+                    <option key={ward.ward_id} value={ward.ward_name}>
+                      {ward.ward_name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+          <div className='d-flex bd-highlight mb-2 align-items-center ms-3'>
+            <div className='me-2'>
+              <div className='input-group me-3 '>
+                <input
+                  type='text'
+                  className='form-control'
+                  placeholder='Tìm Kiếm'
+                  aria-label='Tìm kiếm'
+                  aria-describedby='button-addon2'
+                  onKeyDown={handleKeyPress}
+                  value={filterData.search}
+                  onChange={(e) =>
+                    setFilterData((prevState) => ({
+                      ...prevState,
+                      search: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  onClick={() => {
+                    Search()
+                  }}
+                  className='btn btn-outline-secondary'
+                  type='button'
+                  id='button-addon2'
+                >
+                  <FontAwesomeIcon className='me-1 ' icon={faMagnifyingGlass} />
+                </button>
+              </div>
+            </div>
+            <div className='bd-highlight me-2'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.categoryId}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    categoryId: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Lọc theo danh mục--</option>
+                {categories.length !== 0
+                  ? categories.cates.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
+            <div className='bd-highlight me-2'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.moderatedFilter}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    moderatedFilter: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Lọc theo status--</option>
+                <option value='approved'>Các bài được duyệt hợp lệ</option>
+                <option value='violated'>Các bài bị vi phạm</option>
+              </select>
+            </div>
+            <div className='bd-highlight'>
+              <select
+                className='form-select'
+                aria-label='Default select example'
+                value={filterData.tab}
+                onChange={(e) =>
+                  setFilterData((prevState) => ({
+                    ...prevState,
+                    tab: e.target.value,
+                  }))
+                }
+              >
+                <option value=''>--Lọc theo trạng thái--</option>
+                <option value='inApprove'>Các bài đang chờ duyệt</option>
+                <option value='moderated'>Các bài đã duyệt bởi tôi</option>
+                <option value='myModerated'>
+                  Tất cả các bài đã được duyệt
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         {loading || !unapprovedPosts ? (
           <Loader />
@@ -146,16 +390,7 @@ const PostModeration = () => {
                   {unapprovedPosts.posts?.length === 0 ||
                   !unapprovedPosts.posts ? (
                     <tr>
-                      <td colSpan='7'>
-                        Bạn chưa có tin đăng nào. Bấm{' '}
-                        <Link
-                          className='text-decoration-none'
-                          to='/user/add-new-post'
-                        >
-                          vào đây
-                        </Link>{' '}
-                        để bắt đầu đăng tin
-                      </td>
+                      <td colSpan='7'>Không tìm thấy bài đăng nào.</td>
                     </tr>
                   ) : (
                     // Load all post here
@@ -164,21 +399,20 @@ const PostModeration = () => {
                         <td>{idx + 1 + 6 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
-                            <a
-                              href='https://phongtro123.com/cho-thue-phong-rong-mat-duong-man-thien-q-9-pr653234.html'
-                              target='_blank'
+                            <Link
+                            // to={'/moderator/view-post-details/' + post.slug}
                             >
-                              <img src='https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2024/04/23/439979152-377368798623213-8314998822001744453-n_1713882276.jpg' />
-                            </a>
+                              <img src='../images/property-test.jpg' />
+                            </Link>
                           </div>
                         </td>
                         <td>
                           <span className='badge text-bg-warning me-1'>
-                            Phòng trọ
+                            {post.categoryId?.name}
                           </span>
                           <Link
                             className='post_title text-decoration-none'
-                            to={'/moderator/view-post-details/' + post.slug}
+                            // to={'/moderator/view-post-details/' + post.slug}
                             style={{ color: '#055699' }}
                           >
                             {post.title}
@@ -194,7 +428,7 @@ const PostModeration = () => {
                               marginTop: '10px',
                             }}
                           >
-                            <strong>Người đăng:</strong> Đỗ Trung Đức
+                            <strong>Người đăng:</strong> {post.userId?.name}
                           </span>
                         </td>
                         <td>
