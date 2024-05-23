@@ -47,13 +47,13 @@ const PostManagement = () => {
       })
     }
     setCurrentPage(1)
-    dispatch(getPosts(1))
+    dispatch(getPosts(1, {}))
     dispatch(getUnapprovedPosts(tokenModerator, 1))
   }, [dispatch, alert, error, isDeleted])
 
   useEffect(() => {
     if (approvedList === 'approved') {
-      dispatch(getPosts(1))
+      dispatch(getPosts(1, {}))
     } else if (approvedList === 'unapproved') {
       dispatch(getUnapprovedPosts(tokenModerator, 1))
     }
@@ -98,7 +98,7 @@ const PostManagement = () => {
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
     if (approvedList === 'approved') {
-      dispatch(getPosts(indexPageCurrent))
+      dispatch(getPosts(indexPageCurrent, {}))
     } else {
       dispatch(getUnapprovedPosts(tokenModerator, indexPageCurrent))
     }
@@ -107,14 +107,14 @@ const PostManagement = () => {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
       if (approvedList === 'approved') {
-        dispatch(getPosts(currentPage + 1))
+        dispatch(getPosts(currentPage + 1, {}))
       } else {
         dispatch(getUnapprovedPosts(tokenModerator, currentPage + 1))
       }
     } else {
       setCurrentPage(currentPage - 1)
       if (approvedList === 'approved') {
-        dispatch(getPosts(currentPage + 1))
+        dispatch(getPosts(currentPage + 1, {}))
       } else {
         dispatch(getUnapprovedPosts(tokenModerator, currentPage - 1))
       }
