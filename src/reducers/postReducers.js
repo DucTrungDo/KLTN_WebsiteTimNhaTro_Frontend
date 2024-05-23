@@ -44,24 +44,36 @@ import {
   ADD_NEW_POST_ADMIN_SUCCESS,
   ADD_NEW_POST_ADMIN_RESET,
   ADD_NEW_POST_ADMIN_FAIL,
+  ALL_ADMIN_POSTS_REQUEST,
+  ALL_ADMIN_POSTS_SUCCESS,
+  ALL_ADMIN_POSTS_FAIL,
+  ALL_ADMIN_POSTS_MODERATE_POST_REQUEST,
+  ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS,
+  ALL_ADMIN_POSTS_MODERATE_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
 export const postsReducer = (state = { posts: [] }, action) => {
   switch (action.type) {
     case ALL_POSTS_REQUEST:
+    case ALL_ADMIN_POSTS_REQUEST:
+    case ALL_ADMIN_POSTS_MODERATE_POST_REQUEST:
       return {
         ...state,
         loading: true,
       }
 
     case ALL_POSTS_SUCCESS:
+    case ALL_ADMIN_POSTS_SUCCESS:
+    case ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS:
       return {
         loading: false,
         posts: action.payload.data,
       }
 
     case ALL_POSTS_FAIL:
+    case ALL_ADMIN_POSTS_FAIL:
+    case ALL_ADMIN_POSTS_MODERATE_POST_FAIL:
       return {
         ...state,
         loading: false,

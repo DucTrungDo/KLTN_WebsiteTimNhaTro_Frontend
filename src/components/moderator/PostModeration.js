@@ -547,6 +547,7 @@ const PostModeration = () => {
               <DetailPostModal
                 post={postDetail}
                 setCurrentPage={setCurrentPage}
+                setFilterData={setFilterData}
               />
             </div>
             <div className='modal-footer'>

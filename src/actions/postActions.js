@@ -38,6 +38,12 @@ import {
   ADD_NEW_POST_ADMIN_REQUEST,
   ADD_NEW_POST_ADMIN_SUCCESS,
   ADD_NEW_POST_ADMIN_FAIL,
+  ALL_ADMIN_POSTS_REQUEST,
+  ALL_ADMIN_POSTS_SUCCESS,
+  ALL_ADMIN_POSTS_FAIL,
+  ALL_ADMIN_POSTS_MODERATE_POST_REQUEST,
+  ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS,
+  ALL_ADMIN_POSTS_MODERATE_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -375,6 +381,62 @@ export const newPostAdmin = (token, post) => async (dispatch) => {
     })
   }
 }
+
+// Get all posts ADMIN
+export const getPostsAdmin =
+  (token, currentPage, FilterData) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_ADMIN_POSTS_REQUEST })
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/posts/admin?page=${currentPage}&search=${FilterData.search}&categoryId=${FilterData.categoryId}&city=${FilterData.province}&district=${FilterData.district}&tab=${FilterData.tab}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_ADMIN_POSTS_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_ADMIN_POSTS_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+// Get all posts ADMIN Moderate
+export const getPostsAdminModerate =
+  (token, currentPage, FilterData) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_ADMIN_POSTS_MODERATE_POST_REQUEST })
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/posts/admin/moderators?page=${currentPage}&search=${FilterData.search}&categoryId=${FilterData.categoryId}&city=${FilterData.province}&district=${FilterData.district}&tab=${FilterData.tab}&moderatedFilter=${FilterData.moderatedFilter}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_ADMIN_POSTS_MODERATE_POST_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
 
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
