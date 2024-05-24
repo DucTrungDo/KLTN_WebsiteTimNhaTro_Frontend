@@ -1,7 +1,14 @@
 import axios from 'axios'
 import { getProfileUserAdmin } from '../../actions/userActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
-import { editPostAdmin, getPosts, clearErrors } from '../../actions/postActions'
+import {
+  editPostAdmin,
+  getPosts,
+  getPostsAdmin,
+  deleteAdminPost,
+  getPostsAdminModerate,
+  clearErrors,
+} from '../../actions/postActions'
 import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +26,7 @@ import {
   MODERATOR_APPROVE_POST_RESET,
   MODERATOR_REPORT_POST_RESET,
 } from '../../constants/postConstants'
-const DetailPostModal = ({ post, setCurrentPage }) => {
+const DetailPostModal = ({ post, setCurrentPage, setFilterData, whatList }) => {
   const token = Cookies.get('accessToken')
   const navigate = useNavigate()
   const alert = useAlert()
@@ -45,6 +52,15 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
     ward: '',
     street: '',
   })
+  const resetFilterModerator = {
+    search: '',
+    categoryId: '',
+    province: '',
+    district: '',
+    ward: '',
+    tab: '',
+    moderatedFilter: '',
+  }
   const [addressAbsolute, setAddressAbsolute] = useState('')
   const [warningComment, setWarningComment] = useState('')
 
@@ -77,7 +93,12 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
       dispatch({
         type: UPDATE_ADMIN_POST_RESET,
       })
-      dispatch(getPosts(1))
+      if (whatList === 'listallpost') {
+        dispatch(getPostsAdmin(token, 1, resetFilterModerator))
+      } else {
+        dispatch(getPostsAdminModerate(token, 1, resetFilterModerator))
+      }
+      setFilterData(resetFilterModerator)
       setCurrentPage(1)
     }
 
@@ -86,7 +107,17 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
       dispatch({
         type: MODERATOR_APPROVE_POST_RESET,
       })
-      dispatch(getUnapprovedPosts(token, 1))
+      if (who.isAdmin) {
+        if (whatList === 'listallpost') {
+          dispatch(getPostsAdmin(token, 1, resetFilterModerator))
+        } else {
+          dispatch(getPostsAdminModerate(token, 1, resetFilterModerator))
+        }
+      } else {
+        dispatch(getUnapprovedPosts(token, 1, resetFilterModerator))
+      }
+
+      setFilterData(resetFilterModerator)
       setCurrentPage(1)
     }
 
@@ -95,7 +126,16 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
       dispatch({
         type: MODERATOR_REPORT_POST_RESET,
       })
-      dispatch(getUnapprovedPosts(token, 1))
+      if (who.isAdmin) {
+        if (whatList === 'listallpost') {
+          dispatch(getPostsAdmin(token, 1, resetFilterModerator))
+        } else {
+          dispatch(getPostsAdminModerate(token, 1, resetFilterModerator))
+        }
+      } else {
+        dispatch(getUnapprovedPosts(token, 1, resetFilterModerator))
+      }
+      setFilterData(resetFilterModerator)
       setCurrentPage(1)
     }
   }, [dispatch, alert, error, isSuccess, isApproved, isReported])
@@ -165,7 +205,7 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
     dispatch(getCategories())
   }, [dispatch, navigate, alert, error])
   useEffect(() => {
-    setCategory(post?.categoryId)
+    setCategory(post.categoryId?._id)
     setTitle(post?.title)
     setDescription(post?.description)
     setprice(post?.price)
@@ -188,6 +228,8 @@ const DetailPostModal = ({ post, setCurrentPage }) => {
       setUserName(user.user.name)
       setUserPhone(user.user.phone)
     }
+    console.log(categories)
+    console.log(category)
   }, [user])
 
   useEffect(() => {

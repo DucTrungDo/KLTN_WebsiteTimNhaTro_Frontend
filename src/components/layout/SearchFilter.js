@@ -189,8 +189,8 @@ const SearchFilter = ({ setFilterData }) => {
   const handleAreaChange = (event) => {
     const value = event.target.value
     const [MiA, MaA] = value.split('-').map(Number)
-    setMaxArea(MiA)
-    setMinArea(MaA)
+    setMinArea(MiA)
+    setMaxArea(MaA)
     SetRangeSliderWhenhandleAreaChange(MaA)
   }
   async function Search() {
@@ -207,16 +207,6 @@ const SearchFilter = ({ setFilterData }) => {
       })
     )
     setFilterData({
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-      minArea: minArea,
-      maxArea: maxArea,
-      category: category,
-      province: province,
-      district: district,
-      ward: ward,
-    })
-    console.log({
       minPrice: minPrice,
       maxPrice: maxPrice,
       minArea: minArea,
@@ -244,8 +234,8 @@ const SearchFilter = ({ setFilterData }) => {
     if (kich) {
       setAreaSliderMin(valueRangeSliderArea[0])
       setAreaSliderMax(valueRangeSliderArea[1])
-      setMaxArea(valueRangeSliderArea[0])
-      setMinArea(valueRangeSliderArea[1])
+      setMinArea(valueRangeSliderArea[0])
+      setMaxArea(valueRangeSliderArea[1])
     }
     setKich(true)
   }, [valueRangeSliderArea])
