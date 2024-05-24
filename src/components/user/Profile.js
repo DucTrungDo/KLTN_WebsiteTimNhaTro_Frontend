@@ -14,9 +14,9 @@ const Profile = () => {
   const [phone, setPhone] = useState('')
   const [zalo, setZalo] = useState('')
   const [facebook, setFacebook] = useState('')
-  const [avatarPreview, setAvatarPreview] = useState(
-    '/images/default_avatar.jpg'
-  )
+  const [avatar, setAvatar] = useState('')
+  const [avatarPreview, setAvatarPreview] = useState('')
+  const [fileInputKey, setFileInputKey] = useState(Date.now())
   const navigate = useNavigate()
   const alert = useAlert()
   const dispatch = useDispatch()
@@ -24,12 +24,16 @@ const Profile = () => {
   const user = useSelector((state) => state.auth.user)
   const { error, isUpdated, loading } = useSelector((state) => state.user)
 
+  // console.log('avatar', avatar)
+  // console.log('avatarPreview', avatarPreview)
+
   useEffect(() => {
     if (user) {
       setName(user.name)
       setPhone(user.phone)
       setZalo(user.zalo)
       setFacebook(user.facebook)
+      setAvatarPreview(user.img)
     }
 
     if (error) {
@@ -50,7 +54,7 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updateProfile(token, name, phone, zalo, facebook))
+    dispatch(updateProfile(token, name, phone, avatar, zalo, facebook))
   }
 
   // Xử lý sự kiện khi người dùng chọn ảnh mới
@@ -60,7 +64,7 @@ const Profile = () => {
       const reader = new FileReader()
       reader.onload = (e) => {
         setAvatarPreview(e.target.result)
-        // setIsAvatarSelected(true) // Đánh dấu là đã chọn ảnh mới
+        setAvatar(e.target.result)
         document.querySelector('.remove-image').classList.add('upload_done')
       }
       reader.readAsDataURL(file)
@@ -70,9 +74,10 @@ const Profile = () => {
   // Xử lý sự kiện khi người dùng chọn xóa ảnh
   const handleRemoveAvatar = (event) => {
     event.preventDefault()
-    setAvatarPreview('/images/default_avatar.jpg') // Đặt lại ảnh đại diện ban đầu
-    // setIsAvatarSelected(false) // Đánh dấu là không còn ảnh đại diện nữa
+    setAvatar('')
+    setAvatarPreview(`${user.img}`) // Đặt lại ảnh đại diện ban đầu
     document.querySelector('.remove-image').classList.remove('upload_done')
+    setFileInputKey(Date.now()) // Reset the file input
   }
   return (
     <div>
@@ -251,6 +256,7 @@ const Profile = () => {
                     className='btn-add-avatar'
                     multiple=''
                     onChange={handleAvatarChange}
+                    key={fileInputKey}
                   />
                 </div>
               </div>

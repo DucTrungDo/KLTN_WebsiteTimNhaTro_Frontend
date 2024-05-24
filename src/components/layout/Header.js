@@ -69,10 +69,7 @@ const Header = () => {
                         to='/user/dashboard'
                         rel='nofollow'
                       >
-                        <img
-                          src='/images/default_avatar.jpg'
-                          className='user-info'
-                        />
+                        <img src={user.img} className='user-info' />
                         <div>
                           <span className='d-block fs-6 mw-200 text-ellipsis overflow-hidden nowrap'>
                             Xin chào, <strong>{user.name}</strong>

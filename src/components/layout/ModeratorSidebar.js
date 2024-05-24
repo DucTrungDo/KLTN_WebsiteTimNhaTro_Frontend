@@ -31,7 +31,7 @@ const ModeratorSidebar = () => {
           <div className='user_info'>
             <Link to='/' className='clearfix'>
               <div className='user_avatar'>
-                <img src='/images/default_avatar.jpg' className='user-info' />
+                <img src={user.img} className='user-info' />
               </div>
               <div className='welcome-text text-decoration-none'>
                 <div className='ms-2'>

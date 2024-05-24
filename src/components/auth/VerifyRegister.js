@@ -45,7 +45,10 @@ const VerifyRegister = () => {
         alert.success(message)
       } else if (message !== 'Email verified') {
         // Trường hợp tài khoản đã có người đăng ký sau khi bấm đăng ký tài khoản hoặc chưa yêu cầu gửi otp mà đã truy cập /verify_register => chuyển lại về trang register
-        if (error === 'Email is already registered') {
+        if (
+          error === 'Email is already registered' ||
+          error === 'Phone is already registered'
+        ) {
           navigate('/register')
         }
         if (
