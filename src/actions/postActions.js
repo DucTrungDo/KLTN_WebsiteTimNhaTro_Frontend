@@ -188,6 +188,7 @@ export const editPost = (token, slug, post) => async (dispatch) => {
 // Add new post (User)
 export const newPost = (token, post) => async (dispatch) => {
   try {
+    console.log(post)
     dispatch({ type: ADD_NEW_POST_REQUEST })
     const config = {
       headers: {

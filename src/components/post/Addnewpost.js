@@ -3,11 +3,19 @@ import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import MapD from '../googleMap/MapD'
 import { ADD_NEW_POST_RESET } from '../../constants/postConstants'
+import ImageUploading from 'react-images-uploading'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons'
+import {
+  faTrashCan,
+  faWindowRestore,
+} from '@fortawesome/free-regular-svg-icons'
 const AddNewPost = () => {
   const navigate = useNavigate()
   const alert = useAlert()
@@ -35,6 +43,49 @@ const AddNewPost = () => {
   })
   const [addressAbsolute, setAddressAbsolute] = useState('')
 
+  const inputRef = React.useRef()
+
+  const [source, setSource] = React.useState()
+  const [sourceReal, setSourceReal] = React.useState()
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    // console.log(typeof source)
+    const url = URL.createObjectURL(file)
+    setSource(url)
+    setSourceReal(file)
+    console.log(file)
+  }
+  // kéo thả cái video
+  const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0]
+    const url = URL.createObjectURL(file)
+    setSource(url)
+    setSourceReal(file)
+    console.log(file)
+  }, [])
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({ onDrop })
+  //kéo thả video
+
+  function DeleteVideoChoise() {
+    setSource(undefined)
+  }
+  // xoá video hiện tại
+  const [images, setImages] = React.useState([])
+  const [imagesReal, setImagesReal] = React.useState([])
+  const maxNumber = 69
+  const onChange = (imageList, addUpdateIndex) => {
+    // data for submit
+
+    let getDataImage = []
+    imageList.map((image) => {
+      getDataImage.push(image.file)
+    })
+    setImages(imageList)
+    setImagesReal(getDataImage)
+    console.log(getDataImage)
+  }
   useEffect(() => {
     dispatch(getProvince())
     dispatch(getCategories())
@@ -141,6 +192,9 @@ const AddNewPost = () => {
     const isEmpty = fields.some((field) => field.trim() === '')
     if (isEmpty || price <= 100000 || area <= 10) {
       alert.error('thiếu thông tin')
+      console.log(fields)
+      console.log(price)
+      console.log(area)
     } else {
       const token = Cookies.get('accessToken')
       dispatch(
@@ -152,6 +206,8 @@ const AddNewPost = () => {
           description: description,
           title: title,
           renters: gender,
+          imageFiles: imagesReal,
+          videoFile: sourceReal,
         })
       )
     }
@@ -513,7 +569,99 @@ const AddNewPost = () => {
                 <div
                   className='list_photos row dropzone-previews'
                   id='list-photos-dropzone-previews'
-                ></div>
+                >
+                  <div className='App'>
+                    <ImageUploading
+                      multiple
+                      value={images}
+                      onChange={onChange}
+                      maxNumber={maxNumber}
+                      dataURLKey='data_url'
+                      acceptType={['jpg', 'png']}
+                    >
+                      {({
+                        imageList,
+                        onImageUpload,
+                        onImageRemoveAll,
+                        onImageUpdate,
+                        onImageRemove,
+                        isDragging,
+                        dragProps,
+                      }) => (
+                        // write your building UI
+                        <div className='upload__image-wrapper row justify-content-center'>
+                          <button
+                            type='button'
+                            className='bg-light rounded-2 p-5 col-md-6 w-100 h-100'
+                            style={{
+                              color: isDragging ? 'red' : undefined, // undefined để bỏ qua thuộc tính nếu không kéo
+                              borderStyle: 'dashed',
+                            }}
+                            onClick={onImageUpload}
+                            {...dragProps}
+                          >
+                            <span className='text-primary'>
+                              Kéo & thả ảnh hoặc chọn ảnh từ{' '}
+                            </span>
+                            <span className='text-muted'>trình duyệt</span>
+                            <div>
+                              <FontAwesomeIcon
+                                style={{
+                                  height: '50%',
+                                  width: '20%',
+                                }}
+                                className='mt-2 text-primary '
+                                icon={faCloudArrowUp}
+                              />
+                            </div>
+                          </button>
+                          &nbsp;
+                          <button
+                            type='button'
+                            onClick={onImageRemoveAll}
+                            className='col-md-6  w-100 h-100 btn btn-danger'
+                          >
+                            Xoá tất cả ảnh
+                          </button>
+                          <div className='row d-flex justify-content-left'>
+                            {imageList.map((image, index) => (
+                              <div
+                                key={index}
+                                className='image-item col-sm-3 m-1 text-center border '
+                                style={{
+                                  height: '180px',
+                                  width: '190px',
+                                }}
+                              >
+                                <div className='mt-2 row  me-2 ms-2'>
+                                  <div className='col'>
+                                    <FontAwesomeIcon
+                                      className='btn btn-light'
+                                      icon={faWindowRestore}
+                                      onClick={() => onImageUpdate(index)}
+                                    />
+                                  </div>
+                                  <div className='col'>
+                                    <FontAwesomeIcon
+                                      className='btn btn-light'
+                                      icon={faTrashCan}
+                                      onClick={() => onImageRemove(index)}
+                                    />
+                                  </div>
+                                </div>
+                                <img
+                                  src={image.data_url}
+                                  alt=''
+                                  className='post-images'
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </ImageUploading>
+                  </div>
+                </div>
                 <div id='tpl' style={{ display: 'none' }}>
                   <div className='photo_item col-md-2 col-3 js-photo-manual'>
                     <div className='photo'>
@@ -553,7 +701,107 @@ const AddNewPost = () => {
                 </div>
               </div>
             </div>
-
+            <div className='form-group row mt-5'>
+              <div className='col-md-12'>
+                <h3>Video</h3>
+              </div>
+            </div>
+            <div className='form-group row'>
+              <div className='col-md-12'>
+                <p>Cập nhật Video</p>
+                <div>
+                  <div
+                    {...getRootProps()}
+                    type='button'
+                    className='bg-light rounded-2 p-5 col-md-6 w-100 h-100'
+                    style={{
+                      borderStyle: 'dashed',
+                    }}
+                    onClick={() => inputRef.current.click()}
+                  >
+                    <input
+                      {...getInputProps()}
+                      ref={inputRef}
+                      type='file'
+                      onChange={handleFileChange}
+                      accept='.mov,.mp4'
+                    />
+                    {isDragActive ? (
+                      <div className='text-success text-center'>
+                        Thả video vào nào
+                      </div>
+                    ) : (
+                      <div className='text-primary text-center'>
+                        Kéo & thả video vào đây{' '}
+                      </div>
+                    )}
+                    <div className='text-center '>
+                      <FontAwesomeIcon
+                        style={{
+                          height: '50%',
+                          width: '20%',
+                        }}
+                        className='mt-2 text-primary text-center '
+                        icon={faCloudArrowUp}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type='button'
+                    className='col-md-6 mt-3 mb-3 w-100 h-100 btn btn-danger'
+                    onClick={DeleteVideoChoise}
+                  >
+                    Xoá Video
+                  </button>
+                  {source && (
+                    <video
+                      className='VideoInput_video'
+                      width='100%'
+                      height='100%'
+                      controls
+                      src={source}
+                    />
+                  )}
+                </div>
+                <div id='tpl' style={{ display: 'none' }}>
+                  <div className='photo_item col-md-2 col-3 js-photo-manual'>
+                    <div className='photo'>
+                      <img data-dz-thumbnail='' />
+                    </div>
+                    <div className='dz-progress'>
+                      <span
+                        className='dz-upload'
+                        data-dz-uploadprogress=''
+                      ></span>
+                    </div>
+                    <div className='bottom clearfix'>
+                      <span className='photo_name' data-dz-name=''></span>
+                      <span className='photo_delete' data-dz-remove=''>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='24'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
+                          strokeWidth='2'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='feather feather-trash-2'
+                        >
+                          <polyline points='3 6 5 6 21 6'></polyline>
+                          <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
+                          <line x1='10' y1='11' x2='10' y2='17'></line>
+                          <line x1='14' y1='11' x2='14' y2='17'></line>
+                        </svg>{' '}
+                        Xóa
+                      </span>
+                    </div>
+                    <input name='' value='' type='hidden' />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className='form-group row mt-5'>
               <div className='col-md-12'>
                 <button
