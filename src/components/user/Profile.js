@@ -17,6 +17,7 @@ const Profile = () => {
   const [avatar, setAvatar] = useState('')
   const [avatarPreview, setAvatarPreview] = useState('')
   const [fileInputKey, setFileInputKey] = useState(Date.now())
+  const [imgFile, setImgFile] = useState(null)
   const navigate = useNavigate()
   const alert = useAlert()
   const dispatch = useDispatch()
@@ -24,15 +25,13 @@ const Profile = () => {
   const user = useSelector((state) => state.auth.user)
   const { error, isUpdated, loading } = useSelector((state) => state.user)
 
-  // console.log('avatar', avatar)
-  // console.log('avatarPreview', avatarPreview)
-
   useEffect(() => {
     if (user) {
       setName(user.name)
       setPhone(user.phone)
       setZalo(user.zalo)
       setFacebook(user.facebook)
+      setAvatar(user.img)
       setAvatarPreview(user.img)
     }
 
@@ -54,7 +53,15 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updateProfile(token, name, phone, avatar, zalo, facebook))
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('phone', phone)
+    formData.append('zalo', zalo)
+    formData.append('facebook', facebook)
+    formData.append('img', avatar)
+    formData.append('imgFile', imgFile)
+
+    dispatch(updateProfile(token, formData))
   }
 
   // Xử lý sự kiện khi người dùng chọn ảnh mới
@@ -64,7 +71,7 @@ const Profile = () => {
       const reader = new FileReader()
       reader.onload = (e) => {
         setAvatarPreview(e.target.result)
-        setAvatar(e.target.result)
+        setImgFile(file) // Set the file for upload
         document.querySelector('.remove-image').classList.add('upload_done')
       }
       reader.readAsDataURL(file)
@@ -74,8 +81,8 @@ const Profile = () => {
   // Xử lý sự kiện khi người dùng chọn xóa ảnh
   const handleRemoveAvatar = (event) => {
     event.preventDefault()
-    setAvatar('')
     setAvatarPreview(`${user.img}`) // Đặt lại ảnh đại diện ban đầu
+    setImgFile(null) // Clear file input
     document.querySelector('.remove-image').classList.remove('upload_done')
     setFileInputKey(Date.now()) // Reset the file input
   }

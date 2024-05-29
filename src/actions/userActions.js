@@ -301,35 +301,33 @@ export const forgotPasswordReset =
   }
 
 // Update profile
-export const updateProfile =
-  (token, name, phone, img, zalo, facebook) => async (dispatch) => {
-    try {
-      dispatch({ type: UPDATE_PROFILE_REQUEST })
+export const updateProfile = (token, formData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_PROFILE_REQUEST })
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-          'Content-Type': 'application/json',
-        },
-      }
-
-      const { data } = await axios.put(
-        'https://boardinghouse-api.onrender.com/api/v1/users/me',
-        { name, phone, img, zalo, facebook },
-        config
-      )
-
-      dispatch({
-        type: UPDATE_PROFILE_SUCCESS,
-        payload: data.success,
-      })
-    } catch (error) {
-      dispatch({
-        type: UPDATE_PROFILE_FAIL,
-        payload: error.message,
-      })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+      },
     }
+
+    const { data } = await axios.put(
+      'https://boardinghouse-api.onrender.com/api/v1/users/me',
+      formData,
+      config
+    )
+
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    })
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.message,
+    })
   }
+}
 
 // Update password
 export const updatePassword =
