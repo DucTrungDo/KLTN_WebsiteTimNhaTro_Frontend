@@ -3,9 +3,7 @@ import { getProfileUserAdmin } from '../../actions/userActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import {
   editPostAdmin,
-  getPosts,
   getPostsAdmin,
-  deleteAdminPost,
   getPostsAdminModerate,
   clearErrors,
 } from '../../actions/postActions'
