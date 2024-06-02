@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 
@@ -18,7 +18,6 @@ import {
 const Header = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
-  const location = useLocation()
   const { user, loading } = useSelector((state) => state.auth)
   const { favoritePosts } = useSelector((state) => state.favorite)
 
@@ -31,7 +30,7 @@ const Header = () => {
   if (
     window.performance.getEntriesByType('navigation')[0].type === 'back_forward'
   ) {
-    location.reload(true)
+    window.location.reload(true)
   }
   return (
     <>

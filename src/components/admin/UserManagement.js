@@ -19,6 +19,8 @@ import Loader from '../layout/Loader'
 import NewpostModal from './NewpostModal'
 import React, { useState, useEffect } from 'react'
 import { UPDATE_PROFILE_USER_ADMIN_RESET } from '../../constants/userConstants'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 const UserManagement = () => {
   const token = Cookies.get('accessToken')
   const dispatch = useDispatch()
@@ -34,6 +36,8 @@ const UserManagement = () => {
   const { error, loading, users, isUpdated, user } = useSelector(
     (state) => state.user
   )
+  const [show, setShow] = useState(false)
+
   useEffect(() => {
     if (error) {
       alert.error(error)
@@ -64,6 +68,8 @@ const UserManagement = () => {
     setCurrentPage(1)
   }, [statusGet])
 
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
   async function ResetOut() {
     setUserDetail({})
   }
@@ -423,8 +429,7 @@ const UserManagement = () => {
                             </button>
                           )}
                           <button
-                            data-bs-toggle='modal'
-                            data-bs-target='#modalnewpost'
+                            variant='primary'
                             style={{
                               textAlign: 'left',
                               marginTop: '5px',
@@ -432,6 +437,7 @@ const UserManagement = () => {
                             }}
                             onClick={() => {
                               ViewDetail(user)
+                              handleShow()
                             }}
                             className={
                               statusGet === 'delete'
@@ -1079,49 +1085,35 @@ const UserManagement = () => {
               </div>
             </div>
           </div>
-          <div
-            class='modal fade modal-xl'
-            id='modalnewpost'
-            data-bs-backdrop='static'
-            data-bs-keyboard='false'
-            tabindex='-1'
-            aria-labelledby='modalnewpost'
-            aria-hidden='true'
+          <Modal
+            show={show}
+            onHide={() => {
+              ResetOut()
+              handleClose()
+            }}
+            backdrop='static'
+            keyboard={false}
+            size='xl'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='modalnewpost'>
-                    Modal title
-                  </h5>
-                  <button
-                    type='button'
-                    class='btn-close'
-                    data-bs-dismiss='modal'
-                    aria-label='Close'
-                    onClick={() => {
-                      ResetOut()
-                    }}
-                  ></button>
-                </div>
-                <div class='modal-body'>
-                  <NewpostModal user={userDetail} />
-                </div>
-                <div class='modal-footer'>
-                  <button
-                    type='button'
-                    class='btn btn-secondary'
-                    data-bs-dismiss='modal'
-                    onClick={() => {
-                      ResetOut()
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            <Modal.Header closeButton>
+              <Modal.Title>Modal title</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <NewpostModal user={userDetail} setShowModal={setShow} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                class='btn btn-secondary'
+                variant='secondary'
+                onClick={() => {
+                  ResetOut()
+                  handleClose()
+                }}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       )}
     </>

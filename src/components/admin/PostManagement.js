@@ -22,6 +22,8 @@ import {
   faMagnifyingGlass,
   faGlobe,
 } from '@fortawesome/free-solid-svg-icons'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 const PostManagement = () => {
   const token = Cookies.get('accessToken')
   const dispatch = useDispatch()
@@ -30,7 +32,7 @@ const PostManagement = () => {
   const [page, setPage] = useState(0)
   const [whatList, setWhatList] = useState('listallpost')
   const [postDetail, setPostDetail] = useState({})
-
+  const [show, setShow] = useState(false)
   const [filterData, setFilterData] = useState({
     search: '',
     categoryId: '',
@@ -127,6 +129,8 @@ const PostManagement = () => {
   useEffect(() => {
     Search()
   }, [filterData])
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
   async function ViewDetail(post) {
     setPostDetail(post)
   }
@@ -536,10 +540,9 @@ const PostManagement = () => {
                         <button
                           class='btn btn-sm btn_danglai'
                           type='button'
-                          data-bs-toggle='modal'
-                          data-bs-target='#staticBackdrop'
                           onClick={() => {
                             ViewDetail(post)
+                            handleShow()
                           }}
                         >
                           <svg
@@ -767,54 +770,42 @@ const PostManagement = () => {
           </div>
         </div>
       )}
-      <div
-        class='modal fade modal-xl'
-        id='staticBackdrop'
-        data-bs-backdrop='static'
-        data-bs-keyboard='false'
-        tabindex='-1'
-        aria-labelledby='staticBackdropLabel'
-        aria-hidden='true'
+      <Modal
+        show={show}
+        onHide={() => {
+          ResetOut()
+          handleClose()
+        }}
+        backdrop='static'
+        keyboard={false}
+        size='xl'
       >
-        <div class='modal-dialog'>
-          <div class='modal-content'>
-            <div class='modal-header'>
-              <h5 class='modal-title' id='staticBackdropLabel'>
-                Modal title
-              </h5>
-              <button
-                onClick={() => {
-                  ResetOut()
-                }}
-                type='button'
-                class='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
-            </div>
-            <div class='modal-body'>
-              <DetailPostModal
-                post={postDetail}
-                setCurrentPage={setCurrentPage}
-                setFilterData={setFilterData}
-                whatList={whatList}
-              />
-            </div>
-            <div class='modal-footer'>
-              <button
-                onClick={() => {
-                  ResetOut()
-                }}
-                type='button'
-                class='btn btn-secondary'
-                data-bs-dismiss='modal'
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DetailPostModal
+            post={postDetail}
+            setCurrentPage={setCurrentPage}
+            setFilterData={setFilterData}
+            whatList={whatList}
+            setShow={setShow}
+            setShowModal={setShow}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            class='btn btn-secondary'
+            variant='secondary'
+            onClick={() => {
+              ResetOut()
+              handleClose()
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
