@@ -3,12 +3,17 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
+import { format } from 'date-fns'
 import {
   getUserPosts,
+  hideUserPost,
   deleteUserPost,
   clearErrors,
 } from '../../actions/postActions'
-import { DELETE_USER_POST_RESET } from '../../constants/postConstants'
+import {
+  HIDE_USER_POST_RESET,
+  DELETE_USER_POST_RESET,
+} from '../../constants/postConstants'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
@@ -49,7 +54,7 @@ const PostManagement = () => {
   })
 
   const { loading, posts, error } = useSelector((state) => state.userPosts)
-  const { postLoading, postError, isDeleted } = useSelector(
+  const { postLoading, postError, isHided, isDeleted } = useSelector(
     (state) => state.userPost
   )
 
@@ -59,7 +64,6 @@ const PostManagement = () => {
       provinces !== undefined &&
       filterData.province !== ''
     ) {
-      console.log('1')
       const keypro = provinces.find(
         (location) => location.province_name === filterData.province
       ).province_id
@@ -121,12 +125,27 @@ const PostManagement = () => {
       dispatch(clearErrors())
     }
 
+    if (isHided) {
+      alert.success('Post hided')
+      navigate('/user/post-management')
+      dispatch({ type: HIDE_USER_POST_RESET })
+    }
+
     if (isDeleted) {
       alert.success('Post deleted')
       navigate('/user/post-management')
       dispatch({ type: DELETE_USER_POST_RESET })
     }
-  }, [dispatch, alert, isDeleted, error, postError, navigate, filterData])
+  }, [
+    dispatch,
+    alert,
+    isHided,
+    isDeleted,
+    error,
+    postError,
+    navigate,
+    filterData,
+  ])
 
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
@@ -175,11 +194,14 @@ const PostManagement = () => {
     }
   }
 
+  const hidePostHandler = (slug) => {
+    dispatch(hideUserPost(slug, token))
+  }
+
   const deletePostHandler = (slug) => {
     dispatch(deleteUserPost(slug, token))
   }
 
-  const [index] = useState(1)
   return (
     <div>
       <nav aria-label='breadcrumb' className='bg-body-secondary px-3 py-1 mb-3'>
@@ -386,11 +408,20 @@ const PostManagement = () => {
                   // Load all post here
                   posts.posts?.map((post, idx) => (
                     <tr key={post._id}>
-                      <td>{index + idx}</td>
+                      <td>{idx + 1 + 10 * (currentPage - 1)}</td>
                       <td>
                         <div className='post_thumb'>
-                          <Link to={'/post/' + post.slug} target='_blank'>
-                            <img src='../images/property-test.jpg' />
+                          <Link
+                            to={'/post/' + post.slug + '/me'}
+                            target='_blank'
+                          >
+                            <img
+                              src={
+                                post.images[0]
+                                  ? post.images[0]
+                                  : '/images/property-test.jpg'
+                              }
+                            />
                           </Link>
                         </div>
                       </td>
@@ -400,7 +431,7 @@ const PostManagement = () => {
                         </span>
                         <Link
                           className='post_title text-decoration-none'
-                          to={'/post/' + post.slug}
+                          to={'/post/' + post.slug + '/me'}
                           style={{ color: '#055699' }}
                         >
                           {post.title}
@@ -438,32 +469,32 @@ const PostManagement = () => {
                               </a>
                             )}
 
-                          {((post.isPaid && !post.isApproved) ||
+                          {/* {((post.isPaid && !post.isApproved) ||
                             post.isHided ||
-                            post.isViolated) && (
-                            <a
-                              href='https://phongtro123.com/quan-ly/post/gan-nhan/653234'
-                              className='btn btn-sm mt-2'
+                            post.isViolated) && ( */}
+                          <Link
+                            to={'/user/post/edit/' + post.slug}
+                            className='btn btn-sm mt-2'
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='24'
+                              height='24'
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeWidth={2}
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              className='feather feather-refresh-ccw'
                             >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='24'
-                                height='24'
-                                viewBox='0 0 24 24'
-                                fill='none'
-                                stroke='currentColor'
-                                strokeWidth={2}
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                class='feather feather-refresh-ccw'
-                              >
-                                <polyline points='1 4 1 10 7 10'></polyline>
-                                <polyline points='23 20 23 14 17 14'></polyline>
-                                <path d='M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15'></path>
-                              </svg>
-                              Sửa và đăng lại
-                            </a>
-                          )}
+                              <polyline points='1 4 1 10 7 10'></polyline>
+                              <polyline points='23 20 23 14 17 14'></polyline>
+                              <path d='M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15'></path>
+                            </svg>
+                            Sửa và đăng lại
+                          </Link>
+                          {/* )} */}
                           {!post.isPaid && (
                             <a
                               href='https://phongtro123.com/quan-ly/post/gan-nhan/653234'
@@ -493,7 +524,7 @@ const PostManagement = () => {
                             !post.isViolated &&
                             !post.isHided && (
                               <>
-                                <Link
+                                {/* <Link
                                   to={'/user/post/edit/' + post.slug}
                                   className='btn btn-sm mt-2'
                                 >
@@ -512,7 +543,7 @@ const PostManagement = () => {
                                     <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
                                   </svg>
                                   Sửa tin
-                                </Link>
+                                </Link> */}
 
                                 <a
                                   href='https://phongtro123.com/quan-ly/tin-dang/day-tin/653234'
@@ -557,9 +588,13 @@ const PostManagement = () => {
                                   Nâng cấp tin
                                 </a>
 
-                                <a
-                                  href='https://phongtro123.com/quan-ly/tin-dang/an-tin/653234'
+                                <button
                                   className='btn btn-sm mt-2'
+                                  type='button'
+                                  data-bs-toggle='modal'
+                                  data-bs-target='#hideModal'
+                                  onClick={() => setPostSlug(post.slug)}
+                                  disabled={postLoading ? true : false}
                                 >
                                   <svg
                                     xmlns='http://www.w3.org/2000/svg'
@@ -577,7 +612,7 @@ const PostManagement = () => {
                                     <line x1='1' y1='1' x2='23' y2='23'></line>
                                   </svg>
                                   Ẩn tin
-                                </a>
+                                </button>
                               </>
                             )}
                           <button
@@ -624,7 +659,8 @@ const PostManagement = () => {
                             marginTop: '10px',
                           }}
                         >
-                          Cập nhật gần nhất: 1 phút trước
+                          Cập nhật gần nhất:{' '}
+                          {format(post.updatedAt, 'HH:mm - dd/MM/yyyy')}
                         </span>
                       </td>
                       <td>
@@ -632,7 +668,7 @@ const PostManagement = () => {
                           <PriceDisplay price={post.price} />
                         </div>
                       </td>
-                      <td>23/04/2024 21:26:13</td>
+                      <td>{format(post.createdAt, 'HH:mm:ss - dd/MM/yyyy')}</td>
                       <td>28/04/2024 21:26:13</td>
                       <td>
                         <div
@@ -755,6 +791,49 @@ const PostManagement = () => {
                 disabled={postLoading ? true : false}
               >
                 Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className='modal fade'
+        id='hideModal'
+        tabIndex='-1'
+        aria-labelledby='hideModalLabel'
+        aria-hidden='true'
+      >
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='hideModalLabel'>
+                Xác nhận ẩn
+              </h1>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              ></button>
+            </div>
+            <div className='modal-body'>Bạn có chắc là muốn ẩn post chứ?</div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                className='btn btn-danger'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => hidePostHandler(postSlug)}
+                disabled={postLoading ? true : false}
+              >
+                Ẩn tin
               </button>
             </div>
           </div>

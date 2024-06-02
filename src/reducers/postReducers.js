@@ -5,10 +5,20 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  USER_POST_DETAILS_REQUEST,
+  USER_POST_DETAILS_SUCCESS,
+  USER_POST_DETAILS_FAIL,
+  MODERATOR_POST_DETAILS_REQUEST,
+  MODERATOR_POST_DETAILS_SUCCESS,
+  MODERATOR_POST_DETAILS_FAIL,
   ALL_USER_POSTS_REQUEST,
   ALL_USER_POSTS_SUCCESS,
   ALL_USER_POSTS_FAIL,
   RESET_USER_POST,
+  HIDE_USER_POST_REQUEST,
+  HIDE_USER_POST_SUCCESS,
+  HIDE_USER_POST_FAIL,
+  HIDE_USER_POST_RESET,
   DELETE_USER_POST_REQUEST,
   DELETE_USER_POST_SUCCESS,
   DELETE_USER_POST_RESET,
@@ -94,18 +104,24 @@ export const postsReducer = (state = { posts: [] }, action) => {
 export const postDetailsReducer = (state = { post: {} }, action) => {
   switch (action.type) {
     case POST_DETAILS_REQUEST:
+    case USER_POST_DETAILS_REQUEST:
+    case MODERATOR_POST_DETAILS_REQUEST:
       return {
         ...state,
         loading: true,
       }
 
     case POST_DETAILS_SUCCESS:
+    case USER_POST_DETAILS_SUCCESS:
+    case MODERATOR_POST_DETAILS_SUCCESS:
       return {
         loading: false,
         post: action.payload,
       }
 
     case POST_DETAILS_FAIL:
+    case USER_POST_DETAILS_FAIL:
+    case MODERATOR_POST_DETAILS_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -164,6 +180,7 @@ export const userPostReducer = (state = {}, action) => {
   switch (action.type) {
     case DELETE_USER_POST_REQUEST:
     case DELETE_ADMIN_POST_REQUEST:
+    case HIDE_USER_POST_REQUEST:
       return {
         ...state,
         postLoading: true,
@@ -177,8 +194,21 @@ export const userPostReducer = (state = {}, action) => {
         isDeleted: true,
       }
 
+    case HIDE_USER_POST_SUCCESS:
+      return {
+        ...state,
+        postLoading: false,
+        isHided: true,
+      }
+
     case DELETE_USER_POST_FAIL:
     case DELETE_ADMIN_POST_FAIL:
+      return {
+        ...state,
+        postError: action.payload,
+      }
+
+    case HIDE_USER_POST_FAIL:
       return {
         ...state,
         postError: action.payload,
@@ -189,6 +219,12 @@ export const userPostReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      }
+
+    case HIDE_USER_POST_RESET:
+      return {
+        ...state,
+        isHided: false,
       }
 
     case CLEAR_ERRORS:

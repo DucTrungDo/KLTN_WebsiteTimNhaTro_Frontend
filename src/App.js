@@ -82,6 +82,8 @@ function App() {
                 element={<VerifyRegister />}
               />
               <Route path='/post/:slug' element={<PostDetail />} />
+              <Route path='/post/:slug/me' element={<PostDetail />} />
+              <Route path='/post/:slug/moderator' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
               <Route path='/favorite_post' element={<FavoritePost />} />
             </Routes>

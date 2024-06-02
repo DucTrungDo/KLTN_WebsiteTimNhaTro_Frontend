@@ -7,10 +7,19 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  USER_POST_DETAILS_REQUEST,
+  USER_POST_DETAILS_SUCCESS,
+  USER_POST_DETAILS_FAIL,
+  MODERATOR_POST_DETAILS_REQUEST,
+  MODERATOR_POST_DETAILS_SUCCESS,
+  MODERATOR_POST_DETAILS_FAIL,
   ALL_USER_POSTS_REQUEST,
   ALL_USER_POSTS_SUCCESS,
   ALL_USER_POSTS_FAIL,
   RESET_USER_POST,
+  HIDE_USER_POST_REQUEST,
+  HIDE_USER_POST_SUCCESS,
+  HIDE_USER_POST_FAIL,
   DELETE_USER_POST_REQUEST,
   DELETE_USER_POST_SUCCESS,
   DELETE_USER_POST_FAIL,
@@ -95,6 +104,62 @@ export const getPostDetails = (slug) => async (dispatch) => {
   }
 }
 
+// Get user's post details (User)
+export const getUserPostDetails = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_POST_DETAILS_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/me`,
+      config
+    )
+
+    dispatch({
+      type: USER_POST_DETAILS_SUCCESS,
+      payload: data.data.post,
+    })
+  } catch (error) {
+    dispatch({
+      type: USER_POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get user's post details (Moderator)
+export const getPostDetailsByModerator = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: MODERATOR_POST_DETAILS_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/moderator`,
+      config
+    )
+
+    dispatch({
+      type: MODERATOR_POST_DETAILS_SUCCESS,
+      payload: data.data.post,
+    })
+  } catch (error) {
+    dispatch({
+      type: MODERATOR_POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
 // Get all user's posts (User)
 export const getUserPosts =
   (token, currentPage, FilterData) => async (dispatch) => {
@@ -129,6 +194,35 @@ export const resetUserPosts = () => async (dispatch) => {
   dispatch({
     type: RESET_USER_POST,
   })
+}
+
+// Hide user's post (User)
+export const hideUserPost = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: HIDE_USER_POST_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/hide/me`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: HIDE_USER_POST_SUCCESS,
+      payload: data.success,
+    })
+  } catch (error) {
+    dispatch({
+      type: HIDE_USER_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
 }
 
 // Delete user's post (User)

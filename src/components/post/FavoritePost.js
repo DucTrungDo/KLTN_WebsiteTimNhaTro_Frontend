@@ -59,6 +59,35 @@ const FavoritePost = () => {
   }
   return (
     <div>
+      <nav
+        className='navbar navbar-light mb-3 text-white'
+        style={{ backgroundColor: '#1266dd' }}
+      >
+        <div className='container'>
+          <Link className='navbar-brand fs-5 ms-4' to='/'>
+            Trang chủ
+          </Link>
+
+          <a className='nav-link fw-medium ms-1' href='#'>
+            Cho thuê phòng trọ
+          </a>
+          <a className='nav-link fw-medium ms-4' href='#'>
+            Nhà cho thuê
+          </a>
+          <a className='nav-link fw-medium ms-4' href='#'>
+            Cho thuê căn hộ
+          </a>
+          <a className='nav-link fw-medium ms-4' href='#'>
+            Mặt bằng, văn phòng
+          </a>
+          <a className='nav-link fw-medium ms-4' href='#'>
+            Tìm người ở ghép
+          </a>
+          <a className='nav-link fw-medium ms-4' href='#'>
+            Bảng giá dịch vụ
+          </a>
+        </div>
+      </nav>
       {/* <SearchFilter /> */}
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4'>
         <h1 className='h2'>Tin đã lưu</h1>

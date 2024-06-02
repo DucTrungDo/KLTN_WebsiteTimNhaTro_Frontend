@@ -39,7 +39,11 @@ const Header = () => {
         <nav className='navbar navbar-expand-lg navbar-light bg-light border-bottom'>
           <div className='container-fluid p-0'>
             <Link to='/'>
-              <img src='/images/logo.png' alt='' className='header-image' />
+              <img
+                src='/images/logo-secondary.png'
+                alt=''
+                className='header-image'
+              />
             </Link>
             <button
               className='navbar-toggler'

@@ -57,7 +57,6 @@ const PostModeration = () => {
       provinces !== undefined &&
       filterData.province !== ''
     ) {
-      console.log('1')
       const keypro = provinces.find(
         (location) => location.province_name === filterData.province
       ).province_id
@@ -173,7 +172,6 @@ const PostModeration = () => {
     setPostDetail({})
   }
 
-  const [index] = useState(1)
   return (
     <>
       <div>
@@ -193,7 +191,7 @@ const PostModeration = () => {
               </Link>
             </li>
             <li className='breadcrumb-item active' aria-current='page'>
-              Danh sách tin đăng chưa duyệt
+              Kiểm duyệt bài đăng
             </li>
           </ol>
         </nav>
@@ -355,9 +353,11 @@ const PostModeration = () => {
               >
                 <option value=''>--Lọc theo trạng thái--</option>
                 <option value='inApprove'>Các bài đang chờ duyệt</option>
-                <option value='moderated'>Các bài đã duyệt bởi tôi</option>
                 <option value='myModerated'>
-                  Tất cả các bài đã được duyệt
+                  Các bài đã được kiểm duyệt bởi tôi
+                </option>
+                <option value='moderated'>
+                  Tất cả các bài đã được kiểm duyệt
                 </option>
               </select>
             </div>
@@ -381,9 +381,12 @@ const PostModeration = () => {
                     <th>Giá</th>
                     <th style={{ whiteSpace: 'nowrap' }}>Ngày tạo</th>
                     <th style={{ whiteSpace: 'nowrap' }}>Ngày cập nhật</th>
-                    <th style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>
-                      Hoạt động
-                    </th>
+                    {filterData.tab !== 'moderated' &&
+                    filterData.tab !== 'myModerated' ? (
+                      <th style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>
+                        Hoạt động
+                      </th>
+                    ) : null}
                   </tr>
                 </thead>
                 <tbody>
@@ -396,13 +399,19 @@ const PostModeration = () => {
                     // Load all post here
                     unapprovedPosts.posts?.map((post, idx) => (
                       <tr key={post._id}>
-                        <td>{idx + 1 + 6 * (currentPage - 1)}</td>
+                        <td>{idx + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
                             <Link
-                            // to={'/moderator/view-post-details/' + post.slug}
+                            to={'/post/' + post.slug + '/moderator'}
                             >
-                              <img src='../images/property-test.jpg' />
+                              <img
+                                src={
+                                  post.images[0]
+                                    ? post.images[0]
+                                    : '/images/property-test.jpg'
+                                }
+                              />
                             </Link>
                           </div>
                         </td>
@@ -412,7 +421,7 @@ const PostModeration = () => {
                           </span>
                           <Link
                             className='post_title text-decoration-none'
-                            // to={'/moderator/view-post-details/' + post.slug}
+                            to={'/post/' + post.slug + '/moderator'}
                             style={{ color: '#055699' }}
                           >
                             {post.title}
@@ -442,24 +451,27 @@ const PostModeration = () => {
                         <td>
                           {format(post.updatedAt, 'HH:mm:ss - dd/MM/yyyy')}
                         </td>
-                        <td>
-                          <Link
-                            className='btn btn-info btn-sm text-center w-100 text-white fw-semibold'
-                            to='/moderator/view-post-details/{}'
-                            type='button'
-                            data-bs-toggle='modal'
-                            data-bs-target='#staticBackdrop'
-                            onClick={() => {
-                              ViewDetail(post)
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              className='me-1 '
-                              icon={faSquareCheck}
-                            />
-                            Kiểm duyệt
-                          </Link>
-                        </td>
+                        {filterData.tab !== 'moderated' &&
+                        filterData.tab !== 'myModerated' ? (
+                          <td>
+                            <Link
+                              className='btn btn-info btn-sm text-center w-100 text-white fw-semibold'
+                              to='/moderator/view-post-details/{}'
+                              type='button'
+                              data-bs-toggle='modal'
+                              data-bs-target='#staticBackdrop'
+                              onClick={() => {
+                                ViewDetail(post)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                className='me-1 '
+                                icon={faSquareCheck}
+                              />
+                              Kiểm duyệt
+                            </Link>
+                          </td>
+                        ) : null}
                       </tr>
                     ))
                   )}

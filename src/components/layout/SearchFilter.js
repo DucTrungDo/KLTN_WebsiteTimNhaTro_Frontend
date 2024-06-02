@@ -367,7 +367,7 @@ const SearchFilter = ({ setFilterData }) => {
             </div>
             <div className='col-lg-2'>
               <button
-                className='btn btn-primary border-0 w-100 '
+                className='btn btn-primary border-0 w-100 mb-3'
                 onClick={() => {
                   Search()
                 }}

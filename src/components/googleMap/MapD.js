@@ -93,7 +93,7 @@ function MapD({ direction, useDirect }) {
       <div style={{ display: useDirect ? 'block' : 'none' }}>
         <div>
           <InputGroup className='mb-1'>
-            <InputGroup.Text id='basic-addon1'>Khoản cách</InputGroup.Text>
+            <InputGroup.Text id='basic-addon1'>Khoảng cách</InputGroup.Text>
             <Form.Control
               placeholder='DisTance'
               aria-label='DisTance'

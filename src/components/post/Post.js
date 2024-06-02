@@ -64,14 +64,23 @@ const Post = ({ post }) => {
             minHeight: '490px',
           }}
         >
-          <div className='position-relative overflow-hidden'>
+          <div
+            className='position-relative overflow-hidden'
+            style={{ width: 'auto', height: '275px' }}
+          >
             <img
-              className='img-fluid'
-              src='./images/property-test.jpg'
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              src={
+                post.images[0] ? post.images[0] : '/images/property-test.jpg'
+              }
               alt=''
             />
             <div className='bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3'>
-              For rent
+              {post.categoryId?.name}
             </div>
             <div className='rounded text-white position-absolute end-0 top-0 mx-4 py-0 px-3 homepage-post-listing'>
               <span
@@ -86,7 +95,7 @@ const Post = ({ post }) => {
                 <i></i>
               </span>
             </div>
-            <div className='bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3'>
+            <div className='bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3 border border-bottom-0'>
               Shop
             </div>
           </div>

@@ -37,7 +37,7 @@ export const getProvince = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PROVINCE_FAIL,
-      payload: error.response.data.message,
+      payload: error.message,
     })
   }
 }
@@ -63,7 +63,7 @@ export const getdistrict = (province_id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PROVINCE_DISTRICT_FAIL,
-      payload: error.response.data.message,
+      payload: error.message,
     })
   }
 }
@@ -89,7 +89,7 @@ export const getWard = (district_id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PROVINCE_DISTRICT_WARD_FAIL,
-      payload: error.response.data.message,
+      payload: error.message,
     })
   }
 }

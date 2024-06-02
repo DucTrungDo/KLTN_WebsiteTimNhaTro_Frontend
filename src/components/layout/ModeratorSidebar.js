@@ -64,7 +64,7 @@ const ModeratorSidebar = () => {
                 className='nav-link link-dark'
               >
                 <FontAwesomeIcon icon={faFileLines} className='me-2' />
-                Quản lý tin đăng
+                Kiểm duyệt bài đăng
               </NavLink>
             </li>
             <li>

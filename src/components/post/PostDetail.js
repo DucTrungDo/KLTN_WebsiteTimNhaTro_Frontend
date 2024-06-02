@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
 import { differenceInDays } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -17,7 +18,12 @@ import { format } from 'date-fns'
 // import SearchFilter from '../layout/SearchFilter'
 import MapD from '../googleMap/MapD'
 import Loader from '../layout/Loader'
-import { getPostDetails, clearErrors } from '../../actions/postActions'
+import {
+  getUserPostDetails,
+  getPostDetailsByModerator,
+  getPostDetails,
+  clearErrors,
+} from '../../actions/postActions'
 import {
   addPostToFavorite,
   removePostFromFavorite,
@@ -27,7 +33,9 @@ const PostDetail = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const { slug } = useParams()
+  const token = Cookies.get('accessToken')
   const { loading, post, error } = useSelector((state) => state.postDetails)
   const { favoritePosts } = useSelector((state) => state.favorite)
   const [addressPost, setaddressPost] = useState('')
@@ -52,7 +60,13 @@ const PostDetail = () => {
   }
 
   useEffect(() => {
-    dispatch(getPostDetails(slug))
+    if (location.pathname.includes('/me')) {
+      dispatch(getUserPostDetails(slug, token))
+    } else if (location.pathname.includes('/moderator')) {
+      dispatch(getPostDetailsByModerator(slug, token))
+    } else {
+      dispatch(getPostDetails(slug))
+    }
   }, [dispatch])
 
   useEffect(() => {
@@ -134,70 +148,115 @@ const PostDetail = () => {
 
   return (
     <>
+      <nav
+        className='navbar navbar-light mb-3 text-white'
+        style={{ backgroundColor: '#1266dd' }}
+      >
+        <div className='container'>
+          <Link className='navbar-brand fs-5 ms-4' to='/'>
+            Trang chủ
+          </Link>
+
+          <a className='nav-link fw-medium me-4' href='#'>
+            Cho thuê phòng trọ
+          </a>
+          <a className='nav-link fw-medium me-4' href='#'>
+            Nhà cho thuê
+          </a>
+          <a className='nav-link fw-medium me-4' href='#'>
+            Cho thuê căn hộ
+          </a>
+          <a className='nav-link fw-medium me-4' href='#'>
+            Mặt bằng, văn phòng
+          </a>
+          <a className='nav-link fw-medium me-4' href='#'>
+            Tìm người ở ghép
+          </a>
+          <a className='nav-link fw-medium me-4' href='#'>
+            Bảng giá dịch vụ
+          </a>
+        </div>
+      </nav>
       {/* <SearchFilter /> */}
       {loading ? (
         <Loader />
       ) : (
         <div className='container mt-1 mb-4'>
-          <div className='row'>
+          <div className='row ms-0 me-0'>
             <div className='col-md-8 border border-1 rounded p-2 pb-3'>
-              <div
-                id='carouselExampleControlsNoTouching'
-                className='carousel slide'
-                data-bs-touch='false'
-                data-bs-interval='false'
-              >
-                <div className='carousel-inner bg-dark'>
-                  <div
-                    className='carousel-item active '
-                    data-bs-interval='10000'
+              {post.images?.length !== 0 || post.video ? (
+                <div
+                  id='carouselExampleControlsNoTouching'
+                  className='carousel slide'
+                  data-bs-touch='false'
+                  data-bs-interval='false'
+                  style={{ width: 'auto', height: '300px' }}
+                >
+                  <div className='carousel-inner bg-dark'>
+                    {post.images &&
+                      post.images.map((image, index) => (
+                        <div
+                          className={`carousel-item ${
+                            index === 0 ? 'active' : ''
+                          }`}
+                          key={index}
+                        >
+                          <img
+                            src={image}
+                            className='d-block m-auto'
+                            alt={`Slide ${index + 1}`}
+                            style={{
+                              height: '300px',
+                              objectFit: 'cover',
+                              maxWidth: '100%',
+                            }}
+                          />
+                        </div>
+                      ))}
+                    {post.video && (
+                      <div className='carousel-item'>
+                        <video
+                          className='d-block m-auto'
+                          style={{
+                            height: '300px',
+                            objectFit: 'cover',
+                            maxWidth: '100%',
+                          }}
+                          controls
+                        >
+                          <source src={post.video} type='video/mp4' />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    className='carousel-control-prev'
+                    type='button'
+                    data-bs-target='#carouselExampleControlsNoTouching'
+                    data-bs-slide='prev'
                   >
-                    <img
-                      src='../images/property-test.jpg'
-                      className='d-block w-100 cropitem'
-                      alt='...'
-                    />
-                  </div>
-                  <div className='carousel-item ' data-bs-interval='2000'>
-                    <img
-                      src='../images/upload-image.png'
-                      className='d-block w-100 cropitem'
-                      alt='...'
-                    />
-                  </div>
-                  <div className='carousel-item'>
-                    <img
-                      src='../images/logo-secondary.png'
-                      className='d-block w-100 cropitem'
-                      alt='...'
-                    />
-                  </div>
+                    <span
+                      className='carousel-control-prev-icon'
+                      aria-hidden='true'
+                    ></span>
+                    <span className='visually-hidden'>Previous</span>
+                  </button>
+                  <button
+                    className='carousel-control-next'
+                    type='button'
+                    data-bs-target='#carouselExampleControlsNoTouching'
+                    data-bs-slide='next'
+                  >
+                    <span
+                      className='carousel-control-next-icon'
+                      aria-hidden='true'
+                    ></span>
+                    <span className='visually-hidden'>Next</span>
+                  </button>
                 </div>
-                <button
-                  className='carousel-control-prev'
-                  type='button'
-                  data-bs-target='#carouselExampleControlsNoTouching'
-                  data-bs-slide='prev'
-                >
-                  <span
-                    className='carousel-control-prev-icon'
-                    aria-hidden='true'
-                  ></span>
-                  <span className='visually-hidden'>Previous</span>
-                </button>
-                <button
-                  className='carousel-control-next'
-                  type='button'
-                  data-bs-target='#carouselExampleControlsNoTouching'
-                  data-bs-slide='next'
-                >
-                  <span
-                    className='carousel-control-next-icon'
-                    aria-hidden='true'
-                  ></span>
-                  <span className='visually-hidden'>Next</span>
-                </button>
-              </div>
+              ) : null}
+
               <div>
                 <h4 className='mt-2 text-danger fw-bold'>
                   <FontAwesomeIcon icon={faStar} className='iconstar' />
@@ -339,8 +398,8 @@ const PostDetail = () => {
               <div className='mt-4'>
                 <h4>Bản đồ</h4>
                 <p>
-                  Dịa chỉ: 01 Võ Văn Ngân, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí
-                  Minh, Việt Nam
+                  Địa chỉ: {post.address?.street}, {post.address?.ward},{' '}
+                  {post.address?.district}, {post.address?.city}
                 </p>
                 <MapD direction={addressPost} useDirect={true} />
               </div>
@@ -349,7 +408,7 @@ const PostDetail = () => {
               <div className='info_sell border border-1 rounded'>
                 <div className='mt-3'>
                   <img
-                    src='../images/default_avatar.jpg'
+                    src={post.userId?.img}
                     className='avata rounded-circle mx-auto d-block'
                   ></img>
                 </div>
@@ -395,327 +454,6 @@ const PostDetail = () => {
                   </button>
                 </div>
               </div>
-              {/* <!-- card outstanding --> */}
-              {/* <div className='border border-1 rounded mt-2'>
-                <h5 className='ms-3 me-3 mt-1'>Tin nổi bật</h5>
-                <div
-                  className='card-list ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          <i className='bi bi-star-fill iconstar'></i>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div> */}
-              {/* <!-- card end outstanding -->
-            
-            <!-- card relation --> */}
-              {/* <div className='border border-1 rounded mt-2'>
-                <h5 className='ms-3 me-3 mt-1'>Tin liên quan</h5>
-                <div
-                  className='card-list-relation ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list-relation ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list-relation ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list-relation ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div
-                  className='card-list-relation ms-3 me-3 mb-2'
-                  style={{ maxWidth: '540px' }}
-                >
-                  <a href='#' className='row g-0 text-decoration-none'>
-                    <div className='col-md-4 p-1'>
-                      <img
-                        src='../images/property-test.jpg'
-                        className='img-fluid'
-                        alt='...'
-                      />
-                    </div>
-                    <div className='col-md-8 p-1'>
-                      <div className='card-body'>
-                        <p className='card-text mb-0'>
-                          Phòng trọ có ban công, cửa sổ lớn
-                        </p>
-                        <p className='card-text mb-0 fw-bold'>
-                          <small className='text-muted'>4.1 triệu/tháng</small>
-                        </p>
-                        <p className='card-text mb-0'>
-                          <small className='text-muted'>
-                            Đăng ngày 22/02/2024
-                          </small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div> */}
-              {/* <!-- card end relation --> */}
               <section className='section section-aside-tinmoidang mt-3 pb-0'>
                 <div className='section-header'>
                   <span className='section-title'>Tin nổi bật</span>
@@ -729,8 +467,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='../images/property-test.jpg'
-                          data-src='../images/property-test.jpg'
+                          src='/images/property-test.jpg'
+                          data-src='/images/property-test.jpg'
                           alt='Khai trương phòng giá rẻ, duplex siêu phẩm BanCol, đầy đủ nội thất, tại Tân Bình, giáp Quận 10'
                           height='100'
                           width='100'
@@ -764,8 +502,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='../images/property-test.jpg'
-                          data-src='../images/property-test.jpg'
+                          src='/images/property-test.jpg'
+                          data-src='/images/property-test.jpg'
                           alt='Phòng mới xây 572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr'
                           height='100'
                           width='100'
@@ -800,8 +538,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='../images/property-test.jpg'
-                          data-src='../images/property-test.jpg'
+                          src='/images/property-test.jpg'
+                          data-src='/images/property-test.jpg'
                           alt='phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN ngay khu Bàu Cát'
                           height='100'
                           width='100'
@@ -831,8 +569,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='../images/property-test.jpg'
-                          data-src='../images/property-test.jpg'
+                          src='/images/property-test.jpg'
+                          data-src='/images/property-test.jpg'
                           alt='PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3'
                           height='100'
                           width='100'

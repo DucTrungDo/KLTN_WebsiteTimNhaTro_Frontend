@@ -262,6 +262,7 @@ const Profile = () => {
                     type='file'
                     className='btn-add-avatar'
                     multiple=''
+                    accept='image/png, image/jpeg'
                     onChange={handleAvatarChange}
                     key={fileInputKey}
                   />
