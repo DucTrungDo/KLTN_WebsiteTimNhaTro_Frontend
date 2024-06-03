@@ -141,7 +141,7 @@ const CategoryManagement = () => {
       </nav>
       <button
         type='button'
-        class='btn btn-success btn-sm mb-2 px-4 fw-semibold'
+        className='btn btn-success btn-sm mb-2 px-4 fw-semibold'
         data-bs-toggle='modal'
         data-bs-target='#addModal'
       >

@@ -143,7 +143,7 @@ const UserManagement = () => {
                 </Link>
               </li>
               <li className='breadcrumb-item'>
-                <Link to='/user/dashboard' className='text-decoration-none'>
+                <Link to='/admin/dashboard' className='text-decoration-none'>
                   Quản lý
                 </Link>
               </li>
@@ -155,16 +155,16 @@ const UserManagement = () => {
           <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
             <h1 className='h2'>Quản lý người dùng</h1>
           </div>
-          <div class='d-flex bd-highlight mb-2 justify-content-end align-items-center'>
+          <div className='d-flex bd-highlight mb-2 justify-content-end align-items-center'>
             <div className='me-2'>
-              <div class='input-group me-3 '>
+              <div className='input-group me-3 '>
                 <input
                   type='text'
-                  class='form-control'
+                  className='form-control'
                   placeholder='Tìm Kiếm'
                   aria-label='Tìm kiếm'
                   aria-describedby='button-addon2'
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                 />
@@ -172,7 +172,7 @@ const UserManagement = () => {
                   onClick={() => {
                     Search()
                   }}
-                  class='btn btn-outline-secondary'
+                  className='btn btn-outline-secondary'
                   type='button'
                   id='button-addon2'
                 >
@@ -180,9 +180,9 @@ const UserManagement = () => {
                 </button>
               </div>
             </div>
-            <div class='bd-highlight'>
+            <div className='bd-highlight'>
               <select
-                class='form-select'
+                className='form-select'
                 aria-label='Default select example'
                 value={statusGet}
                 onChange={(e) => setStatusGet(e.target.value)}
@@ -193,9 +193,9 @@ const UserManagement = () => {
               </select>
             </div>
           </div>
-          <div class='d-md-block'>
-            <div class='table-responsive'>
-              <table class='table table_post_listing table-bordered _table-hover'>
+          <div className='d-md-block'>
+            <div className='table-responsive'>
+              <table className='table table_post_listing table-bordered _table-hover'>
                 <thead>
                   <tr>
                     <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
@@ -233,7 +233,7 @@ const UserManagement = () => {
                 <tbody>
                   {users &&
                     users.users?.map((user, index) => (
-                      <tr>
+                      <tr key={user._id}>
                         <td>{index + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='user_avatar'>
@@ -245,30 +245,30 @@ const UserManagement = () => {
                         </td>
                         <td>
                           <div>
-                            <span class='fw-bold'>Tên: </span> {user.name}
+                            <span className='fw-bold'>Tên: </span> {user.name}
                           </div>
                           <div>
-                            <span class='fw-bold'>Email: </span>
+                            <span className='fw-bold'>Email: </span>
                             {user.email}
                           </div>
                           <div>
-                            <span class='fw-bold'>SDT: </span>
+                            <span className='fw-bold'>SDT: </span>
                             {user.phone}
                           </div>
                           <div>
-                            <span class='fw-bold'>ZaLo: </span>
+                            <span className='fw-bold'>ZaLo: </span>
                             {user.zalo}
                           </div>
                           <div>
-                            <span class='fw-bold'>Facebook: </span>
+                            <span className='fw-bold'>Facebook: </span>
                             {user.facebook}
                           </div>
                           <div>
-                            <span class='fw-bold'>Giới tính: </span>
+                            <span className='fw-bold'>Giới tính: </span>
                             {user.gender}
                           </div>
                           <div>
-                            <span class='fw-bold'>Ngày sinh: </span>
+                            <span className='fw-bold'>Ngày sinh: </span>
                             {user.birthday}
                           </div>
                         </td>
@@ -284,12 +284,12 @@ const UserManagement = () => {
                         <td>23/04/2024 21:26:13</td>
                         <td>28/04/2024 21:26:13</td>
                         <td>
-                          <div class='post_price'>
+                          <div className='post_price'>
                             {user.isVerified
                               ? user.isLocked
-                                ? 'bị khoá'
-                                : 'hoạt động'
-                              : 'Chưa sát thực'}
+                                ? 'Bị khoá'
+                                : 'Đang hoạt động'
+                              : 'Chưa xác thực'}
                           </div>
                         </td>
 
@@ -373,7 +373,7 @@ const UserManagement = () => {
                                 className='me-1 '
                                 icon={faTrashCan}
                               />
-                              Xoá tài khoản
+                              Xóa tài khoản
                             </button>
                           )}
 
@@ -425,7 +425,7 @@ const UserManagement = () => {
                                 className='me-1 '
                                 icon={faLock}
                               />
-                              khoá tài khoản
+                              Khóa tài khoản
                             </button>
                           )}
                           <button
@@ -454,9 +454,9 @@ const UserManagement = () => {
                 </tbody>
               </table>
               <nav aria-label='...'>
-                <ul class='pagination justify-content-end'>
+                <ul className='pagination justify-content-end'>
                   <li
-                    class={
+                    className={
                       currentPage === 1 ? 'page-item disabled' : 'page-item'
                     }
                   >
@@ -464,7 +464,7 @@ const UserManagement = () => {
                       onClick={() => {
                         NextAndPrevious('previous')
                       }}
-                      class='page-link'
+                      className='page-link'
                     >
                       Previous
                     </button>
@@ -489,7 +489,7 @@ const UserManagement = () => {
                     </li>
                   ))}
                   <li
-                    class={
+                    className={
                       currentPage === page ? 'page-item disabled' : 'page-item'
                     }
                   >
@@ -497,7 +497,7 @@ const UserManagement = () => {
                       onClick={() => {
                         NextAndPrevious('next')
                       }}
-                      class='page-link'
+                      className='page-link'
                     >
                       Next
                     </button>
@@ -508,34 +508,37 @@ const UserManagement = () => {
           </div>
 
           <div
-            class='modal fade'
+            className='modal fade'
             id='exampleModal'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Thông Tin chi tiết
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <form>
                     <div>
-                      <label for='recipient-name' class='col-form-label'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Avatar
                       </label>
                     </div>
                     <div
-                      class='mb-3'
+                      className='mb-3'
                       style={{
                         height: '50px',
                       }}
@@ -545,26 +548,32 @@ const UserManagement = () => {
                         className='user-info'
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Mã người dùng
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
-                        value={userDetail._id}
+                        defaultValue={userDetail._id}
                         readOnly='ReadOnly'
                       />
                     </div>
 
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Tên người dùng
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
                         value={userDetail.name}
                         onChange={(e) =>
@@ -575,26 +584,33 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Địa chỉ email
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
-                        value={userDetail.email}
-                        onChange={(e) =>
-                          setUserDetail((prevState) => ({
-                            ...prevState,
-                            email: e.target.value,
-                          }))
-                        }
+                        defaultValue={userDetail.email}
+                        // onChange={(e) =>
+                        //   setUserDetail((prevState) => ({
+                        //     ...prevState,
+                        //     email: e.target.value,
+                        //   }))
+                        // }
+                        readOnly
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
-                        birthday
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
+                        Birthday
                       </label>
 
                       <input
@@ -618,13 +634,16 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
-                        facebook
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
+                        Facebook
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
                         value={
                           userDetail.facebook === undefined
@@ -639,8 +658,11 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Giới tính
                       </label>
                       <select
@@ -668,13 +690,16 @@ const UserManagement = () => {
                         <option value='female'>Nữ</option>
                       </select>
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
-                        phone
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
+                        Phone
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
                         value={
                           userDetail.phone === undefined ? '' : userDetail.phone
@@ -687,13 +712,16 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
-                        zalo
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
+                        Zalo
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
                         value={
                           userDetail.zalo === undefined ? '' : userDetail.zalo
@@ -706,8 +734,11 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Quyền
                       </label>
                       <select
@@ -734,13 +765,16 @@ const UserManagement = () => {
                           }))
                         }
                       >
-                        <option value='Admin'>Admin</option>
-                        <option value='Moderator'>Moderator</option>
-                        <option value='User'>User</option>
+                        <option defaultValue='Admin'>Admin</option>
+                        <option defaultValue='Moderator'>Moderator</option>
+                        <option defaultValue='User'>User</option>
                       </select>
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Ngày tạo
                       </label>
                       <input
@@ -764,8 +798,11 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Ngày câp nhật
                       </label>
                       <input
@@ -789,15 +826,18 @@ const UserManagement = () => {
                         }
                       />
                     </div>
-                    <div class='mb-3'>
-                      <label for='recipient-name' class='col-form-label'>
+                    <div className='mb-3'>
+                      <label
+                        htmlFor='recipient-name'
+                        className='col-form-label'
+                      >
                         Trạng thái
                       </label>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         id='recipient-name'
-                        value={
+                        defaultValue={
                           userDetail.isVerified
                             ? userDetail.isLocked
                               ? 'bị khoá'
@@ -808,17 +848,17 @@ const UserManagement = () => {
                     </div>
                   </form>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Đóng
                   </button>
                   <button
                     type='button'
-                    class='btn btn-primary '
+                    className='btn btn-primary '
                     data-bs-dismiss='modal'
                     onClick={() => {
                       updateProfile()
@@ -831,26 +871,26 @@ const UserManagement = () => {
             </div>
           </div>
           <div
-            class='modal fade'
+            className='modal fade'
             id='restoreuser'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Bạn muốn khôi phục tài khoản Người dùng này ?
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <div>
                     <span className='fw-bold'>ID: </span> {userDetail._id}
                   </div>
@@ -859,10 +899,10 @@ const UserManagement = () => {
                     {userDetail.name}
                   </div>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Huỷ
@@ -872,7 +912,7 @@ const UserManagement = () => {
                       RestoreUserDeleted()
                     }}
                     type='button'
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
                     Xác nhận
@@ -882,26 +922,26 @@ const UserManagement = () => {
             </div>
           </div>
           <div
-            class='modal fade'
+            className='modal fade'
             id='deletedPermanently'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Bạn có chắc Xoá tài khoản này!
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <div>
                     <span className='fw-bold'>ID: </span> {userDetail._id}
                   </div>
@@ -910,10 +950,10 @@ const UserManagement = () => {
                     {userDetail.name}
                   </div>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Huỷ
@@ -923,7 +963,7 @@ const UserManagement = () => {
                       DeleteUserPermanently()
                     }}
                     type='button'
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
                     Xác nhận
@@ -933,26 +973,26 @@ const UserManagement = () => {
             </div>
           </div>
           <div
-            class='modal fade'
+            className='modal fade'
             id='deletetemporary'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Đưa tài khoản này vào thùng rác
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <div>
                     <span className='fw-bold'>ID: </span> {userDetail._id}
                   </div>
@@ -961,10 +1001,10 @@ const UserManagement = () => {
                     {userDetail.name}
                   </div>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Huỷ
@@ -974,7 +1014,7 @@ const UserManagement = () => {
                       DeleteUserTemporary()
                     }}
                     type='button'
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
                     Xác nhận
@@ -984,26 +1024,26 @@ const UserManagement = () => {
             </div>
           </div>
           <div
-            class='modal fade'
+            className='modal fade'
             id='AccessBlocksModal'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Bạn Có Thật Sự Muốn Khoá tài Khoản
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <div>
                     <span className='fw-bold'>ID: </span> {userDetail._id}
                   </div>
@@ -1012,10 +1052,10 @@ const UserManagement = () => {
                     {userDetail.name}
                   </div>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Huỷ
@@ -1025,7 +1065,7 @@ const UserManagement = () => {
                       BlockUser()
                     }}
                     type='button'
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
                     Xác nhận Khoá
@@ -1035,26 +1075,26 @@ const UserManagement = () => {
             </div>
           </div>
           <div
-            class='modal fade'
+            className='modal fade'
             id='AccessUnBlocksModal'
-            tabindex='-1'
+            tabIndex='-1'
             aria-labelledby='exampleModalLabel'
             aria-hidden='true'
           >
-            <div class='modal-dialog'>
-              <div class='modal-content'>
-                <div class='modal-header'>
-                  <h5 class='modal-title' id='exampleModalLabel'>
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='exampleModalLabel'>
                     Bạn có muốn mở khoá tài Khoản
                   </h5>
                   <button
                     type='button'
-                    class='btn-close'
+                    className='btn-close'
                     data-bs-dismiss='modal'
                     aria-label='Close'
                   ></button>
                 </div>
-                <div class='modal-body'>
+                <div className='modal-body'>
                   <div>
                     <span className='fw-bold'>ID: </span> {userDetail._id}
                   </div>
@@ -1063,10 +1103,10 @@ const UserManagement = () => {
                     {userDetail.name}
                   </div>
                 </div>
-                <div class='modal-footer'>
+                <div className='modal-footer'>
                   <button
                     type='button'
-                    class='btn btn-secondary'
+                    className='btn btn-secondary'
                     data-bs-dismiss='modal'
                   >
                     Huỷ
@@ -1076,7 +1116,7 @@ const UserManagement = () => {
                       UnBlockUser()
                     }}
                     type='button'
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
                     Xác nhận Khoá
@@ -1103,7 +1143,7 @@ const UserManagement = () => {
             </Modal.Body>
             <Modal.Footer>
               <Button
-                class='btn btn-secondary'
+                className='btn btn-secondary'
                 variant='secondary'
                 onClick={() => {
                   ResetOut()

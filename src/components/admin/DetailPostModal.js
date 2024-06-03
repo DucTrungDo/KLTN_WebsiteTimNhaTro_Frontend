@@ -16,7 +16,7 @@ import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import MapD from '../googleMap/MapD'
 import {
-  getUnapprovedPosts,
+  getModeratorPosts,
   approvePost,
   reportViolatingPost,
 } from '../../actions/postActions'
@@ -93,11 +93,11 @@ const DetailPostModal = ({
   const { user } = useSelector((state) => state.user)
   const { user: who } = useSelector((state) => state.auth)
   const {
-    loading: unapprovedPostLoading,
+    loading: moderatorPostLoading,
     isApproved,
     isReported,
-    error: unapprovedPostError,
-  } = useSelector((state) => state.unapprovedPost)
+    error: moderatorPostError,
+  } = useSelector((state) => state.moderatorPost)
   useEffect(() => {
     if (error) {
       alert.error(error)
@@ -105,8 +105,8 @@ const DetailPostModal = ({
       setShowModal(false)
     }
 
-    if (unapprovedPostError) {
-      alert.error(unapprovedPostError)
+    if (moderatorPostError) {
+      alert.error(moderatorPostError)
       dispatch(clearErrors())
       setShowModal(false)
     }
@@ -138,7 +138,7 @@ const DetailPostModal = ({
           dispatch(getPostsAdminModerate(token, 1, resetFilterModerator))
         }
       } else {
-        dispatch(getUnapprovedPosts(token, 1, resetFilterModerator))
+        dispatch(getModeratorPosts(token, 1, resetFilterModerator))
       }
 
       setFilterData(resetFilterModerator)
@@ -158,7 +158,7 @@ const DetailPostModal = ({
           dispatch(getPostsAdminModerate(token, 1, resetFilterModerator))
         }
       } else {
-        dispatch(getUnapprovedPosts(token, 1, resetFilterModerator))
+        dispatch(getModeratorPosts(token, 1, resetFilterModerator))
       }
       setFilterData(resetFilterModerator)
       setCurrentPage(1)
@@ -1131,7 +1131,7 @@ const DetailPostModal = ({
                       data-bs-dismiss='modal'
                       aria-label='Close'
                       className='btn btn-warning btn-lg btn-block'
-                      disabled={unapprovedPostLoading ? true : false}
+                      disabled={moderatorPostLoading ? true : false}
                     >
                       Từ chối duyệt
                     </button>
@@ -1146,7 +1146,7 @@ const DetailPostModal = ({
                   data-bs-dismiss='modal'
                   aria-label='Close'
                   className='btn btn-success mt-4 btn-lg btn-block'
-                  disabled={unapprovedPostLoading ? true : false}
+                  disabled={moderatorPostLoading ? true : false}
                 >
                   Duyệt tin
                 </button>

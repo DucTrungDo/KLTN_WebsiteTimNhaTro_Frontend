@@ -13,6 +13,9 @@ import {
   MODERATOR_POST_DETAILS_REQUEST,
   MODERATOR_POST_DETAILS_SUCCESS,
   MODERATOR_POST_DETAILS_FAIL,
+  ADMIN_POST_DETAILS_REQUEST,
+  ADMIN_POST_DETAILS_SUCCESS,
+  ADMIN_POST_DETAILS_FAIL,
   ALL_USER_POSTS_REQUEST,
   ALL_USER_POSTS_SUCCESS,
   ALL_USER_POSTS_FAIL,
@@ -29,9 +32,9 @@ import {
   ADD_NEW_POST_REQUEST,
   ADD_NEW_POST_SUCCESS,
   ADD_NEW_POST_FAIL,
-  ALL_UNAPPROVED_POSTS_REQUEST,
-  ALL_UNAPPROVED_POSTS_SUCCESS,
-  ALL_UNAPPROVED_POSTS_FAIL,
+  ALL_MODERATOR_POSTS_REQUEST,
+  ALL_MODERATOR_POSTS_SUCCESS,
+  ALL_MODERATOR_POSTS_FAIL,
   MODERATOR_APPROVE_POST_REQUEST,
   MODERATOR_APPROVE_POST_SUCCESS,
   MODERATOR_APPROVE_POST_FAIL,
@@ -155,6 +158,34 @@ export const getPostDetailsByModerator = (slug, token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: MODERATOR_POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get user's post details (Admin)
+export const getPostDetailsByAdmin = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_POST_DETAILS_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/admin`,
+      config
+    )
+
+    dispatch({
+      type: ADMIN_POST_DETAILS_SUCCESS,
+      payload: data.data.post,
+    })
+  } catch (error) {
+    dispatch({
+      type: ADMIN_POST_DETAILS_FAIL,
       payload: error.response.data.message,
     })
   }
@@ -306,11 +337,11 @@ export const newPost = (token, post) => async (dispatch) => {
   }
 }
 
-// Get all unapproved post (Moderator)
-export const getUnapprovedPosts =
+// Get all post (Moderator)
+export const getModeratorPosts =
   (token, currentPage, FilterData) => async (dispatch) => {
     try {
-      dispatch({ type: ALL_UNAPPROVED_POSTS_REQUEST })
+      dispatch({ type: ALL_MODERATOR_POSTS_REQUEST })
 
       const config = {
         headers: {
@@ -324,12 +355,12 @@ export const getUnapprovedPosts =
       )
 
       dispatch({
-        type: ALL_UNAPPROVED_POSTS_SUCCESS,
+        type: ALL_MODERATOR_POSTS_SUCCESS,
         payload: data,
       })
     } catch (error) {
       dispatch({
-        type: ALL_UNAPPROVED_POSTS_FAIL,
+        type: ALL_MODERATOR_POSTS_FAIL,
         payload: error.response.data.message,
       })
     }

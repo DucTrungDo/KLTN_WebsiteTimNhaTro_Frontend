@@ -21,6 +21,7 @@ import Loader from '../layout/Loader'
 import {
   getUserPostDetails,
   getPostDetailsByModerator,
+  getPostDetailsByAdmin,
   getPostDetails,
   clearErrors,
 } from '../../actions/postActions'
@@ -64,6 +65,8 @@ const PostDetail = () => {
       dispatch(getUserPostDetails(slug, token))
     } else if (location.pathname.includes('/moderator')) {
       dispatch(getPostDetailsByModerator(slug, token))
+    } else if (location.pathname.includes('/admin')) {
+      dispatch(getPostDetailsByAdmin(slug, token))
     } else {
       dispatch(getPostDetails(slug))
     }

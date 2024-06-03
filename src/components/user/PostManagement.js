@@ -432,6 +432,7 @@ const PostManagement = () => {
                         <Link
                           className='post_title text-decoration-none'
                           to={'/post/' + post.slug + '/me'}
+                          target='_blank'
                           style={{ color: '#055699' }}
                         >
                           {post.title}
@@ -447,7 +448,7 @@ const PostManagement = () => {
                             !post.isViolated &&
                             !post.isHided && (
                               <a
-                                href='https://phongtro123.com/quan-ly/tin-dang/gia-han-tin/653234'
+                                href=''
                                 className='btn btn-sm mt-2 btn_danglai btn-warning text-success'
                               >
                                 <svg
@@ -496,10 +497,7 @@ const PostManagement = () => {
                           </Link>
                           {/* )} */}
                           {!post.isPaid && (
-                            <a
-                              href='https://phongtro123.com/quan-ly/post/gan-nhan/653234'
-                              className='btn btn-sm mt-2'
-                            >
+                            <a href='' className='btn btn-sm mt-2'>
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 width='24'
@@ -545,10 +543,7 @@ const PostManagement = () => {
                                   Sửa tin
                                 </Link> */}
 
-                                <a
-                                  href='https://phongtro123.com/quan-ly/tin-dang/day-tin/653234'
-                                  className='btn btn-sm mt-2'
-                                >
+                                <a href='' className='btn btn-sm mt-2'>
                                   <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     width='24'
@@ -567,10 +562,7 @@ const PostManagement = () => {
                                   Đẩy tin
                                 </a>
 
-                                <a
-                                  href='https://phongtro123.com/quan-ly/tin-dang/nang-cap-tin/653234'
-                                  className='btn btn-sm mt-2'
-                                >
+                                <a href='' className='btn btn-sm mt-2'>
                                   <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     width='24'

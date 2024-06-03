@@ -11,6 +11,9 @@ import {
   MODERATOR_POST_DETAILS_REQUEST,
   MODERATOR_POST_DETAILS_SUCCESS,
   MODERATOR_POST_DETAILS_FAIL,
+  ADMIN_POST_DETAILS_REQUEST,
+  ADMIN_POST_DETAILS_SUCCESS,
+  ADMIN_POST_DETAILS_FAIL,
   ALL_USER_POSTS_REQUEST,
   ALL_USER_POSTS_SUCCESS,
   ALL_USER_POSTS_FAIL,
@@ -31,9 +34,9 @@ import {
   ADD_NEW_POST_SUCCESS,
   ADD_NEW_POST_RESET,
   ADD_NEW_POST_FAIL,
-  ALL_UNAPPROVED_POSTS_REQUEST,
-  ALL_UNAPPROVED_POSTS_SUCCESS,
-  ALL_UNAPPROVED_POSTS_FAIL,
+  ALL_MODERATOR_POSTS_REQUEST,
+  ALL_MODERATOR_POSTS_SUCCESS,
+  ALL_MODERATOR_POSTS_FAIL,
   MODERATOR_APPROVE_POST_REQUEST,
   MODERATOR_APPROVE_POST_SUCCESS,
   MODERATOR_APPROVE_POST_FAIL,
@@ -106,6 +109,7 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case POST_DETAILS_REQUEST:
     case USER_POST_DETAILS_REQUEST:
     case MODERATOR_POST_DETAILS_REQUEST:
+    case ADMIN_POST_DETAILS_REQUEST:
       return {
         ...state,
         loading: true,
@@ -114,6 +118,7 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case POST_DETAILS_SUCCESS:
     case USER_POST_DETAILS_SUCCESS:
     case MODERATOR_POST_DETAILS_SUCCESS:
+    case ADMIN_POST_DETAILS_SUCCESS:
       return {
         loading: false,
         post: action.payload,
@@ -122,6 +127,7 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case POST_DETAILS_FAIL:
     case USER_POST_DETAILS_FAIL:
     case MODERATOR_POST_DETAILS_FAIL:
+    case ADMIN_POST_DETAILS_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -318,24 +324,24 @@ export const postEditReducer = (state = { post: {} }, action) => {
   }
 }
 
-export const unapprovedPostsReducer = (
-  state = { unapprovedPosts: [] },
+export const moderatorPostsReducer = (
+  state = { moderatorPosts: [] },
   action
 ) => {
   switch (action.type) {
-    case ALL_UNAPPROVED_POSTS_REQUEST:
+    case ALL_MODERATOR_POSTS_REQUEST:
       return {
         ...state,
         loading: true,
       }
 
-    case ALL_UNAPPROVED_POSTS_SUCCESS:
+    case ALL_MODERATOR_POSTS_SUCCESS:
       return {
         loading: false,
-        unapprovedPosts: action.payload.data,
+        moderatorPosts: action.payload.data,
       }
 
-    case ALL_UNAPPROVED_POSTS_FAIL:
+    case ALL_MODERATOR_POSTS_FAIL:
       return {
         ...state,
         loading: false,
@@ -353,7 +359,7 @@ export const unapprovedPostsReducer = (
   }
 }
 
-export const unapprovedPostReducer = (state = {}, action) => {
+export const moderatorPostReducer = (state = {}, action) => {
   switch (action.type) {
     case MODERATOR_APPROVE_POST_REQUEST:
     case MODERATOR_REPORT_POST_REQUEST:

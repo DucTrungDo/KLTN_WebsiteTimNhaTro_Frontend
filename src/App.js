@@ -84,6 +84,7 @@ function App() {
               <Route path='/post/:slug' element={<PostDetail />} />
               <Route path='/post/:slug/me' element={<PostDetail />} />
               <Route path='/post/:slug/moderator' element={<PostDetail />} />
+              <Route path='/post/:slug/admin' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
               <Route path='/favorite_post' element={<FavoritePost />} />
             </Routes>

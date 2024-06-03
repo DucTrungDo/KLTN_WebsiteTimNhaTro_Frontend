@@ -189,6 +189,7 @@ const PostManagement = () => {
       Search()
     }
   }
+  console.log(filterData)
   const Search = () => {
     if (whatList === 'listallpost') {
       dispatch(getPostsAdmin(token, 1, filterData))
@@ -227,7 +228,7 @@ const PostManagement = () => {
             </Link>
           </li>
           <li className='breadcrumb-item'>
-            <Link to='/user/dashboard' className='text-decoration-none'>
+            <Link to='/admin/dashboard' className='text-decoration-none'>
               Quản lý
             </Link>
           </li>
@@ -431,11 +432,11 @@ const PostManagement = () => {
               >
                 <option value=''>--Lọc theo trạng thái--</option>
                 <option value='all'>Tất cả</option>
-                <option value='posted'>các bài đăng đã đăng</option>
-                <option value='inPay'>chờ thanh toán</option>
-                <option value='inApprove'>chờ duyệt bài</option>
-                <option value='inViolation'>các bài đăng vi phạm</option>
-                <option value='isHide'>các bài đăng đã ẩn</option>
+                <option value='posted'>Các bài đã được duyệt</option>
+                <option value='inPay'>Các bài chờ thanh toán</option>
+                <option value='inApprove'>Các bài chờ duyệt</option>
+                <option value='inViolation'>Các bài vi phạm</option>
+                <option value='inHide'>Các bài đã ẩn</option>
               </select>
             </div>
           ) : (
@@ -471,8 +472,8 @@ const PostManagement = () => {
                 >
                   <option value=''>--Lọc theo trạng thái--</option>
                   <option value='inApprove'>Các bài đang chờ duyệt</option>
-                  <option value='moderated'>Các bài đã duyệt bởi tôi</option>
-                  <option value='myModerated'>
+                  <option value='myModerated'>Các bài đã duyệt bởi tôi</option>
+                  <option value='moderated'>
                     Tất cả các bài đã được duyệt
                   </option>
                 </select>
@@ -484,9 +485,9 @@ const PostManagement = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div class='d-none d-md-block'>
-          <div class='table-responsive'>
-            <table class='table table_post_listing table-bordered _table-hover'>
+        <div className='d-none d-md-block'>
+          <div className='table-responsive'>
+            <table className='table table_post_listing table-bordered _table-hover'>
               <thead>
                 <tr>
                   <th>No.</th>
@@ -501,231 +502,255 @@ const PostManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {posts.posts?.map((post, index) => (
+                {posts.posts?.length === 0 || !posts.posts ? (
                   <tr>
-                    <td>{index + 1 + 10 * (currentPage - 1)}</td>
-                    <td>
-                      <div class='post_thumb'>
-                        <a
-                          href='https://phongtro123.com/cho-thue-phong-rong-mat-duong-man-thien-q-9-pr653234.html'
-                          target='_blank'
-                        >
-                          <img src='https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2024/04/23/439979152-377368798623213-8314998822001744453-n_1713882276.jpg' />
-                        </a>
-                      </div>
-                    </td>
-                    <td>
-                      <span class='badge badge-pill bg-warning me-1'>
-                        Phòng trọ
-                      </span>
-                      <a
-                        class='post_title'
-                        target='_blank'
-                        href='https://phongtro123.com/cho-thue-phong-rong-mat-duong-man-thien-q-9-pr653234.html'
-                        style={{ color: '#055699' }}
-                      >
-                        {post.title}
-                      </a>
-                      <p style={{ marginTop: '10px' }}>
-                        <strong>Địa chỉ:</strong>{' '}
-                        {post.address.street +
-                          ', ' +
-                          post.address.ward +
-                          ', ' +
-                          post.address.district +
-                          ', ' +
-                          post.address.city}
-                      </p>
-                      <div class='post_btn_toolbar mt-3'>
-                        <button
-                          class='btn btn-sm btn_danglai'
-                          type='button'
-                          onClick={() => {
-                            ViewDetail(post)
-                            handleShow()
-                          }}
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            stroke='currentColor'
-                            stroke-width='2'
-                            stroke-linecap='round'
-                            stroke-linejoin='round'
-                            class='feather feather-refresh-ccw'
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='24'
-                              height='24'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              stroke-width='2'
-                              stroke-linecap='round'
-                              stroke-linejoin='round'
-                              class='feather feather-edit-2'
-                            >
-                              <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
-                            </svg>
-                          </svg>{' '}
-                          Xem chi tiết
-                        </button>
-
-                        <a
-                          href='https://phongtro123.com/quan-ly/tin-dang/an-tin/653234'
-                          class='btn btn-sm'
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            stroke='currentColor'
-                            stroke-width='2'
-                            stroke-linecap='round'
-                            stroke-linejoin='round'
-                            class='feather feather-eye-off'
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='24'
-                              height='24'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              stroke-width='2'
-                              stroke-linecap='round'
-                              stroke-linejoin='round'
-                              class='feather feather-star'
-                            >
-                              <polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-                            </svg>
-                          </svg>{' '}
-                          Nâng cấp tin
-                        </a>
-                        <a
-                          href='https://phongtro123.com/quan-ly/tin-dang/an-tin/653234'
-                          class='btn btn-sm'
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            stroke='currentColor'
-                            stroke-width='2'
-                            stroke-linecap='round'
-                            stroke-linejoin='round'
-                            class='feather feather-eye-off'
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='24'
-                              height='24'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              stroke-width='2'
-                              stroke-linecap='round'
-                              stroke-linejoin='round'
-                              class='feather feather-plus'
-                            >
-                              <line x1='12' y1='5' x2='12' y2='19'></line>
-                              <line x1='5' y1='12' x2='19' y2='12'></line>
-                            </svg>
-                          </svg>{' '}
-                          Gia hạn
-                        </a>
-                        <button
-                          class='btn btn-sm '
-                          onClick={() => {
-                            DeletePost(post.slug)
-                          }}
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            stroke='currentColor'
-                            stroke-width='2'
-                            stroke-linecap='round'
-                            stroke-linejoin='round'
-                            class='feather feather-eye-off'
-                          >
-                            <polyline points='3 6 5 6 21 6'></polyline>
-                            <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
-                            <line x1='10' y1='11' x2='10' y2='17'></line>
-                            <line x1='14' y1='11' x2='14' y2='17'></line>
-                          </svg>{' '}
-                          Xoá tin
-                        </button>
-                      </div>
-                      <span
-                        style={{
-                          display: 'block',
-                          color: '#333',
-                          marginTop: '10px',
-                        }}
-                      >
-                        <em>Tên người đăng: {post.userId.name}</em>
-                      </span>
-                      <span
-                        style={{
-                          display: 'block',
-                          color: '#999',
-                          marginTop: '10px',
-                        }}
-                      >
-                        Cập nhật gần nhất:{' '}
-                        {format(post.updatedAt, 'dd-mm-yyyy HH:mm:ss')}
-                      </span>
-                      <span
-                        style={{
-                          display: 'block',
-                          color: '#999',
-                          marginTop: '10px',
-                        }}
-                      >
-                        mã tin: {post._id}
-                      </span>
-                    </td>
-                    <td>
-                      <div class='post_price'>
-                        <PriceDisplay price={post.price} />
-                      </div>
-                    </td>
-                    <td>{format(post.createdAt, 'dd-mm-yyyy HH:mm:ss')}</td>
-                    <td>28/04/2024 21:26:13</td>
-                    <td>
-                      <span
-                        class='text text-error'
-                        style={{ whiteSpace: 'nowrap' }}
-                      >
-                        Tin hết hạn
-                      </span>
-                    </td>
+                    <td colSpan='7'>Không tìm thấy bài đăng nào.</td>
                   </tr>
-                ))}
+                ) : (
+                  posts.posts?.map((post, index) => (
+                    <tr key={post._id}>
+                      <td>{index + 1 + 10 * (currentPage - 1)}</td>
+                      <td>
+                        <div className='post_thumb'>
+                          <Link
+                            to={'/post/' + post.slug + '/admin'}
+                            target='_blank'
+                          >
+                            <img
+                              src={
+                                post.images[0]
+                                  ? post.images[0]
+                                  : '/images/property-test.jpg'
+                              }
+                            />
+                          </Link>
+                        </div>
+                      </td>
+                      <td>
+                        <span className='badge badge-pill bg-warning me-1'>
+                          {post.categoryId?.name}
+                        </span>
+                        <Link
+                          className='post_title text-decoration-none'
+                          target='_blank'
+                          to={'/post/' + post.slug + '/admin'}
+                          style={{ color: '#055699' }}
+                        >
+                          {post.title}
+                        </Link>
+                        <p style={{ marginTop: '10px' }}>
+                          <strong>Địa chỉ:</strong>{' '}
+                          {post.address.street +
+                            ', ' +
+                            post.address.ward +
+                            ', ' +
+                            post.address.district +
+                            ', ' +
+                            post.address.city}
+                        </p>
+                        <div className='post_btn_toolbar mt-3'>
+                          <button
+                            className='btn btn-sm btn_danglai'
+                            type='button'
+                            onClick={() => {
+                              ViewDetail(post)
+                              handleShow()
+                            }}
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='24'
+                              height='24'
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeWidth='2'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              className='feather feather-refresh-ccw'
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='24'
+                                height='24'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='feather feather-edit-2'
+                              >
+                                <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
+                              </svg>
+                            </svg>{' '}
+                            Xem chi tiết
+                          </button>
+
+                          <a href='' className='btn btn-sm'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='24'
+                              height='24'
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeWidth='2'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              className='feather feather-eye-off'
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='24'
+                                height='24'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='feather feather-star'
+                              >
+                                <polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+                              </svg>
+                            </svg>{' '}
+                            Nâng cấp tin
+                          </a>
+                          <a href='' className='btn btn-sm'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='24'
+                              height='24'
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeWidth='2'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              className='feather feather-eye-off'
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='24'
+                                height='24'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='feather feather-plus'
+                              >
+                                <line x1='12' y1='5' x2='12' y2='19'></line>
+                                <line x1='5' y1='12' x2='19' y2='12'></line>
+                              </svg>
+                            </svg>{' '}
+                            Gia hạn
+                          </a>
+                          <button
+                            className='btn btn-sm '
+                            onClick={() => {
+                              DeletePost(post.slug)
+                            }}
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='24'
+                              height='24'
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeWidth='2'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              className='feather feather-eye-off'
+                            >
+                              <polyline points='3 6 5 6 21 6'></polyline>
+                              <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
+                              <line x1='10' y1='11' x2='10' y2='17'></line>
+                              <line x1='14' y1='11' x2='14' y2='17'></line>
+                            </svg>{' '}
+                            Xoá tin
+                          </button>
+                        </div>
+                        <span
+                          style={{
+                            display: 'block',
+                            color: '#333',
+                            marginTop: '10px',
+                          }}
+                        >
+                          <em>Tên người đăng: {post.userId.name}</em>
+                        </span>
+                        <span
+                          style={{
+                            display: 'block',
+                            color: '#999',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Cập nhật gần nhất:{' '}
+                          {format(post.updatedAt, 'dd-MM-yyyy HH:mm:ss')}
+                        </span>
+                        <span
+                          style={{
+                            display: 'block',
+                            color: '#999',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Mã tin: {post._id}
+                        </span>
+                      </td>
+                      <td>
+                        <div className='post_price'>
+                          <PriceDisplay price={post.price} />
+                        </div>
+                      </td>
+                      <td>{format(post.createdAt, 'dd-MM-yyyy HH:mm:ss')}</td>
+                      <td>28/04/2024 21:26:13</td>
+                      <td>
+                        <div
+                          className='label-success'
+                          style={{ whiteSpace: 'nowrap' }}
+                        >
+                          {post.isHided ? (
+                            <span className='text-warning'>Tin đã ẩn</span>
+                          ) : post.isViolated ? (
+                            <span className='text-danger'>Tin bị vi phạm</span>
+                          ) : !post.isPaid ? (
+                            <span className='text-info'>
+                              Tin chưa thanh toán
+                            </span>
+                          ) : !post.isApproved ? (
+                            <span className='text-primary'>
+                              Tin đang chờ duyệt
+                            </span>
+                          ) : (
+                            <span className='text-success'>
+                              Tin đã được duyệt
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
             <nav aria-label='...'>
-              <ul class='pagination justify-content-end'>
+              <ul className='pagination justify-content-end'>
                 <li
-                  class={currentPage === 1 ? 'page-item disabled' : 'page-item'}
+                  className={
+                    currentPage === 1 ? 'page-item disabled' : 'page-item'
+                  }
                 >
                   <button
                     onClick={() => {
                       NextAndPrevious('previous')
                     }}
-                    class='page-link'
+                    className='page-link'
                   >
                     Previous
                   </button>
@@ -750,7 +775,7 @@ const PostManagement = () => {
                   </li>
                 ))}
                 <li
-                  class={
+                  className={
                     currentPage === page || posts.total === 0
                       ? 'page-item disabled'
                       : 'page-item'
@@ -760,7 +785,7 @@ const PostManagement = () => {
                     onClick={() => {
                       NextAndPrevious('next')
                     }}
-                    class='page-link'
+                    className='page-link'
                   >
                     Next
                   </button>
@@ -795,7 +820,7 @@ const PostManagement = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            class='btn btn-secondary'
+            className='btn btn-secondary'
             variant='secondary'
             onClick={() => {
               ResetOut()

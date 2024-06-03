@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck } from '@fortawesome/free-regular-svg-icons'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { getUnapprovedPosts, clearErrors } from '../../actions/postActions'
+import { getModeratorPosts, clearErrors } from '../../actions/postActions'
 import Cookies from 'js-cookie'
 import DetailPostModal from '../admin/DetailPostModal'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
@@ -47,8 +47,8 @@ const PostModeration = () => {
     tab: tab,
     moderatedFilter: moderatedFilter,
   })
-  const { loading, unapprovedPosts, error } = useSelector(
-    (state) => state.unapprovedPosts
+  const { loading, moderatorPosts, error } = useSelector(
+    (state) => state.moderatorPosts
   )
 
   useEffect(() => {
@@ -99,14 +99,14 @@ const PostModeration = () => {
     }
   }
   const Search = () => {
-    dispatch(getUnapprovedPosts(token, currentPage, filterData))
+    dispatch(getModeratorPosts(token, currentPage, filterData))
     setCurrentPage(1)
   }
 
   console.log(filterData)
 
   useEffect(() => {
-    dispatch(getUnapprovedPosts(token, currentPage, filterData))
+    dispatch(getModeratorPosts(token, currentPage, filterData))
 
     if (error) {
       alert.error(error)
@@ -137,30 +137,30 @@ const PostModeration = () => {
 
   useEffect(() => {
     if (
-      JSON.stringify(unapprovedPosts) !== '{}' &&
-      unapprovedPosts !== undefined
+      JSON.stringify(moderatorPosts) !== '{}' &&
+      moderatorPosts !== undefined
     ) {
       setPage(
         Math.round(
-          unapprovedPosts.total % 10 !== 0
-            ? Math.floor(unapprovedPosts.total / 10) + 1
-            : Math.floor(unapprovedPosts.total / 10)
+          moderatorPosts.total % 10 !== 0
+            ? Math.floor(moderatorPosts.total / 10) + 1
+            : Math.floor(moderatorPosts.total / 10)
         )
       )
     }
-  }, [unapprovedPosts])
+  }, [moderatorPosts])
 
   const ChoosePage = (indexPageCurrent) => {
     setCurrentPage(indexPageCurrent)
-    dispatch(getUnapprovedPosts(token, indexPageCurrent, filterData))
+    dispatch(getModeratorPosts(token, indexPageCurrent, filterData))
   }
   const NextAndPrevious = (Actions) => {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getUnapprovedPosts(token, currentPage + 1, filterData))
+      dispatch(getModeratorPosts(token, currentPage + 1, filterData))
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getUnapprovedPosts(token, currentPage - 1, filterData))
+      dispatch(getModeratorPosts(token, currentPage - 1, filterData))
     }
   }
 
@@ -363,7 +363,7 @@ const PostModeration = () => {
             </div>
           </div>
         </div>
-        {loading || !unapprovedPosts ? (
+        {loading || !moderatorPosts ? (
           <Loader />
         ) : (
           <div className='d-md-block'>
@@ -390,21 +390,19 @@ const PostModeration = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {unapprovedPosts.posts?.length === 0 ||
-                  !unapprovedPosts.posts ? (
+                  {moderatorPosts.posts?.length === 0 ||
+                  !moderatorPosts.posts ? (
                     <tr>
                       <td colSpan='7'>Không tìm thấy bài đăng nào.</td>
                     </tr>
                   ) : (
                     // Load all post here
-                    unapprovedPosts.posts?.map((post, idx) => (
+                    moderatorPosts.posts?.map((post, idx) => (
                       <tr key={post._id}>
                         <td>{idx + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
-                            <Link
-                            to={'/post/' + post.slug + '/moderator'}
-                            >
+                            <Link to={'/post/' + post.slug + '/moderator'} target='_blank'>
                               <img
                                 src={
                                   post.images[0]
