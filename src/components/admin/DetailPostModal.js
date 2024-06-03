@@ -67,6 +67,7 @@ const DetailPostModal = ({
   const [showInfoLost, setShowInfoLost] = useState(false)
   const [showVideoSizeWaring, setShowVideoSizeWaring] = useState(false)
   const [fetchDataInProgress, setFetchDataInProgress] = useState(false)
+  const [fileInputKey, setFileInputKey] = useState(Date.now())
   const [address, setAddress] = useState({
     city: '',
     district: '',
@@ -349,7 +350,8 @@ const DetailPostModal = ({
   //kéo thả video
 
   function DeleteVideoChoise() {
-    setSource({ data: '', url: 'null' })
+    setFileInputKey(Date.now())
+    setSource({ data: '', url: '' })
   }
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList)
@@ -397,13 +399,10 @@ const DetailPostModal = ({
       })
       if (source.data !== '') {
         formData.append('videoFile', source.data)
-        formData.append('video', null)
-      } else if (source.url !== '' && source.url.includes('firebasestorage')) {
-        formData.append('videoFile', null)
-        formData.append('video', source.url)
-      } else if (source.data === '') {
-        formData.append('video', null)
-        formData.append('videoFile', null)
+      } else {
+        if (source.url.includes('firebasestorage')) {
+          formData.append('video', source.url)
+        }
       }
       const token = Cookies.get('accessToken')
       dispatch(editPostAdmin(token, slug, formData))
@@ -994,6 +993,7 @@ const DetailPostModal = ({
                         type='file'
                         onChange={handleFileChange}
                         accept='.mov,.mp4'
+                        key={fileInputKey}
                       />
                       {isDragActive ? (
                         <div className='text-success text-center'>
@@ -1031,7 +1031,7 @@ const DetailPostModal = ({
                     >
                       Xoá Video
                     </button>
-                    {source.url !== 'null' ? (
+                    {source.url !== '' ? (
                       <video
                         className='VideoInput_video'
                         width='100%'
