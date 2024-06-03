@@ -49,9 +49,9 @@ const EditPost = () => {
     street: '',
   })
   const [addressAbsolute, setAddressAbsolute] = useState('')
-
+  const [fileInputKey, setFileInputKey] = useState(Date.now())
   const inputRef = React.useRef()
-  const [source, setSource] = React.useState({ data: '', url: 'null' })
+  const [source, setSource] = React.useState({ data: '', url: '' })
   const [images, setImages] = React.useState([])
   const maxNumber = 10
 
@@ -230,34 +230,43 @@ const EditPost = () => {
 
   // images and video functions
   const handleFileChange = (event) => {
-    const file = event.target.files[0]
-    const sizeInBytes = file.size
-    const sizeInMB = sizeInBytes / (1024 * 1024)
-    if (sizeInMB > 400) {
-      alert.error('Dung lượng video quá lớn video chỉ được lưu dưới 400MB')
-    } else {
-      const url = URL.createObjectURL(file)
-      setSource({ data: file, url: url })
+    try {
+      const file = event.target.files[0]
+      const sizeInBytes = file.size
+      const sizeInMB = sizeInBytes / (1024 * 1024)
+      if (sizeInMB > 400) {
+        alert.error('Dung lượng video quá lớn video chỉ được lưu dưới 400MB')
+      } else {
+        const url = URL.createObjectURL(file)
+        setSource({ data: file, url: url })
+      }
+    } catch (error) {
+      alert.waring('Thao của bạn quá nhanh video chưa load kịp')
     }
   }
   // kéo thả cái video
   const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0]
-    const sizeInBytes = file.size
-    const sizeInMB = sizeInBytes / (1024 * 1024)
-    if (sizeInMB > 400) {
-      alert.error('Dung lượng video quá lớn video chỉ được lưu dưới 400MB')
-    } else {
-      const url = URL.createObjectURL(file)
-      setSource({ data: file, url: url })
+    try {
+      const file = acceptedFiles[0]
+      const sizeInBytes = file.size
+      const sizeInMB = sizeInBytes / (1024 * 1024)
+      if (sizeInMB > 400) {
+        alert.error('Dung lượng video quá lớn video chỉ được lưu dưới 400MB')
+      } else {
+        const url = URL.createObjectURL(file)
+        setSource({ data: file, url: url })
+      }
+    } catch (error) {
+      alert.waring('Thao của bạn quá nhanh video chưa load kiệp')
     }
   }, [])
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({ onDrop })
   //kéo thả video
 
-  function DeleteVideoChoise() {
-    setSource({ data: '', url: 'null' })
+  const DeleteVideoChoise = () => {
+    setFileInputKey(Date.now())
+    setSource({ data: '', url: '' })
   }
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList)
@@ -301,13 +310,10 @@ const EditPost = () => {
       })
       if (source.data !== '') {
         formData.append('videoFile', source.data)
-        formData.append('video', null)
-      } else if (source.url !== '' && source.url.includes('firebasestorage')) {
-        formData.append('videoFile', null)
-        formData.append('video', source.url)
-      } else if (source.data === '') {
-        formData.append('video', null)
-        formData.append('videoFile', null)
+      } else {
+        if (source.url.includes('firebasestorage')) {
+          formData.append('video', source.url)
+        }
       }
       dispatch(editPost(token, slug, formData))
     }
@@ -851,6 +857,7 @@ const EditPost = () => {
                         type='file'
                         onChange={handleFileChange}
                         accept='.mov,.mp4'
+                        key={fileInputKey}
                       />
                       {isDragActive ? (
                         <div className='text-success text-center'>
@@ -879,7 +886,7 @@ const EditPost = () => {
                     >
                       Xoá Video
                     </button>
-                    {source.url !== 'null' ? (
+                    {source.url !== '' ? (
                       <video
                         className='VideoInput_video'
                         width='100%'
