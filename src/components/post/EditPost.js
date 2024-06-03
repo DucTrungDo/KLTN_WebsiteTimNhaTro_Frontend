@@ -886,7 +886,7 @@ const EditPost = () => {
                     >
                       Xoá Video
                     </button>
-                    {source.url !== '' ? (
+                    {source.url !== '' && source.url !== undefined ? (
                       <video
                         className='VideoInput_video'
                         width='100%'

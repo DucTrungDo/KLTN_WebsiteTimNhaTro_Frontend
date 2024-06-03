@@ -259,7 +259,7 @@ const PostManagement = () => {
                 className='me-2 align-self-center'
                 icon={faGlobe}
               />
-              Trang đăng tin
+              Trang tin đăng
               <FontAwesomeIcon
                 className='ms-2 align-self-center'
                 icon={faArrowLeft}
@@ -584,70 +584,9 @@ const PostManagement = () => {
                                 <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
                               </svg>
                             </svg>{' '}
-                            Xem chi tiết
+                            Sửa và kiểm duyệt tin
                           </button>
 
-                          <a href='' className='btn btn-sm'>
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='24'
-                              height='24'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              strokeWidth='2'
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              className='feather feather-eye-off'
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='24'
-                                height='24'
-                                viewBox='0 0 24 24'
-                                fill='none'
-                                stroke='currentColor'
-                                strokeWidth='2'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                className='feather feather-star'
-                              >
-                                <polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-                              </svg>
-                            </svg>{' '}
-                            Nâng cấp tin
-                          </a>
-                          <a href='' className='btn btn-sm'>
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='24'
-                              height='24'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              strokeWidth='2'
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              className='feather feather-eye-off'
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='24'
-                                height='24'
-                                viewBox='0 0 24 24'
-                                fill='none'
-                                stroke='currentColor'
-                                strokeWidth='2'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                className='feather feather-plus'
-                              >
-                                <line x1='12' y1='5' x2='12' y2='19'></line>
-                                <line x1='5' y1='12' x2='19' y2='12'></line>
-                              </svg>
-                            </svg>{' '}
-                            Gia hạn
-                          </a>
                           <button
                             className='btn btn-sm '
                             onClick={() => {
