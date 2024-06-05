@@ -23,7 +23,7 @@ export const provinceReducer = (state = { provinces: [] }, action) => {
     case PROVINCE_SUCCESS:
       return {
         loading: false,
-        provinces: action.payload.results,
+        provinces: action.payload.data,
       }
 
     case PROVINCE_FAIL:
@@ -47,7 +47,7 @@ export const districtReducer = (state = { districts: [] }, action) => {
     case PROVINCE_DISTRICT_SUCCESS:
       return {
         loading: false,
-        districts: action.payload.results,
+        districts: action.payload.data,
       }
 
     case PROVINCE_DISTRICT_FAIL:
@@ -71,7 +71,7 @@ export const wardReducer = (state = { wards: [] }, action) => {
     case PROVINCE_DISTRICT_WARD_SUCCESS:
       return {
         loading: false,
-        wards: action.payload.results,
+        wards: action.payload.data,
       }
 
     case PROVINCE_DISTRICT_WARD_FAIL:

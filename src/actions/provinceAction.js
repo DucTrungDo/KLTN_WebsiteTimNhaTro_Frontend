@@ -26,7 +26,7 @@ export const getProvince = () => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      'https://vapi.vnappmob.com/api/province',
+      'https://esgoo.net/api-tinhthanh/1/0.htm',
       config
     )
 
@@ -52,7 +52,7 @@ export const getdistrict = (province_id) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://vapi.vnappmob.com/api/province/district/${province_id}`,
+      `https://esgoo.net/api-tinhthanh/2/${province_id}.htm`,
       config
     )
 
@@ -78,7 +78,7 @@ export const getWard = (district_id) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://vapi.vnappmob.com/api/province/ward/${district_id}`,
+      `https://esgoo.net/api-tinhthanh/3/${district_id}.htm`,
       config
     )
 
