@@ -279,7 +279,7 @@ const AddNewPost = () => {
                         value={province}
                         onChange={(e) => setProvince(e.target.value)}
                       >
-                        <option value=''>-- Chọn Tỉnh/TP --</option>
+                        <option value=''>--Chọn Tỉnh/TP--</option>
                         {provinces &&
                           provinces.map((location) => (
                             <option value={location.id}>
@@ -305,7 +305,7 @@ const AddNewPost = () => {
                         value={district}
                         onChange={(e) => setDistrict(e.target.value)}
                       >
-                        <option value=''>chọn quận huyện</option>
+                        <option value=''>--Chọn Quận/Huyện--</option>
                         {districts &&
                           districts.map((district) => (
                             <option value={district.id}>
@@ -329,7 +329,7 @@ const AddNewPost = () => {
                         value={ward}
                         onChange={(e) => setWard(e.target.value)}
                       >
-                        <option value=''>chọn phường xã</option>
+                        <option value=''>--Chọn Phường/Xã--</option>
                         {wards &&
                           wards.map((ward) => (
                             <option value={ward.id}>{ward.full_name}</option>

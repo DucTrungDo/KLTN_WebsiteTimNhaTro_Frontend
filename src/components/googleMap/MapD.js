@@ -118,7 +118,7 @@ function MapD({ direction, useDirect }) {
 
         <div className='d-grid gap-2'>
           <Button onClick={calculateRoute} variant='primary' size='ms'>
-            Tìm Kiếm
+            Tìm đường
           </Button>
         </div>
       </div>

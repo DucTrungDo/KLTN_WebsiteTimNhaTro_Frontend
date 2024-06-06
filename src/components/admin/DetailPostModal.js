@@ -404,7 +404,7 @@ const DetailPostModal = ({
       if (source.data !== '') {
         formData.append('videoFile', source.data)
       } else {
-        if (source.url.includes('firebasestorage')) {
+        if (source.url && source.url.includes('firebasestorage')) {
           formData.append('video', source.url)
         }
       }

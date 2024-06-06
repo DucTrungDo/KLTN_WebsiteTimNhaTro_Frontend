@@ -106,10 +106,38 @@ const Header = () => {
                         </Link>
                         <Link
                           className='dropdown-item'
-                          to='/user/post-management'
+                          to={
+                            user.isModerator
+                              ? '/moderator/post-moderation'
+                              : user.isAdmin
+                              ? '/admin/post-management'
+                              : '/user/post-management'
+                          }
                         >
                           Quản lý tin đăng
                         </Link>
+                        {/* {user.isModerator ? (
+                          <Link
+                            className='dropdown-item'
+                            to='/moderator/post-moderation'
+                          >
+                            Kiểm duyệt bài đăng
+                          </Link>
+                        ) : user.isAdmin ? (
+                          <Link
+                            className='dropdown-item'
+                            to='/admin/post-management'
+                          >
+                            Quản lý tin đăng
+                          </Link>
+                        ) : (
+                          <Link
+                            className='dropdown-item'
+                            to='/user/post-management'
+                          >
+                            Quản lý tin đăng
+                          </Link>
+                        )} */}
                         {user.isModerator ? (
                           <Link
                             className='dropdown-item'

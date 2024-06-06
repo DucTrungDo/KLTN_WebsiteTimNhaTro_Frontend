@@ -313,7 +313,7 @@ const EditPost = () => {
       if (source.data !== '') {
         formData.append('videoFile', source.data)
       } else {
-        if (source.url.includes('firebasestorage')) {
+        if (source.url && source.url.includes('firebasestorage')) {
           formData.append('video', source.url)
         }
       }
@@ -370,7 +370,7 @@ const EditPost = () => {
                       value={provinceName}
                       onChange={(e) => setProvinceName(e.target.value)}
                     >
-                      <option value=''>-- Chọn Tỉnh/TP --</option>
+                      <option value=''>--Chọn Tỉnh/TP--</option>
 
                       {provinces &&
                         provinces.map((location) => (
@@ -397,7 +397,7 @@ const EditPost = () => {
                       value={districtName}
                       onChange={(e) => setDistrictName(e.target.value)}
                     >
-                      <option value=''>chọn quận huyện</option>
+                      <option value=''>--Chọn Quận/Huyện--</option>
                       {districts &&
                         districts.map((district) => (
                           <option key={district.id} value={district.full_name}>
@@ -421,7 +421,7 @@ const EditPost = () => {
                       value={wardName}
                       onChange={(e) => setWardName(e.target.value)}
                     >
-                      <option value=''>chọn phường xã</option>
+                      <option value=''>--Chọn Phường/Xã--</option>
                       {wards &&
                         wards.map((ward) => (
                           <option key={ward.id} value={ward.full_name}>
