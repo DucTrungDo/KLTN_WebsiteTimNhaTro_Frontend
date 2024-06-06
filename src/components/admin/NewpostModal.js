@@ -98,28 +98,30 @@ const NewpostModal = ({ user, setShowModal }) => {
 
   async function fetchData(change) {
     try {
-      const response = await axios.get('https://vapi.vnappmob.com/api/province')
-      setProvinces(response.data.results)
-      const keypro = await response.data.results.find(
-        (location) => location.province_name === provinceName
-      ).province_id
-      const response2 = await axios.get(
-        `https://vapi.vnappmob.com/api/province/district/${keypro}`
+      const response = await axios.get(
+        'https://esgoo.net/api-tinhthanh/1/0.htm'
       )
-      setDistricts(response2.data.results)
+      setProvinces(response.data.data)
+      const keypro = await response.data.data.find(
+        (location) => location.full_name === provinceName
+      ).id
+      const response2 = await axios.get(
+        `https://esgoo.net/api-tinhthanh/2/${keypro}.htm`
+      )
+      setDistricts(response2.data.data)
 
       if (change === 'provinceChange') {
         setDistrictName('')
         setWardName('')
         setStreet('')
       }
-      const keydis = await response2.data.results.find(
-        (location) => location.district_name === districtName
-      ).district_id
+      const keydis = await response2.data.data.find(
+        (location) => location.full_name === districtName
+      ).id
       const response3 = await axios.get(
-        ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
+        ` https://esgoo.net/api-tinhthanh/3/${keydis}.htm`
       )
-      setWards(response3.data.results)
+      setWards(response3.data.data)
       if (change === 'districtChange') {
         setWardName('')
         setStreet('')
@@ -364,12 +366,12 @@ const NewpostModal = ({ user, setShowModal }) => {
                 <div className='row mt-3'>
                   <div className='col-md-3'>
                     <div className='form-group'>
-                      <label htmlFor='province_id' className='col-form-label'>
+                      <label htmlFor='id' className='col-form-label'>
                         Tỉnh/Thành phố
                       </label>
                       <select
-                        id='province_id'
-                        name='province_id'
+                        id='id'
+                        name='id'
                         className='form-control js-select-tinhthanhpho select2-hidden-accessible'
                         required=''
                         data-msg-required='Chưa chọn Tỉnh/TP'
@@ -383,10 +385,10 @@ const NewpostModal = ({ user, setShowModal }) => {
                         {provinces &&
                           provinces.map((location) => (
                             <option
-                              key={location.province_id}
-                              value={location.province_name}
+                              key={location.id}
+                              value={location.full_name}
                             >
-                              {location.province_name}
+                              {location.full_name}
                             </option>
                           ))}
                       </select>
@@ -394,12 +396,12 @@ const NewpostModal = ({ user, setShowModal }) => {
                   </div>
                   <div className='col-md-3'>
                     <div className='form-group'>
-                      <label className='col-form-label' htmlFor='district_id'>
+                      <label className='col-form-label' htmlFor='id'>
                         Quận/Huyện
                       </label>
                       <select
-                        name='district_id'
-                        id='district_id'
+                        name='id'
+                        id='id'
                         className='form-control js-select-quanhuyen select2-hidden-accessible'
                         required=''
                         data-msg-required='Chưa chọn Quận/Huyện'
@@ -412,10 +414,10 @@ const NewpostModal = ({ user, setShowModal }) => {
                         {districts &&
                           districts.map((district) => (
                             <option
-                              key={district.district_id}
-                              value={district.district_name}
+                              key={district.id}
+                              value={district.full_name}
                             >
-                              {district.district_name}
+                              {district.full_name}
                             </option>
                           ))}
                       </select>
@@ -438,8 +440,8 @@ const NewpostModal = ({ user, setShowModal }) => {
                         <option value=''>chọn phường xã</option>
                         {wards &&
                           wards.map((ward) => (
-                            <option key={ward.ward_id} value={ward.ward_name}>
-                              {ward.ward_name}
+                            <option key={ward.id} value={ward.full_name}>
+                              {ward.full_name}
                             </option>
                           ))}
                       </select>
@@ -526,8 +528,8 @@ const NewpostModal = ({ user, setShowModal }) => {
                   </label>
                   <div className='col-md-6'>
                     <select
-                      id='province_id'
-                      name='province_id'
+                      id='id'
+                      name='id'
                       className='form-control js-select-tinhthanhpho select2-hidden-accessible'
                       required=''
                       data-msg-required='Chưa chọn Tỉnh/TP'

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { editPost } from '../../actions/postActions'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
-import { getPostDetails, clearErrors } from '../../actions/postActions'
+import { getUserPostDetails, clearErrors } from '../../actions/postActions'
 import { getCategories } from '../../actions/categoryActions'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,6 +20,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons'
 import Loader from '../layout/Loader'
 const EditPost = () => {
+  const token = Cookies.get('accessToken')
   const navigate = useNavigate()
   const alert = useAlert()
   const { slug } = useParams()
@@ -77,24 +78,27 @@ const EditPost = () => {
 
   async function fetchDataInitialization() {
     try {
-      const response = await axios.get('https://vapi.vnappmob.com/api/province')
-      setProvinces(response.data.results)
+      const response = await axios.get(
+        'https://esgoo.net/api-tinhthanh/1/0.htm'
+      )
+      setProvinces(response.data.data)
       setProvinceName(post.address.city)
-      const keypro = await response.data.results.find(
-        (location) => location.province_name === post.address.city
-      ).province_id
+      const keypro = await response.data.data.find(
+        (location) => location.full_name === post.address.city
+      ).id
+
       const response2 = await axios.get(
-        `https://vapi.vnappmob.com/api/province/district/${keypro}`
+        `https://esgoo.net/api-tinhthanh/2/${keypro}.htm`
       )
-      setDistricts(response2.data.results)
+      setDistricts(response2.data.data)
       setDistrictName(post.address.district)
-      const keydis = await response2.data.results.find(
-        (location) => location.district_name === post.address.district
-      ).district_id
+      const keydis = await response2.data.data.find(
+        (location) => location.full_name === post.address.district
+      ).id
       const response3 = await axios.get(
-        ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
+        ` https://esgoo.net/api-tinhthanh/3/${keydis}.htm`
       )
-      setWards(response3.data.results)
+      setWards(response3.data.data)
       setWardName(post.address.ward)
       setStreet(post.address.street)
       setKich(1)
@@ -104,28 +108,29 @@ const EditPost = () => {
   }
   async function fetchData(change) {
     try {
-      const response = await axios.get('https://vapi.vnappmob.com/api/province')
-      setProvinces(response.data.results)
-      const keypro = await response.data.results.find(
-        (location) => location.province_name === provinceName
-      ).province_id
-      const response2 = await axios.get(
-        `https://vapi.vnappmob.com/api/province/district/${keypro}`
+      const response = await axios.get(
+        'https://esgoo.net/api-tinhthanh/1/0.htm'
       )
-      setDistricts(response2.data.results)
-
+      setProvinces(response.data.data)
+      const keypro = await response.data.data.find(
+        (location) => location.full_name === provinceName
+      ).id
+      const response2 = await axios.get(
+        `https://esgoo.net/api-tinhthanh/2/${keypro}.htm`
+      )
+      setDistricts(response2.data.data)
       if (change === 'provinceChange') {
         setDistrictName('')
         setWardName('')
         setStreet('')
       }
-      const keydis = await response2.data.results.find(
-        (location) => location.district_name === districtName
-      ).district_id
+      const keydis = await response2.data.data.find(
+        (location) => location.full_name === districtName
+      ).id
       const response3 = await axios.get(
-        ` https://vapi.vnappmob.com/api/province/ward/${keydis}`
+        `https://esgoo.net/api-tinhthanh/3/${keydis}.htm`
       )
-      setWards(response3.data.results)
+      setWards(response3.data.data)
       if (change === 'districtChange') {
         setWardName('')
         setStreet('')
@@ -139,7 +144,7 @@ const EditPost = () => {
   }
   useEffect(() => {
     dispatch(getCategories())
-    dispatch(getPostDetails(slug))
+    dispatch(getUserPostDetails(slug, token))
   }, [dispatch, navigate, alert, error])
   useEffect(() => {
     setCategory(post.categoryId?._id)
@@ -170,7 +175,6 @@ const EditPost = () => {
       data: '',
       url: post.video,
     })
-
     setAcceptDataCount(acceptDataCount + 1)
   }, [post])
 
@@ -270,7 +274,6 @@ const EditPost = () => {
   }
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList)
-    console.log(imageList)
   }
   // images and video functions
   const submitHandler = (e) => {
@@ -289,7 +292,6 @@ const EditPost = () => {
     if (isEmpty || price <= 100000 || area <= 10) {
       alert.error('thiếu thông tin')
     } else {
-      const token = Cookies.get('accessToken')
       const formData = new FormData()
       formData.append('address[city]', address.city)
       formData.append('address[district]', address.district)
@@ -372,11 +374,8 @@ const EditPost = () => {
 
                       {provinces &&
                         provinces.map((location) => (
-                          <option
-                            key={location.province_id}
-                            value={location.province_name}
-                          >
-                            {location.province_name}
+                          <option key={location.id} value={location.full_name}>
+                            {location.full_name}
                           </option>
                         ))}
                     </select>
@@ -401,11 +400,8 @@ const EditPost = () => {
                       <option value=''>chọn quận huyện</option>
                       {districts &&
                         districts.map((district) => (
-                          <option
-                            key={district.district_id}
-                            value={district.district_name}
-                          >
-                            {district.district_name}
+                          <option key={district.id} value={district.full_name}>
+                            {district.full_name}
                           </option>
                         ))}
                     </select>
@@ -428,8 +424,8 @@ const EditPost = () => {
                       <option value=''>chọn phường xã</option>
                       {wards &&
                         wards.map((ward) => (
-                          <option key={ward.ward_id} value={ward.ward_name}>
-                            {ward.ward_name}
+                          <option key={ward.id} value={ward.full_name}>
+                            {ward.full_name}
                           </option>
                         ))}
                     </select>

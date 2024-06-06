@@ -109,8 +109,8 @@ const AddNewPost = () => {
     if (provinces !== undefined) {
       if (provinces.length !== 0 && province !== '') {
         const proName = provinces.find(
-          (provinces) => provinces.province_id === province
-        ).province_name
+          (provinces) => provinces.id === province
+        ).full_name
         setProvinceName(proName)
         setAddressAbsolute(proName)
       }
@@ -122,8 +122,8 @@ const AddNewPost = () => {
     setStreet('')
     if (districts.length !== 0 && district !== '') {
       const disName = districts.find(
-        (districts) => districts.district_id === district
-      ).district_name
+        (districts) => districts.id === district
+      ).full_name
       setDistrictName(disName)
       setAddressAbsolute(provinceName + '/' + disName)
     }
@@ -131,7 +131,7 @@ const AddNewPost = () => {
   useEffect(() => {
     setStreet('')
     if (districts.length !== 0 && ward !== '') {
-      const warName = wards.find((wards) => wards.ward_id === ward).ward_name
+      const warName = wards.find((wards) => wards.id === ward).full_name
       setWardName(warName)
       setAddressAbsolute(provinceName + '/' + districtName + '/' + warName)
     }
@@ -167,6 +167,7 @@ const AddNewPost = () => {
       }
     }
   }, [street])
+
   const { provinces } = useSelector((state) => state.province)
   const { districts } = useSelector((state) => state.district)
   const { wards } = useSelector((state) => state.ward)
@@ -281,8 +282,8 @@ const AddNewPost = () => {
                         <option value=''>-- Chọn Tỉnh/TP --</option>
                         {provinces &&
                           provinces.map((location) => (
-                            <option value={location.province_id}>
-                              {location.province_name}
+                            <option value={location.id}>
+                              {location.full_name}
                             </option>
                           ))}
                       </select>
@@ -307,8 +308,8 @@ const AddNewPost = () => {
                         <option value=''>chọn quận huyện</option>
                         {districts &&
                           districts.map((district) => (
-                            <option value={district.district_id}>
-                              {district.district_name}
+                            <option value={district.id}>
+                              {district.full_name}
                             </option>
                           ))}
                       </select>
@@ -331,9 +332,7 @@ const AddNewPost = () => {
                         <option value=''>chọn phường xã</option>
                         {wards &&
                           wards.map((ward) => (
-                            <option value={ward.ward_id}>
-                              {ward.ward_name}
-                            </option>
+                            <option value={ward.id}>{ward.full_name}</option>
                           ))}
                       </select>
                     </div>
