@@ -1085,6 +1085,7 @@ const DetailPostModal = ({
                     ? 'form-group row mt-5'
                     : 'form-group row mt-5 visually-hidden'
                 }
+                hidden={whatList === 'listmoderate' ? true : false}
               >
                 <div className='col-md-4'>
                   <button
@@ -1103,70 +1104,72 @@ const DetailPostModal = ({
                   </Alert>
                 </div>
               </div>
-              <div
-                className='Approve'
-                hidden={post.isApproved || post.isViolated ? true : false}
-              >
-                <div className='form-group row'>
-                  <label
-                    htmlFor='post_warning'
-                    className='col-md-12 col-form-label'
-                  >
-                    Từ chối duyệt {'('}nếu có{')'}:
-                  </label>
-                  <div className='col-md-12 d-flex align-items-center'>
-                    <textarea
-                      className='form-control'
-                      name='noi_dung'
-                      id='post_warning'
-                      placeholder='Lý do từ chối duyệt'
-                      rows='5'
-                      required=''
-                      value={warningComment}
-                      onChange={(e) => setWarningComment(e.target.value)}
-                    ></textarea>
-                    <div className='col-md-2 ms-3'>
-                      <button
-                        onClick={() => {
-                          reportPostHandler()
-                        }}
-                        data-bs-dismiss='modal'
-                        aria-label='Close'
-                        className='btn btn-warning btn-lg btn-block'
-                        disabled={moderatorPostLoading ? true : false}
-                      >
-                        Từ chối duyệt
-                      </button>
+              <div hidden={whatList === 'listallpost' ? true : false}>
+                <div
+                  className='Approve'
+                  hidden={post.isApproved || post.isViolated ? true : false}
+                >
+                  <div className='form-group row'>
+                    <label
+                      htmlFor='post_warning'
+                      className='col-md-12 col-form-label'
+                    >
+                      Từ chối duyệt {'('}nếu có{')'}:
+                    </label>
+                    <div className='col-md-12 d-flex align-items-center'>
+                      <textarea
+                        className='form-control'
+                        name='noi_dung'
+                        id='post_warning'
+                        placeholder='Lý do từ chối duyệt'
+                        rows='5'
+                        required=''
+                        value={warningComment}
+                        onChange={(e) => setWarningComment(e.target.value)}
+                      ></textarea>
+                      <div className='col-md-2 ms-3'>
+                        <button
+                          onClick={() => {
+                            reportPostHandler()
+                          }}
+                          data-bs-dismiss='modal'
+                          aria-label='Close'
+                          className='btn btn-warning btn-lg btn-block'
+                          disabled={moderatorPostLoading ? true : false}
+                        >
+                          Từ chối duyệt
+                        </button>
+                      </div>
                     </div>
                   </div>
+                  <div className='col-md-4'>
+                    <button
+                      onClick={() => {
+                        approvePostHandler()
+                      }}
+                      data-bs-dismiss='modal'
+                      aria-label='Close'
+                      className='btn btn-success mt-4 btn-lg btn-block'
+                      disabled={moderatorPostLoading ? true : false}
+                    >
+                      Duyệt tin
+                    </button>
+                  </div>
                 </div>
-                <div className='col-md-4'>
-                  <button
-                    onClick={() => {
-                      approvePostHandler()
-                    }}
-                    data-bs-dismiss='modal'
-                    aria-label='Close'
-                    className='btn btn-success mt-4 btn-lg btn-block'
-                    disabled={moderatorPostLoading ? true : false}
-                  >
-                    Duyệt tin
-                  </button>
-                </div>
-              </div>
-              {post.isApproved ? (
-                <Alert show={true} variant='success'>
-                  <Alert.Heading>Bài đang đã được phê duyệt</Alert.Heading>
-                </Alert>
-              ) : (
-                post.isViolated && (
-                  <Alert show={true} variant='danger'>
-                    <Alert.Heading>
-                      Bài đăng vi phạm với nội dung: {post.violation}{' '}
-                    </Alert.Heading>
+                {post.isApproved ? (
+                  <Alert show={true} variant='success'>
+                    <Alert.Heading>Bài đang đã được phê duyệt</Alert.Heading>
                   </Alert>
-                )
-              )}
+                ) : (
+                  post.isViolated && (
+                    <Alert show={true} variant='danger'>
+                      <Alert.Heading>
+                        Bài đăng vi phạm với nội dung: {post.violation}{' '}
+                      </Alert.Heading>
+                    </Alert>
+                  )
+                )}
+              </div>
             </div>
             <div className='col-md-4'>
               <MapD direction={addressAbsolute} useDirect={false} />

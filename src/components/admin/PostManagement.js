@@ -578,7 +578,9 @@ const PostManagement = () => {
                                 <polygon points='16 3 21 8 8 21 3 21 3 16 16 3'></polygon>
                               </svg>
                             </svg>{' '}
-                            Sửa và kiểm duyệt tin
+                            {whatList === 'listallpost'
+                              ? 'Sửa Tin'
+                              : 'Kiểm duyệt tin'}
                           </button>
 
                           <button
