@@ -176,7 +176,7 @@ const DetailPostModal = ({
       setProvinces(response.data.data)
       setProvinceName(post.address.city)
       const keypro = await response.data.data.find(
-        (location) => location.name === post.address.city
+        (location) => location.full_name === post.address.city
       ).id
       const response2 = await axios.get(
         `https://esgoo.net/api-tinhthanh/2/${keypro}.htm`
@@ -184,7 +184,7 @@ const DetailPostModal = ({
       setDistricts(response2.data.data)
       setDistrictName(post.address.district)
       const keydis = await response2.data.data.find(
-        (location) => location.name === post.address.district
+        (location) => location.full_name === post.address.district
       ).id
       const response3 = await axios.get(
         ` https://esgoo.net/api-tinhthanh/3/${keydis}.htm`
@@ -205,7 +205,7 @@ const DetailPostModal = ({
       )
       setProvinces(response.data.data)
       const keypro = await response.data.data.find(
-        (location) => location.name === provinceName
+        (location) => location.full_name === provinceName
       ).id
       const response2 = await axios.get(
         `https://esgoo.net/api-tinhthanh/2/${keypro}.htm`
@@ -218,7 +218,7 @@ const DetailPostModal = ({
         setStreet('')
       }
       const keydis = await response2.data.data.find(
-        (location) => location.name === districtName
+        (location) => location.full_name === districtName
       ).id
       const response3 = await axios.get(
         ` https://esgoo.net/api-tinhthanh/3/${keydis}.htm`
@@ -483,8 +483,8 @@ const DetailPostModal = ({
 
                       {provinces &&
                         provinces.map((location) => (
-                          <option key={location.id} value={location.name}>
-                            {location.name}
+                          <option key={location.id} value={location.full_name}>
+                            {location.full_name}
                           </option>
                         ))}
                     </select>
@@ -510,8 +510,8 @@ const DetailPostModal = ({
                       <option value=''>chọn quận huyện</option>
                       {districts &&
                         districts.map((district) => (
-                          <option key={district.id} value={district.name}>
-                            {district.name}
+                          <option key={district.id} value={district.full_name}>
+                            {district.full_name}
                           </option>
                         ))}
                     </select>
@@ -535,8 +535,8 @@ const DetailPostModal = ({
                       <option value=''>chọn phường xã</option>
                       {wards &&
                         wards.map((ward) => (
-                          <option key={ward.id} value={ward.name}>
-                            {ward.name}
+                          <option key={ward.id} value={ward.full_name}>
+                            {ward.full_name}
                           </option>
                         ))}
                     </select>

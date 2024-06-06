@@ -91,7 +91,7 @@ const PostManagement = () => {
       filterData.province !== ''
     ) {
       const keypro = provinces.find(
-        (location) => location.name === filterData.province
+        (location) => location.full_name === filterData.province
       ).id
       dispatch(getdistrict(keypro))
     }
@@ -113,7 +113,7 @@ const PostManagement = () => {
       filterData.district !== ''
     ) {
       const keydis = districts.find(
-        (location) => location.name === filterData.district
+        (location) => location.full_name === filterData.district
       ).id
       dispatch(getWard(keydis))
     }
@@ -310,8 +310,8 @@ const PostManagement = () => {
               <option value=''>--Chọn Tỉnh/TP--</option>
               {provinces &&
                 provinces.map((location) => (
-                  <option key={location.id} value={location.name}>
-                    {location.name}
+                  <option key={location.id} value={location.full_name}>
+                    {location.full_name}
                   </option>
                 ))}
             </select>
@@ -331,8 +331,8 @@ const PostManagement = () => {
               <option value=''>--Chọn Quận/Huyện--</option>
               {districts &&
                 districts.map((district) => (
-                  <option key={district.id} value={district.name}>
-                    {district.name}
+                  <option key={district.id} value={district.full_name}>
+                    {district.full_name}
                   </option>
                 ))}
             </select>
@@ -352,8 +352,8 @@ const PostManagement = () => {
               <option value=''>--Chọn Phường/Xã--</option>
               {wards &&
                 wards.map((ward) => (
-                  <option key={ward.id} value={ward.name}>
-                    {ward.name}
+                  <option key={ward.id} value={ward.full_name}>
+                    {ward.full_name}
                   </option>
                 ))}
             </select>
