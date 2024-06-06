@@ -63,7 +63,7 @@ const FavoritePost = () => {
         className='navbar navbar-light mb-3 text-white'
         style={{ backgroundColor: '#1266dd' }}
       >
-        <div className='container'>
+        <div className='container d-flex flex-nowrap'>
           <Link className='navbar-brand fs-5 ms-4' to='/'>
             Trang chủ
           </Link>

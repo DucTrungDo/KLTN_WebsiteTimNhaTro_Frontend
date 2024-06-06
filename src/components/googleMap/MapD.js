@@ -99,6 +99,7 @@ function MapD({ direction, useDirect }) {
               aria-label='DisTance'
               aria-describedby='basic-addon1'
               defaultValue={distance}
+              readOnly
             />
           </InputGroup>
         </div>
@@ -110,6 +111,7 @@ function MapD({ direction, useDirect }) {
               aria-label='Duration'
               aria-describedby='basic-addon1'
               defaultValue={duration}
+              readOnly
             />
           </InputGroup>
         </div>

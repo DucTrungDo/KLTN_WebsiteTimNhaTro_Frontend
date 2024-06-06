@@ -265,7 +265,7 @@ const SearchFilter = ({ setFilterData }) => {
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     >
-                      <option value=''>chuyên mục</option>
+                      <option value=''>Chọn chuyên mục</option>
                       {categories.length !== 0
                         ? categories.cates.map((category) => (
                             <option key={category._id} value={category._id}>

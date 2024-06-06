@@ -103,9 +103,14 @@ const Home = () => {
             <div className='tab-content'>
               <div id='tab-1' className=''>
                 <div className='row g-4'>
-                  {posts.posts?.map((post, index) => (
-                    <Post key={index} post={post} />
-                  ))}
+                  {posts.posts?.length === 0 ? (
+                    <h4>Không tìm thấy bài đăng nào.</h4>
+                  ) : (
+                    posts.posts?.map((post, index) => (
+                      <Post key={index} post={post} />
+                    ))
+                  )}
+
                   <div
                     className='col-12 text-center wow fadeInUp'
                     data-wow-delay='0.1s'
