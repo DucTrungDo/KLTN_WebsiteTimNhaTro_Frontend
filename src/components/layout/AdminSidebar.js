@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFileLines,
   faFile,
-  faComment,
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faArrowRightFromBracket,
@@ -110,12 +109,6 @@ const AdminSidebar = () => {
               >
                 <FontAwesomeIcon icon={faFile} className='me-2' />
                 Bảng giá dịch vụ
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to='/contact' className='nav-link link-dark'>
-                <FontAwesomeIcon icon={faComment} className='me-2' />
-                Liên hệ
               </NavLink>
             </li>
             <li>

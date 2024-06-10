@@ -42,6 +42,7 @@ const PostManagement = () => {
     tab: '',
     moderatedFilter: '',
   })
+  const [postSlug, setPostSlug] = useState('')
   const { loading, posts, error } = useSelector((state) => state.posts)
   const { isDeleted, postLoading, postError } = useSelector(
     (state) => state.userPost
@@ -52,18 +53,6 @@ const PostManagement = () => {
   const { categories } = useSelector((state) => state.categories)
 
   useEffect(() => {
-    if (error || postError) {
-      alert.error(error)
-      dispatch(clearErrors())
-    }
-    if (isDeleted) {
-      alert.success('Xoá thành công')
-      dispatch({
-        type: DELETE_ADMIN_POST_RESET,
-      })
-    }
-  }, [dispatch, alert, error, isDeleted])
-  useEffect(() => {
     if (whatList === 'listallpost') {
       dispatch(getPostsAdmin(token, 1, filterData))
     } else if (whatList === 'listmoderate') {
@@ -72,7 +61,23 @@ const PostManagement = () => {
     setCurrentPage(1)
     dispatch(getProvince())
     dispatch(getCategories())
-  }, [dispatch])
+
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+    if (postError) {
+      alert.error(postError)
+      dispatch(clearErrors())
+    }
+    if (isDeleted) {
+      alert.success('Xoá thành công')
+      dispatch({
+        type: DELETE_ADMIN_POST_RESET,
+      })
+    }
+  }, [dispatch, alert, error, postError, isDeleted])
+
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
@@ -84,6 +89,7 @@ const PostManagement = () => {
       )
     }
   }, [posts])
+
   useEffect(() => {
     if (
       provinces.length !== 0 &&
@@ -140,7 +146,7 @@ const PostManagement = () => {
   async function DeletePost(slug) {
     dispatch(deleteAdminPost(token, slug))
   }
-  async function ChoisePage(indexPageCurrent) {
+  async function ChoosePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
     if (whatList === 'listallpost') {
       dispatch(getPostsAdmin(token, indexPageCurrent, filterData))
@@ -159,7 +165,7 @@ const PostManagement = () => {
     } else {
       setCurrentPage(currentPage - 1)
       if (whatList === 'listallpost') {
-        dispatch(getPostsAdmin(token, currentPage + 1, filterData))
+        dispatch(getPostsAdmin(token, currentPage - 1, filterData))
       } else {
         dispatch(getPostsAdminModerate(token, currentPage - 1, filterData))
       }
@@ -584,10 +590,12 @@ const PostManagement = () => {
                           </button>
 
                           <button
-                            className='btn btn-sm '
-                            onClick={() => {
-                              DeletePost(post.slug)
-                            }}
+                            className='btn btn-sm'
+                            type='button'
+                            data-bs-toggle='modal'
+                            data-bs-target='#deleteModal'
+                            onClick={() => setPostSlug(post.slug)}
+                            disabled={postLoading ? true : false}
                           >
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
@@ -606,7 +614,7 @@ const PostManagement = () => {
                               <line x1='10' y1='11' x2='10' y2='17'></line>
                               <line x1='14' y1='11' x2='14' y2='17'></line>
                             </svg>{' '}
-                            Xoá tin
+                            Xóa tin
                           </button>
                         </div>
                         <span
@@ -701,7 +709,7 @@ const PostManagement = () => {
                   >
                     <button
                       onClick={() => {
-                        ChoisePage(index + 1)
+                        ChoosePage(index + 1)
                       }}
                       className='page-link'
                     >
@@ -730,6 +738,49 @@ const PostManagement = () => {
           </div>
         </div>
       )}
+      <div
+        className='modal fade'
+        id='deleteModal'
+        tabIndex='-1'
+        aria-labelledby='deleteModalLabel'
+        aria-hidden='true'
+      >
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='deleteModalLabel'>
+                Xác nhận xóa
+              </h1>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              ></button>
+            </div>
+            <div className='modal-body'>Bạn có chắc là muốn xóa post chứ?</div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                className='btn btn-danger'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => DeletePost(postSlug)}
+                disabled={postLoading ? true : false}
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <Modal
         show={show}
         onHide={() => {

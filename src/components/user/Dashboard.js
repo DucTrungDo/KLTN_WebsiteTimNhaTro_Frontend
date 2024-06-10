@@ -102,7 +102,7 @@ const Dashboard = () => {
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
           <Link
-            className='list-group-item js-user-logout'
+            className='list-group-item'
             data-bs-toggle='modal'
             data-bs-target='#logoutModal'
           >

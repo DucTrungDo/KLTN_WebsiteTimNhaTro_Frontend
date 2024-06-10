@@ -130,6 +130,7 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case ADMIN_POST_DETAILS_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       }
 
@@ -211,12 +212,14 @@ export const userPostReducer = (state = {}, action) => {
     case DELETE_ADMIN_POST_FAIL:
       return {
         ...state,
+        postLoading: false,
         postError: action.payload,
       }
 
     case HIDE_USER_POST_FAIL:
       return {
         ...state,
+        postLoading: false,
         postError: action.payload,
       }
 
@@ -310,6 +313,7 @@ export const postEditReducer = (state = { post: {} }, action) => {
     case UPDATE_ADMIN_POST_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       }
 

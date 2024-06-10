@@ -438,7 +438,6 @@ export const deleteAdminPost = (token, slug) => async (dispatch) => {
 
     const { data } = await axios.delete(
       `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}`,
-      {},
       config
     )
 

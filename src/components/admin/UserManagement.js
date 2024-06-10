@@ -1,5 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import {
+  faEye,
+  faTrashCan,
+  faPenToSquare,
+} from '@fortawesome/free-regular-svg-icons'
 import { faLock, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +20,7 @@ import {
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import Loader from '../layout/Loader'
+import { format } from 'date-fns'
 import NewpostModal from './NewpostModal'
 import React, { useState, useEffect } from 'react'
 import { UPDATE_PROFILE_USER_ADMIN_RESET } from '../../constants/userConstants'
@@ -187,8 +192,8 @@ const UserManagement = () => {
                 value={statusGet}
                 onChange={(e) => setStatusGet(e.target.value)}
               >
-                <option value='allUser'>User đang hoạt động</option>
-                <option value='delete'>Thùng rác</option>
+                <option value='allUser'>Danh sách User</option>
+                <option value='delete'>Danh sách User bị xóa tạm thời</option>
                 <option value='moderator'>Danh sách Moderator</option>
               </select>
             </div>
@@ -211,7 +216,7 @@ const UserManagement = () => {
                       Quyền
                     </th>
                     <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
-                      Ngày bắt tạo
+                      Ngày tạo
                     </th>
                     <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
                       Ngày cập nhật
@@ -281,15 +286,27 @@ const UserManagement = () => {
                               : 'User'}
                           </p>
                         </td>
-                        <td>23/04/2024 21:26:13</td>
-                        <td>28/04/2024 21:26:13</td>
+                        <td>
+                          {format(user.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
+                        </td>
+                        <td>
+                          {format(user.updatedAt, 'HH:mm:ss - dd/MM/yyyy')}
+                        </td>
                         <td>
                           <div className='post_price'>
-                            {user.isVerified
-                              ? user.isLocked
-                                ? 'Bị khoá'
-                                : 'Đang hoạt động'
-                              : 'Chưa xác thực'}
+                            {user.isVerified ? (
+                              user.isLocked ? (
+                                <span className='text-danger'>Bị khoá</span>
+                              ) : (
+                                <span className='text-success'>
+                                  Đang hoạt động
+                                </span>
+                              )
+                            ) : (
+                              <span className='text-warning'>
+                                Chưa xác thực
+                              </span>
+                            )}
                           </div>
                         </td>
 
@@ -445,7 +462,10 @@ const UserManagement = () => {
                                 : 'btn btn-success btn-sm'
                             }
                           >
-                            <FontAwesomeIcon className='me-1 ' icon={faLock} />
+                            <FontAwesomeIcon
+                              className='me-1 '
+                              icon={faPenToSquare}
+                            />
                             Hỗ trợ đăng tin
                           </button>
                         </td>
@@ -701,15 +721,16 @@ const UserManagement = () => {
                         type='text'
                         className='form-control'
                         id='recipient-name'
-                        value={
+                        defaultValue={
                           userDetail.phone === undefined ? '' : userDetail.phone
                         }
-                        onChange={(e) =>
-                          setUserDetail((prevState) => ({
-                            ...prevState,
-                            phone: e.target.value,
-                          }))
-                        }
+                        // onChange={(e) =>
+                        //   setUserDetail((prevState) => ({
+                        //     ...prevState,
+                        //     phone: e.target.value,
+                        //   }))
+                        // }
+                        readOnly
                       />
                     </div>
                     <div className='mb-3'>
@@ -840,10 +861,11 @@ const UserManagement = () => {
                         defaultValue={
                           userDetail.isVerified
                             ? userDetail.isLocked
-                              ? 'bị khoá'
-                              : 'hoạt động'
-                            : 'Chưa sát thực'
+                              ? 'Bị khoá'
+                              : 'Đang hoạt động'
+                            : 'Chưa xác thực'
                         }
+                        readOnly
                       />
                     </div>
                   </form>
@@ -1034,7 +1056,7 @@ const UserManagement = () => {
               <div className='modal-content'>
                 <div className='modal-header'>
                   <h5 className='modal-title' id='exampleModalLabel'>
-                    Bạn Có Thật Sự Muốn Khoá tài Khoản
+                    Bạn có thật sự muốn khóa tài khoản?
                   </h5>
                   <button
                     type='button'
@@ -1068,7 +1090,7 @@ const UserManagement = () => {
                     className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
-                    Xác nhận Khoá
+                    Xác nhận khoá
                   </button>
                 </div>
               </div>
@@ -1085,7 +1107,7 @@ const UserManagement = () => {
               <div className='modal-content'>
                 <div className='modal-header'>
                   <h5 className='modal-title' id='exampleModalLabel'>
-                    Bạn có muốn mở khoá tài Khoản
+                    Bạn muốn mở khoá tài Khoản?
                   </h5>
                   <button
                     type='button'
@@ -1119,7 +1141,7 @@ const UserManagement = () => {
                     className='btn btn-primary'
                     data-bs-dismiss='modal'
                   >
-                    Xác nhận Khoá
+                    Xác nhận mở khoá
                   </button>
                 </div>
               </div>
