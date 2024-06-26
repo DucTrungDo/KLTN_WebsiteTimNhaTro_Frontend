@@ -383,18 +383,22 @@ const PostDetail = () => {
                       <td className='name'>Điện thoại:</td>
                       <td> {post.userId?.phone} </td>
                     </tr>
-                    <tr>
-                      <td className='name'>Zalo</td>
-                      <td> {post.userId?.zalo} </td>
-                    </tr>
-                    <tr>
-                      <td className='name'>Facebook</td>
-                      <td>
-                        <a href={post.userId?.facebook} target='_blank'>
-                          {post.userId?.facebook}
-                        </a>
-                      </td>
-                    </tr>
+                    {post.userId?.zalo !== 'undefined' && (
+                      <tr>
+                        <td className='name'>Zalo</td>
+                        <td> {post.userId?.zalo} </td>
+                      </tr>
+                    )}
+                    {post.userId?.facebook !== 'undefined' && (
+                      <tr>
+                        <td className='name'>Facebook</td>
+                        <td>
+                          <a href={post.userId?.facebook} target='_blank'>
+                            {post.userId?.facebook}
+                          </a>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -470,8 +474,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='/images/property-test.jpg'
-                          data-src='/images/property-test.jpg'
+                          src='images/property-test.jpg'
+                          data-src='images/property-test.jpg'
                           alt='Khai trương phòng giá rẻ, duplex siêu phẩm BanCol, đầy đủ nội thất, tại Tân Bình, giáp Quận 10'
                           height='100'
                           width='100'
@@ -505,8 +509,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='/images/property-test.jpg'
-                          data-src='/images/property-test.jpg'
+                          src='images/property-test.jpg'
+                          data-src='images/property-test.jpg'
                           alt='Phòng mới xây 572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr'
                           height='100'
                           width='100'
@@ -541,8 +545,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='/images/property-test.jpg'
-                          data-src='/images/property-test.jpg'
+                          src='images/property-test.jpg'
+                          data-src='images/property-test.jpg'
                           alt='phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN ngay khu Bàu Cát'
                           height='100'
                           width='100'
@@ -572,8 +576,8 @@ const PostDetail = () => {
                       <figure>
                         <img
                           className='lazy_done'
-                          src='/images/property-test.jpg'
-                          data-src='/images/property-test.jpg'
+                          src='images/property-test.jpg'
+                          data-src='images/property-test.jpg'
                           alt='PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3'
                           height='100'
                           width='100'

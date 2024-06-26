@@ -413,7 +413,7 @@ const PostManagement = () => {
                               src={
                                 post.images[0]
                                   ? post.images[0]
-                                  : '/images/property-test.jpg'
+                                  : 'images/property-test.jpg'
                               }
                             />
                           </Link>

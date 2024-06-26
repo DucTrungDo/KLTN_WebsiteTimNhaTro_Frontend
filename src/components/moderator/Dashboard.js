@@ -10,6 +10,8 @@ import {
   faAngleRight,
   faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
+import { logout } from '../../actions/userActions'
+import { resetUserPosts } from '../../actions/postActions'
 
 const Dashboard = () => {
   const dispatch = useDispatch()

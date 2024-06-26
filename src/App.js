@@ -3,7 +3,7 @@ import store from './store'
 import { loadUser } from './actions/userActions'
 import Cookies from 'js-cookie'
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Routes,
   useLocation,

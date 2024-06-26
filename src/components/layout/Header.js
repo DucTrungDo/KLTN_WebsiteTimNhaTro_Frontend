@@ -39,7 +39,7 @@ const Header = () => {
           <div className='container-fluid p-0'>
             <Link to='/'>
               <img
-                src='/images/logo-secondary.png'
+                src='images/logo-secondary.png'
                 alt=''
                 className='header-image'
               />

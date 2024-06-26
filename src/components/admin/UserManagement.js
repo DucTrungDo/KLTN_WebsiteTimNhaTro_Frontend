@@ -242,10 +242,7 @@ const UserManagement = () => {
                         <td>{index + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='user_avatar'>
-                            <img
-                              src='/images/default_avatar.jpg'
-                              className='user-info'
-                            />
+                            <img src={user.img} className='user-info' />
                           </div>
                         </td>
                         <td>
@@ -563,10 +560,7 @@ const UserManagement = () => {
                         height: '50px',
                       }}
                     >
-                      <img
-                        src='/images/default_avatar.jpg'
-                        className='user-info'
-                      />
+                      <img src={userDetail.img} className='user-info' />
                     </div>
                     <div className='mb-3'>
                       <label

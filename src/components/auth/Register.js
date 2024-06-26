@@ -65,7 +65,7 @@ const Register = () => {
                   <img
                     className='img-fluid rounded mx-auto my-4'
                     loading='lazy'
-                    src='./images/loginlogo.png'
+                    src='images/loginlogo.png'
                     width='245'
                     height='80'
                     alt='BootstrapBrain Logo'

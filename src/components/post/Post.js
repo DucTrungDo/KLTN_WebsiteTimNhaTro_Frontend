@@ -75,7 +75,7 @@ const Post = ({ post }) => {
                 objectFit: 'cover',
               }}
               src={
-                post.images[0] ? post.images[0] : '/images/property-test.jpg'
+                post.images[0] ? post.images[0] : 'images/property-test.jpg'
               }
               alt=''
             />

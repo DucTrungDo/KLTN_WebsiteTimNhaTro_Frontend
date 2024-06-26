@@ -83,7 +83,7 @@ const FavoritePost = () => {
           <a className='nav-link fw-medium ms-4' href='#'>
             Tìm người ở ghép
           </a>
-          <a className='nav-link fw-medium ms-4' href='#'>
+          <a className='nav-link fw-medium ms-4 me-4' href='#'>
             Bảng giá dịch vụ
           </a>
         </div>
@@ -103,7 +103,7 @@ const FavoritePost = () => {
                     display: 'block',
                     margin: '15px auto',
                   }}
-                  src='./images/dashboard-post-saved.png'
+                  src='images/dashboard-post-saved.png'
                 />
                 <p
                   style={{
@@ -138,9 +138,9 @@ const FavoritePost = () => {
                       <Link className='clearfix' to={'/post/' + post.slug}>
                         <img
                           className='lazy_done'
-                          src='../images/property-test.jpg'
-                          data-src='../images/property-test.jpg'
-                          alt='Cho Thuê Ký Túc Xá - Sleepbox Cao Cấp Thủ Đức Giá Cực Rẻ'
+                          src='images/property-test.jpg'
+                          data-src='images/property-test.jpg'
+                          alt='property-test'
                           height='100'
                           width='100'
                           layout='responsive'
@@ -186,7 +186,7 @@ const FavoritePost = () => {
                       </div>
                       <div className='meta-row clearfix'>
                         <div className='post-author'>
-                          <img src='../images/default_avatar.jpg' />
+                          <img src='images/default_avatar.jpg' />
                           <span className='author-name'>
                             {post.userId.name}
                           </span>
