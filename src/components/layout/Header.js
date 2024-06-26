@@ -32,18 +32,19 @@ const Header = () => {
   ) {
     window.location.reload(true)
   }
+
   return (
     <>
       <div className='container mb-3'>
         <nav className='navbar navbar-expand-lg navbar-light bg-light border-bottom'>
           <div className='container-fluid p-0'>
-            <Link to='/'>
+            <a href='/KLTN_WebsiteTimNhaTro_Frontend/'>
               <img
                 src='images/logo-secondary.png'
                 alt=''
                 className='header-image'
               />
-            </Link>
+            </a>
             <button
               className='navbar-toggler'
               type='button'
