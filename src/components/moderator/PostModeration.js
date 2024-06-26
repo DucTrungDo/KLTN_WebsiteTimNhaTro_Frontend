@@ -12,15 +12,21 @@ import Cookies from 'js-cookie'
 import DetailPostModal from '../admin/DetailPostModal'
 import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import { getCategories } from '../../actions/categoryActions'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+
 import Loader from '../layout/Loader'
 
 const PostModeration = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(getProvince())
     dispatch(getCategories())
   }, [dispatch])
+
+  const [show, setShow] = useState(false)
   const { provinces } = useSelector((state) => state.province)
   const { districts } = useSelector((state) => state.district)
   const { wards } = useSelector((state) => state.ward)
@@ -98,6 +104,10 @@ const PostModeration = () => {
       Search()
     }
   }
+
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
+
   const Search = () => {
     dispatch(getModeratorPosts(token, currentPage, filterData))
     setCurrentPage(1)
@@ -402,7 +412,10 @@ const PostModeration = () => {
                         <td>{idx + 1 + 10 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
-                            <Link to={'/post/' + post.slug + '/moderator'} target='_blank'>
+                            <Link
+                              to={'/post/' + post.slug + '/moderator'}
+                              target='_blank'
+                            >
                               <img
                                 src={
                                   post.images[0]
@@ -452,14 +465,12 @@ const PostModeration = () => {
                         {filterData.tab !== 'moderated' &&
                         filterData.tab !== 'myModerated' ? (
                           <td>
-                            <Link
+                            <button
                               className='btn btn-info btn-sm text-center w-100 text-white fw-semibold'
-                              to='/moderator/view-post-details/{}'
                               type='button'
-                              data-bs-toggle='modal'
-                              data-bs-target='#staticBackdrop'
                               onClick={() => {
                                 ViewDetail(post)
+                                handleShow()
                               }}
                             >
                               <FontAwesomeIcon
@@ -467,7 +478,7 @@ const PostModeration = () => {
                                 icon={faSquareCheck}
                               />
                               Kiểm duyệt
-                            </Link>
+                            </button>
                           </td>
                         ) : null}
                       </tr>
@@ -530,49 +541,41 @@ const PostModeration = () => {
           </div>
         )}
       </div>
-      <div
-        className='modal fade modal-xl'
-        id='staticBackdrop'
-        data-bs-backdrop='static'
-        data-bs-keyboard='false'
-        tabIndex='-1'
-        aria-labelledby='staticBackdropLabel'
-        aria-hidden='true'
+      <Modal
+        show={show}
+        onHide={() => {
+          ResetOut()
+          handleClose()
+        }}
+        backdrop='static'
+        keyboard={false}
+        size='xl'
       >
-        <div className='modal-dialog'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title' id='staticBackdropLabel'>
-                Modal title
-              </h5>
-              <button
-                onClick={ResetOut}
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
-            </div>
-            <div className='modal-body'>
-              <DetailPostModal
-                post={postDetail}
-                setCurrentPage={setCurrentPage}
-                setFilterData={setFilterData}
-              />
-            </div>
-            <div className='modal-footer'>
-              <button
-                onClick={ResetOut}
-                type='button'
-                className='btn btn-secondary'
-                data-bs-dismiss='modal'
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Modal.Header closeButton>
+          <Modal.Title>Moderator</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DetailPostModal
+            post={postDetail}
+            setCurrentPage={setCurrentPage}
+            setFilterData={setFilterData}
+            setShow={setShow}
+            setShowModal={setShow}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            className='btn btn-secondary'
+            variant='secondary'
+            onClick={() => {
+              ResetOut()
+              handleClose()
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

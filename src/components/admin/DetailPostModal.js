@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { getProvince, getdistrict, getWard } from '../../actions/provinceAction'
 import {
   editPostAdmin,
   getPostsAdmin,
@@ -54,7 +53,7 @@ const DetailPostModal = ({
   const [slug, setSlug] = useState('')
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
-  const [gender, setGender] = useState('')
+  const [renter, setRenter] = useState('')
   const [provinceName, setProvinceName] = useState('')
   const [districtName, setDistrictName] = useState('')
   const [wardName, setWardName] = useState('')
@@ -91,7 +90,6 @@ const DetailPostModal = ({
   const [wards, setWards] = useState([])
   const { categories } = useSelector((state) => state.categories)
   const { loading, error, isSuccess } = useSelector((state) => state.postEdit)
-  const { user } = useSelector((state) => state.user)
   const { user: who } = useSelector((state) => state.auth)
   const {
     loading: moderatorPostLoading,
@@ -241,6 +239,7 @@ const DetailPostModal = ({
     setDescription(post?.description)
     setprice(post?.price)
     setArea(post?.area)
+    setRenter(post?.renters)
     setSlug(post?.slug)
     setAddress({
       city: post.address?.city,
@@ -391,7 +390,7 @@ const DetailPostModal = ({
       formData.append('categoryId', category)
       formData.append('description', description)
       formData.append('title', title)
-      formData.append('renters', gender)
+      formData.append('renters', renter)
       images.forEach((image, index) => {
         if (image.data_url.includes('firebasestorage')) {
           formData.append(`images[${index}]`, image.data_url)
@@ -431,28 +430,8 @@ const DetailPostModal = ({
         <Loader></Loader>
       ) : (
         <div>
-          <nav
-            aria-label='breadcrumb'
-            className='bg-body-secondary px-3 py-1 mb-3'
-          >
-            <ol className='breadcrumb mb-0 py-1'>
-              <li className='breadcrumb-item'>
-                <Link to='/' className='text-decoration-none'>
-                  TroTot123
-                </Link>
-              </li>
-              <li className='breadcrumb-item'>
-                <Link to='/user/dashboard' className='text-decoration-none'>
-                  Quản lý
-                </Link>
-              </li>
-              <li className='breadcrumb-item active' aria-current='page'>
-                Đăng tin
-              </li>
-            </ol>
-          </nav>
           <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
-            <h1 className='h1'>Đăng tin mới</h1>
+            <h1 className='h1'>Kiểm duyệt tin</h1>
           </div>
           <div className='row'>
             <div className='col-md-8'>
@@ -617,6 +596,7 @@ const DetailPostModal = ({
                 </label>
                 <div className='col-md-6'>
                   <select
+                    disabled={who.isModerator === true ? 'readOnly' : ''}
                     id='id'
                     name='id'
                     className='form-control js-select-tinhthanhpho select2-hidden-accessible'
@@ -624,8 +604,8 @@ const DetailPostModal = ({
                     data-msg-required='Chưa chọn Tỉnh/TP'
                     tabIndex='-1'
                     aria-hidden='true'
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
+                    value={renter}
+                    onChange={(e) => setRenter(e.target.value)}
                   >
                     <option value=''>Chọn đối tượng cho thuê</option>
                     <option value='all'>Tất cả</option>

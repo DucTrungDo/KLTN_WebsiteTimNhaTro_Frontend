@@ -58,6 +58,7 @@ import AddNewPost from './components/post/Addnewpost'
 import PostDetail from './components/post/PostDetail'
 import EditPost from './components/post/EditPost'
 import FavoritePost from './components/post/FavoritePost'
+import SuccessfulPayment from './components/post/SuccessfulPayment'
 
 import ProtectedRoute from './components/route/ProtectedRoute'
 
@@ -171,6 +172,7 @@ function UserRoutes() {
             <Route path='service-price-list' element={<ServicePriceList />} />
             <Route path='change-password' element={<ChangePassword />} />
             <Route path='add-new-post' element={<AddNewPost />} />
+            <Route path='payment-success' element={<SuccessfulPayment />} />
           </Routes>
         </main>
       </div>

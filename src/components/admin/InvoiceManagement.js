@@ -21,7 +21,7 @@ const InvoiceManagement = () => {
   const { loading, invoices, error } = useSelector((state) => state.invoices)
 
   useEffect(() => {
-    dispatch(getAllInvoices(token))
+    // dispatch(getAllInvoices(token))
 
     if (error) {
       alert.error(error)
@@ -59,6 +59,7 @@ const InvoiceManagement = () => {
                   <th style={{ whiteSpace: 'nowrap' }}>Mã hóa đơn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã người dùng</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã tin đăng</th>
+                  {/* <th style={{ whiteSpace: 'nowrap' }}>Mã gói tin</th> */}
                   <th style={{ whiteSpace: 'nowrap' }}>Phí</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phương thức</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày thanh toán</th>
@@ -84,7 +85,8 @@ const InvoiceManagement = () => {
                       <td>{invoice._id}</td>
                       <td>{invoice.userId}</td>
                       <td>{invoice.postId}</td>
-                      <td>{invoice.fee}</td>
+                      {/* <td>{invoice.packId}</td> */}
+                      <td>{invoice.amount}</td>
                       <td>{invoice.method}</td>
                       <td>
                         {format(invoice.createdAt, 'HH:mm:ss - dd/MM/yyyy')}

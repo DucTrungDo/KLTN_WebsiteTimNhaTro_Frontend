@@ -792,7 +792,7 @@ const PostManagement = () => {
         size='xl'
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Admin</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <DetailPostModal
