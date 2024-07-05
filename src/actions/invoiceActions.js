@@ -1,27 +1,27 @@
 import axios from 'axios'
 import {
-  USER_INVOICE_REQUEST,
-  USER_INVOICE_SUCCESS,
-  USER_INVOICE_FAIL,
+  ALL_USER_INVOICES_REQUEST,
+  ALL_USER_INVOICES_SUCCESS,
+  ALL_USER_INVOICES_FAIL,
   USER_INVOICE_DETAILS_REQUEST,
   USER_INVOICE_DETAILS_SUCCESS,
   USER_INVOICE_DETAILS_FAIL,
-  ADD_USER_INVOICE_REQUEST,
-  ADD_USER_INVOICE_SUCCESS,
-  ADD_USER_INVOICE_FAIL,
-  ALL_INVOICE_REQUEST,
-  ALL_INVOICE_SUCCESS,
-  ALL_INVOICE_FAIL,
-  INVOICE_DETAILS_REQUEST,
-  INVOICE_DETAILS_SUCCESS,
-  INVOICE_DETAILS_FAIL,
+  USER_ADD_INVOICE_REQUEST,
+  USER_ADD_INVOICE_SUCCESS,
+  USER_ADD_INVOICE_FAIL,
+  ALL_ADMIN_INVOICES_REQUEST,
+  ALL_ADMIN_INVOICES_SUCCESS,
+  ALL_ADMIN_INVOICES_FAIL,
+  ADMIN_INVOICE_DETAILS_REQUEST,
+  ADMIN_INVOICE_DETAILS_SUCCESS,
+  ADMIN_INVOICE_DETAILS_FAIL,
   CLEAR_ERRORS,
 } from '../constants/invoiceConstants'
 
 // Get user's invoices - User
 export const getUserInvoices = (token) => async (dispatch) => {
   try {
-    dispatch({ type: USER_INVOICE_REQUEST })
+    dispatch({ type: ALL_USER_INVOICES_REQUEST })
 
     const config = {
       headers: {
@@ -35,12 +35,12 @@ export const getUserInvoices = (token) => async (dispatch) => {
     )
 
     dispatch({
-      type: USER_INVOICE_SUCCESS,
+      type: ALL_USER_INVOICES_SUCCESS,
       payload: data,
     })
   } catch (error) {
     dispatch({
-      type: USER_INVOICE_FAIL,
+      type: ALL_USER_INVOICES_FAIL,
       payload: error.response.data.message,
     })
   }
@@ -78,7 +78,7 @@ export const getUserInvoiceDetails = (token, id) => async (dispatch) => {
 export const addNewInvoice =
   (token, postId, packId, fee, method) => async (dispatch) => {
     try {
-      dispatch({ type: ADD_USER_INVOICE_REQUEST })
+      dispatch({ type: USER_ADD_INVOICE_REQUEST })
 
       const config = {
         headers: {
@@ -93,12 +93,12 @@ export const addNewInvoice =
       )
 
       dispatch({
-        type: ADD_USER_INVOICE_SUCCESS,
-        payload: data,
+        type: USER_ADD_INVOICE_SUCCESS,
+        payload: data.success,
       })
     } catch (error) {
       dispatch({
-        type: ADD_USER_INVOICE_FAIL,
+        type: USER_ADD_INVOICE_FAIL,
         payload: error.response.data.message,
       })
     }
@@ -107,7 +107,7 @@ export const addNewInvoice =
 // Get all invoices - Admin
 export const getAllInvoices = (token) => async (dispatch) => {
   try {
-    dispatch({ type: ALL_INVOICE_REQUEST })
+    dispatch({ type: ALL_ADMIN_INVOICES_REQUEST })
 
     const config = {
       headers: {
@@ -121,12 +121,12 @@ export const getAllInvoices = (token) => async (dispatch) => {
     )
 
     dispatch({
-      type: ALL_INVOICE_SUCCESS,
+      type: ALL_ADMIN_INVOICES_SUCCESS,
       payload: data,
     })
   } catch (error) {
     dispatch({
-      type: ALL_INVOICE_FAIL,
+      type: ALL_ADMIN_INVOICES_FAIL,
       payload: error.response.data.message,
     })
   }
@@ -135,7 +135,7 @@ export const getAllInvoices = (token) => async (dispatch) => {
 // Get invoice details - Admin
 export const getInvoiceDetails = (token, id) => async (dispatch) => {
   try {
-    dispatch({ type: INVOICE_DETAILS_REQUEST })
+    dispatch({ type: ADMIN_INVOICE_DETAILS_REQUEST })
 
     const config = {
       headers: {
@@ -149,12 +149,12 @@ export const getInvoiceDetails = (token, id) => async (dispatch) => {
     )
 
     dispatch({
-      type: INVOICE_DETAILS_SUCCESS,
+      type: ADMIN_INVOICE_DETAILS_SUCCESS,
       payload: data,
     })
   } catch (error) {
     dispatch({
-      type: INVOICE_DETAILS_FAIL,
+      type: ADMIN_INVOICE_DETAILS_FAIL,
       payload: error.response.data.message,
     })
   }

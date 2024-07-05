@@ -20,7 +20,12 @@ import {
   googleGeoReducer,
 } from './reducers/provinceReducer'
 import { categoriesReducer, categoryReducer } from './reducers/categoryReducers'
-import { invoicesReducer } from './reducers/invoiceReducers'
+import { packReducer, packsReducer } from './reducers/packReducers'
+import {
+  invoicesReducer,
+  invoiceReducer,
+  invoiceDetailsReducer,
+} from './reducers/invoiceReducers'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -35,6 +40,8 @@ const reducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   invoices: invoicesReducer,
+  invoiceDetails: invoiceDetailsReducer,
+  invoice: invoiceReducer,
   province: provinceReducer,
   district: districtReducer,
   ward: wardReducer,
@@ -44,6 +51,8 @@ const reducer = combineReducers({
   postEdit: postEditReducer,
   newPost: newPostReducer,
   payMent: payMentPostReducer,
+  packs: packsReducer,
+  pack: packReducer,
 })
 
 let initialState = {

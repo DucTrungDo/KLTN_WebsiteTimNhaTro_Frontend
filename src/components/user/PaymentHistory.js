@@ -57,10 +57,11 @@ const PaymentHistory = () => {
                 <tr>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã hóa đơn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã tin đăng</th>
+                  <th style={{ whiteSpace: 'nowrap' }}>Mã gói tin</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phí</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phương thức</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày thanh toán</th>
-                  <th
+                  {/* <th
                     style={{
                       textAlign: 'center',
                       width: '150px',
@@ -68,25 +69,26 @@ const PaymentHistory = () => {
                     }}
                   >
                     Hoạt động
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody>
-                {invoices.count === 0 || !invoices.posts ? (
+                {invoices.count === 0 || !invoices.invoices ? (
                   <tr>
                     <td colSpan='6'>Không có hóa đơn nào</td>
                   </tr>
                 ) : (
-                  invoices.posts?.map((invoice) => (
+                  invoices.invoices?.map((invoice) => (
                     <tr key={invoice._id}>
                       <td>{invoice._id}</td>
                       <td>{invoice.postId}</td>
-                      <td>{invoice.fee}</td>
+                      <td>{invoice.packId}</td>
+                      <td>{invoice.amount}</td>
                       <td>{invoice.method}</td>
                       <td>
                         {format(invoice.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
                       </td>
-                      <td className='d-block'>
+                      {/* <td className='d-block'>
                         <button
                           className='btn btn-danger btn-sm text-center w-100'
                           type='button'
@@ -100,7 +102,7 @@ const PaymentHistory = () => {
                           />
                           Xoá
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 )}

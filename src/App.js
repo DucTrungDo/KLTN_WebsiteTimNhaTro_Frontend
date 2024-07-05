@@ -39,7 +39,6 @@ import Profile from './components/user/Profile'
 import Recharge from './components/user/Recharge'
 import RechargeHistory from './components/user/RechargeHistory'
 import PaymentHistory from './components/user/PaymentHistory'
-import ServicePriceList from './components/user/ServicePriceList'
 import ChangePassword from './components/user/ChangePassword'
 
 // Admin import
@@ -48,6 +47,7 @@ import AdminPostManagement from './components/admin/PostManagement'
 import AdminUserManagement from './components/admin/UserManagement'
 import AdminCategoryManagement from './components/admin/CategoryManagement'
 import AdminInvoiceManagement from './components/admin/InvoiceManagement'
+import AdminPackManagement from './components/admin/PackManagement'
 
 // Moderator import
 import ModeratorDashboard from './components/moderator/Dashboard'
@@ -60,6 +60,7 @@ import EditPost from './components/post/EditPost'
 import FavoritePost from './components/post/FavoritePost'
 import SuccessfulPayment from './components/post/SuccessfulPayment'
 import Payment from './components/post/Payment'
+import ServicePriceList from './components/post/ServicePriceList'
 
 import ProtectedRoute from './components/route/ProtectedRoute'
 
@@ -89,6 +90,10 @@ function App() {
               <Route path='/post/:slug/admin' element={<PostDetail />} />
               <Route path='/forgot_password' element={<ForgotPassword />} />
               <Route path='/favorite_post' element={<FavoritePost />} />
+              <Route
+                path='/service-price-list'
+                element={<ServicePriceList />}
+              />
             </Routes>
           </div>
         </main>
@@ -170,7 +175,6 @@ function UserRoutes() {
             <Route path='recharge' element={<Recharge />} />
             <Route path='recharge-history' element={<RechargeHistory />} />
             <Route path='payment-history' element={<PaymentHistory />} />
-            <Route path='service-price-list' element={<ServicePriceList />} />
             <Route path='change-password' element={<ChangePassword />} />
             <Route path='add-new-post' element={<AddNewPost />} />
             <Route path='payment-success' element={<SuccessfulPayment />} />
@@ -200,6 +204,7 @@ function AdminRoutes() {
               path='invoice-management'
               element={<AdminInvoiceManagement />}
             />
+            <Route path='pack-management' element={<AdminPackManagement />} />
           </Routes>
         </main>
       </div>
