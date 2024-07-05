@@ -5,16 +5,14 @@ import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faSquarePlus,
-  faFileLines,
-} from '@fortawesome/free-regular-svg-icons'
+import { faSquarePlus, faFileLines } from '@fortawesome/free-regular-svg-icons'
 import {
   faAngleRight,
   faList,
   faReceipt,
   faUser,
   faArrowRightFromBracket,
+  faBoxArchive,
 } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../../actions/userActions'
 import { resetUserPosts } from '../../actions/postActions'
@@ -71,6 +69,11 @@ const Dashboard = () => {
           <Link className='list-group-item' to='/admin/category-management'>
             <FontAwesomeIcon icon={faList} className='me-2' />
             Quản lý danh mục
+            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
+          </Link>
+          <Link className='list-group-item' to='/admin/pack-management'>
+            <FontAwesomeIcon icon={faBoxArchive} className='me-2' />
+            Quản lý gói tin
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
           <Link className='list-group-item' to='/admin/invoice-management'>

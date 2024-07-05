@@ -4,15 +4,13 @@ import { useAlert } from 'react-alert'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faFileLines,
-  faFile,
-} from '@fortawesome/free-regular-svg-icons'
+import { faFileLines, faFile } from '@fortawesome/free-regular-svg-icons'
 import {
   faArrowRightFromBracket,
   faList,
   faReceipt,
   faUser,
+  faBoxArchive,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink } from 'react-router-dom'
 
@@ -91,6 +89,15 @@ const AdminSidebar = () => {
               >
                 <FontAwesomeIcon icon={faList} className='me-2' />
                 Quản lý danh mục
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='/admin/pack-management'
+                className='nav-link link-dark'
+              >
+                <FontAwesomeIcon icon={faBoxArchive} className='me-2' />
+                Quản lý gói tin
               </NavLink>
             </li>
             <li>

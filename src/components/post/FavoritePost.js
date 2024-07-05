@@ -83,9 +83,9 @@ const FavoritePost = () => {
           <a className='nav-link fw-medium ms-4' href='#'>
             Tìm người ở ghép
           </a>
-          <a className='nav-link fw-medium ms-4 me-4' href='#'>
+          <Link className='nav-link fw-medium me-4' to='/service-price-list'>
             Bảng giá dịch vụ
-          </a>
+          </Link>
         </div>
       </nav>
       {/* <SearchFilter /> */}
