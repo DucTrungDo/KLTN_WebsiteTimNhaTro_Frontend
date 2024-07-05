@@ -10,6 +10,7 @@ import {
   newPostReducer,
   moderatorPostsReducer,
   moderatorPostReducer,
+  payMentPostReducer,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -42,6 +43,7 @@ const reducer = combineReducers({
   category: categoryReducer,
   postEdit: postEditReducer,
   newPost: newPostReducer,
+  payMent: payMentPostReducer,
 })
 
 let initialState = {

@@ -63,6 +63,9 @@ import {
   ALL_ADMIN_POSTS_MODERATE_POST_REQUEST,
   ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS,
   ALL_ADMIN_POSTS_MODERATE_POST_FAIL,
+  PAYMENT_POST_REQUEST,
+  PAYMENT_POST_SUCCESS,
+  PAYMENT_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -327,7 +330,35 @@ export const postEditReducer = (state = { post: {} }, action) => {
       return state
   }
 }
+export const payMentPostReducer = (state = { link: {} }, action) => {
+  switch (action.type) {
+    case PAYMENT_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case PAYMENT_POST_SUCCESS:
+      return {
+        loading: false,
+        link: action.payload.data,
+      }
+    case PAYMENT_POST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
 
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
 export const moderatorPostsReducer = (
   state = { moderatorPosts: [] },
   action

@@ -491,7 +491,10 @@ const PostManagement = () => {
                           </Link>
                           {/* )} */}
                           {!post.isPaid && (
-                            <a href='' className='btn btn-sm mt-2'>
+                            <Link
+                              to={'/user/payment/' + post.slug}
+                              className='btn btn-sm mt-2'
+                            >
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 width='24'
@@ -508,7 +511,7 @@ const PostManagement = () => {
                                 <line x1='7' y1='7' x2='7' y2='7'></line>
                               </svg>
                               Thanh toán
-                            </a>
+                            </Link>
                           )}
 
                           {post.isPaid &&

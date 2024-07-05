@@ -56,6 +56,9 @@ import {
   ALL_ADMIN_POSTS_MODERATE_POST_REQUEST,
   ALL_ADMIN_POSTS_MODERATE_POST_SUCCESS,
   ALL_ADMIN_POSTS_MODERATE_POST_FAIL,
+  PAYMENT_POST_REQUEST,
+  PAYMENT_POST_SUCCESS,
+  PAYMENT_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -561,7 +564,34 @@ export const getPostsAdminModerate =
       })
     }
   }
+//Payment
+export const payMent = (token, object) => async (dispatch) => {
+  try {
+    dispatch({ type: PAYMENT_POST_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
 
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/users/restore`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: PAYMENT_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PAYMENT_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
