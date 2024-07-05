@@ -178,7 +178,7 @@ function UserRoutes() {
             <Route path='change-password' element={<ChangePassword />} />
             <Route path='add-new-post' element={<AddNewPost />} />
             <Route path='payment-success' element={<SuccessfulPayment />} />
-            <Route path='payment/:slug' element={<Payment />} />
+            <Route path='payment/:slug/:type' element={<Payment />} />
           </Routes>
         </main>
       </div>

@@ -110,8 +110,6 @@ const PostManagement = () => {
     setCurrentPage(1)
   }
 
-  console.log(filterData)
-
   useEffect(() => {
     dispatch(getUserPosts(token, currentPage, filterData))
 
@@ -201,7 +199,21 @@ const PostManagement = () => {
   const deletePostHandler = (slug) => {
     dispatch(deleteUserPost(slug, token))
   }
-
+  const comPareDay = (post) => {
+    const currentDate = new Date()
+    const dateEndOfPost = new Date(post.endedAt)
+    if (
+      currentDate.getFullYear() > dateEndOfPost.getUTCFullYear() ||
+      currentDate.getMonth() > dateEndOfPost.getUTCMonth() ||
+      currentDate.getDate() > dateEndOfPost.getUTCDate() ||
+      currentDate.getHours() > dateEndOfPost.getUTCHours() ||
+      currentDate.getMinutes() > dateEndOfPost.getUTCMinutes() ||
+      currentDate.getSeconds() > dateEndOfPost.getUTCSeconds()
+    ) {
+      return true
+    }
+    return false
+  }
   return (
     <div>
       <nav aria-label='breadcrumb' className='bg-body-secondary px-3 py-1 mb-3'>
@@ -437,32 +449,29 @@ const PostManagement = () => {
                           {post.address?.city}
                         </p>
                         <div className='post_btn_toolbar mt-3'>
-                          {post.isPaid &&
-                            post.isApproved &&
-                            !post.isViolated &&
-                            !post.isHided && (
-                              <a
-                                href=''
-                                className='btn btn-sm mt-2 btn_danglai btn-warning text-success'
+                          {post.isPaid && comPareDay(post) && (
+                            <Link
+                              to={'/user/payment/' + post.slug + '/extend'}
+                              className='btn btn-sm mt-2 btn_danglai btn-warning text-success'
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='24'
+                                height='24'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth={2}
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='feather feather-plus'
                               >
-                                <svg
-                                  xmlns='http://www.w3.org/2000/svg'
-                                  width='24'
-                                  height='24'
-                                  viewBox='0 0 24 24'
-                                  fill='none'
-                                  stroke='currentColor'
-                                  strokeWidth={2}
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  className='feather feather-plus'
-                                >
-                                  <line x1='12' y1='5' x2='12' y2='19'></line>
-                                  <line x1='5' y1='12' x2='19' y2='12'></line>
-                                </svg>
-                                Thêm ngày
-                              </a>
-                            )}
+                                <line x1='12' y1='5' x2='12' y2='19'></line>
+                                <line x1='5' y1='12' x2='19' y2='12'></line>
+                              </svg>
+                              Thêm ngày
+                            </Link>
+                          )}
 
                           {/* {((post.isPaid && !post.isApproved) ||
                             post.isHided ||
@@ -492,7 +501,7 @@ const PostManagement = () => {
                           {/* )} */}
                           {!post.isPaid && (
                             <Link
-                              to={'/user/payment/' + post.slug}
+                              to={'/user/payment/' + post.slug + '/pay'}
                               className='btn btn-sm mt-2'
                             >
                               <svg
