@@ -565,33 +565,34 @@ export const getPostsAdminModerate =
     }
   }
 //Payment
-export const payMent = (token, object) => async (dispatch) => {
-  try {
-    dispatch({ type: PAYMENT_POST_REQUEST })
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-        'Content-Type': 'application/json',
-      },
+export const payMent =
+  (token, postId, packId, period, type) => async (dispatch) => {
+    try {
+      dispatch({ type: PAYMENT_POST_REQUEST })
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.post(
+        `https://boardinghouse-api.onrender.com/api/v1/payments/vnpay/me`,
+        { postId, packId, period, type },
+        config
+      )
+
+      dispatch({
+        type: PAYMENT_POST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: PAYMENT_POST_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.patch(
-      `https://boardinghouse-api.onrender.com/api/v1/users/restore`,
-      {},
-      config
-    )
-
-    dispatch({
-      type: PAYMENT_POST_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: PAYMENT_POST_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
