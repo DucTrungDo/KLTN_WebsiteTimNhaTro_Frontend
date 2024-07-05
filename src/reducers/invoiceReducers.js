@@ -15,6 +15,7 @@ import {
   ADMIN_INVOICE_DETAILS_REQUEST,
   ADMIN_INVOICE_DETAILS_SUCCESS,
   ADMIN_INVOICE_DETAILS_FAIL,
+  RESET_INVOICES,
   CLEAR_ERRORS,
 } from '../constants/invoiceConstants'
 
@@ -40,6 +41,12 @@ export const invoicesReducer = (state = { invoices: [] }, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      }
+
+    case RESET_INVOICES:
+      return {
+        loading: false,
+        invoices: [],
       }
 
     case CLEAR_ERRORS:

@@ -21,7 +21,7 @@ const InvoiceManagement = () => {
   const { loading, invoices, error } = useSelector((state) => state.invoices)
 
   useEffect(() => {
-    // dispatch(getAllInvoices(token))
+    dispatch(getAllInvoices(token))
 
     if (error) {
       alert.error(error)

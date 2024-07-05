@@ -9,7 +9,8 @@ import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink } from 'react-router-dom'
 
 import { logout } from '../../actions/userActions'
-import { resetUserPosts } from '../../actions/postActions'
+import { RESET_USER_POST } from '../../constants/postConstants'
+import { RESET_INVOICES } from '../../constants/invoiceConstants'
 
 const ModeratorSidebar = () => {
   const { user } = useSelector((state) => state.auth)
@@ -19,7 +20,12 @@ const ModeratorSidebar = () => {
 
   const logoutHandler = () => {
     dispatch(logout())
-    dispatch(resetUserPosts())
+    dispatch({
+      type: RESET_USER_POST,
+    })
+    dispatch({
+      type: RESET_INVOICES,
+    })
     Cookies.remove('accessToken')
     alert.success('Logged out successfully.')
     navigate('/')
