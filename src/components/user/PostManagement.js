@@ -449,7 +449,7 @@ const PostManagement = () => {
                           {post.address?.city}
                         </p>
                         <div className='post_btn_toolbar mt-3'>
-                          {post.isPaid && comPareDay(post) && (
+                          {post.isExpired && (
                             <Link
                               to={'/user/payment/' + post.slug + '/extend'}
                               className='btn btn-sm mt-2 btn_danglai btn-warning text-success'
@@ -496,7 +496,7 @@ const PostManagement = () => {
                               <polyline points='23 20 23 14 17 14'></polyline>
                               <path d='M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15'></path>
                             </svg>
-                            Sửa và đăng lại
+                            Sửa tin
                           </Link>
                           {/* )} */}
                           {!post.isPaid && (
@@ -673,10 +673,14 @@ const PostManagement = () => {
                           className='label-success'
                           style={{ whiteSpace: 'nowrap' }}
                         >
-                          {post.isHided ? (
-                            <span className='text-warning'>Tin đã ẩn</span>
+                          {post.isExpired ? (
+                            <span className='text-danger'>Tin hết hạn</span>
+                          ) : post.isHided ? (
+                            <span className='text-danger-emphasis'>
+                              Tin đã ẩn
+                            </span>
                           ) : post.isViolated ? (
-                            <span className='text-danger'>Tin bị vi phạm</span>
+                            <span className='text-warning'>Tin bị vi phạm</span>
                           ) : !post.isPaid ? (
                             <span className='text-info'>
                               Tin chưa thanh toán

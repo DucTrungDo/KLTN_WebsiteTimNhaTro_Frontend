@@ -186,7 +186,7 @@ const PostDetail = () => {
       ) : (
         <div className='container mt-1 mb-4'>
           <div className='row ms-0 me-0'>
-            <div className='col-md-8 border border-1 rounded p-2 pb-3'>
+            <div className='col-md-8 border border-1 rounded p-2 pb-3 overflow-hidden'>
               {post.images?.length !== 0 || post.video ? (
                 <div
                   id='carouselExampleControlsNoTouching'

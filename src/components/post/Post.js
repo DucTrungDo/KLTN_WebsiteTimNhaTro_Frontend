@@ -9,9 +9,11 @@ import {
 } from '../../actions/favoriteActions'
 
 import {
+  faStar,
   faLocationDot,
   faRulerCombined,
 } from '@fortawesome/free-solid-svg-icons'
+
 import { Link } from 'react-router-dom'
 const Post = ({ post }) => {
   const dispatch = useDispatch()
@@ -20,20 +22,12 @@ const Post = ({ post }) => {
   const [saved, setSaved] = useState(false)
   const { favoritePosts } = useSelector((state) => state.favorite)
 
-  useEffect(() => {
-    function truncateText(selector, maxLength) {
-      let elements = document.querySelectorAll(selector)
-      elements.forEach(function (element) {
-        let text = element.textContent
-        if (text.length > maxLength) {
-          element.textContent = text.slice(0, maxLength) + '...'
-        }
-      })
+  const truncateTitle = (title, limit) => {
+    if (title.length > limit) {
+      return title.substring(0, limit) + '...'
     }
-
-    truncateText('.title', 50)
-    truncateText('.address', 30)
-  })
+    return title
+  }
 
   useEffect(() => {
     // Kiểm tra xem post.slug có trong danh sách bài đăng yêu thích không
@@ -74,9 +68,7 @@ const Post = ({ post }) => {
                 height: '100%',
                 objectFit: 'cover',
               }}
-              src={
-                post.images[0] ? post.images[0] : 'images/property-test.jpg'
-              }
+              src={post.images[0] ? post.images[0] : 'images/property-test.jpg'}
               alt=''
             />
             <div className='bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3'>
@@ -106,8 +98,14 @@ const Post = ({ post }) => {
             className='d-flex flex-column'
           >
             <div className='p-4 pb-0'>
-              <div className='title d-block ellipsis h4 mb-3'>{post.title}</div>
-
+              <div className='title d-block ellipsis h4 mb-3'>
+                <FontAwesomeIcon icon={faStar} className='iconstar' />
+                <FontAwesomeIcon icon={faStar} className='iconstar' />
+                <FontAwesomeIcon icon={faStar} className='iconstar' />
+                <FontAwesomeIcon icon={faStar} className='iconstar' />
+                <FontAwesomeIcon icon={faStar} className='iconstar' />{' '}
+                {truncateTitle(post.title, 50)}
+              </div>
               <h5 className='text-primary mb-2'>
                 {parseInt(post.price).toLocaleString('vi-VN')} đồng/tháng
               </h5>

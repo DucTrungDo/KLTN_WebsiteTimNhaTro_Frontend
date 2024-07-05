@@ -47,7 +47,7 @@ const SearchFilter = ({ setFilterData }) => {
   const [maxPrice, setMaxPrice] = useState(-1)
   const [minArea, setMinArea] = useState(-1)
   const [maxArea, setMaxArea] = useState(-1)
-  const [category, setCategory] = useState('')
+  const [categoryId, setCategoryId] = useState('')
   const [province, setProvince] = useState('')
   const [district, setDistrict] = useState('')
   const [ward, setWard] = useState('')
@@ -200,7 +200,7 @@ const SearchFilter = ({ setFilterData }) => {
         maxPrice: maxPrice,
         minArea: minArea,
         maxArea: maxArea,
-        category: category,
+        categoryId: categoryId,
         province: province,
         district: district,
         ward: ward,
@@ -211,7 +211,7 @@ const SearchFilter = ({ setFilterData }) => {
       maxPrice: maxPrice,
       minArea: minArea,
       maxArea: maxArea,
-      category: category,
+      categoryId: categoryId,
       province: province,
       district: district,
       ward: ward,
@@ -262,8 +262,8 @@ const SearchFilter = ({ setFilterData }) => {
                       required=''
                       data-msg-required='Chưa chọn loại chuyên mục'
                       aria-invalid='false'
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
+                      value={categoryId}
+                      onChange={(e) => setCategoryId(e.target.value)}
                     >
                       <option value=''>Chọn chuyên mục</option>
                       {categories.length !== 0

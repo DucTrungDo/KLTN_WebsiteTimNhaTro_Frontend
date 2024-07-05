@@ -72,7 +72,7 @@ export const getPosts = (currentPage, FilterData) => async (dispatch) => {
     if (JSON.stringify(FilterData) !== '{}') {
       link =
         link +
-        `&minPrice=${FilterData.minPrice}&maxPrice=${FilterData.maxPrice}&minArea=${FilterData.minArea}&maxArea=${FilterData.maxArea}&city=${FilterData.province}&district=${FilterData.district}&ward=${FilterData.ward}`
+        `&categoryId=${FilterData.categoryId}&minPrice=${FilterData.minPrice}&maxPrice=${FilterData.maxPrice}&minArea=${FilterData.minArea}&maxArea=${FilterData.maxArea}&city=${FilterData.province}&district=${FilterData.district}&ward=${FilterData.ward}`
     }
 
     const { data } = await axios.get(link)
