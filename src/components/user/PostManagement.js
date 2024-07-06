@@ -372,6 +372,7 @@ const PostManagement = () => {
               <option value='inApprove'>Các bài chờ duyệt</option>
               <option value='inViolation'>Các bài vi phạm</option>
               <option value='inHide'>Các bài đã ẩn</option>
+              <option value='expired'>Các bài đã hết hạn</option>
             </select>
           </div>
         </div>
@@ -666,8 +667,16 @@ const PostManagement = () => {
                           <PriceDisplay price={post.price} />
                         </div>
                       </td>
-                      <td>{format(post.createdAt, 'HH:mm:ss - dd/MM/yyyy')}</td>
-                      <td>28/04/2024 21:26:13</td>
+                      <td>
+                        {post.startedAt
+                          ? format(post.startedAt, 'HH:mm - dd/MM/yyyy')
+                          : ' - '}
+                      </td>
+                      <td>
+                        {post.endedAt
+                          ? format(post.endedAt, 'HH:mm - dd/MM/yyyy')
+                          : ' - '}
+                      </td>
                       <td>
                         <div
                           className='label-success'

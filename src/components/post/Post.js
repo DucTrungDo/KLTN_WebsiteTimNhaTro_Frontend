@@ -98,7 +98,7 @@ const Post = ({ post }) => {
             className='d-flex flex-column'
           >
             <div className='p-4 pb-0'>
-              <div className='title d-block ellipsis h4 mb-3'>
+              <div className='d-block ellipsis h4 mb-3'>
                 <FontAwesomeIcon icon={faStar} className='iconstar' />
                 <FontAwesomeIcon icon={faStar} className='iconstar' />
                 <FontAwesomeIcon icon={faStar} className='iconstar' />

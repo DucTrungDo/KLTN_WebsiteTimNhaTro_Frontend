@@ -34,6 +34,7 @@ const PackManagement = () => {
   const [packId, setPackId] = useState('')
   const [packName, setPackName] = useState('')
   const [packDescription, setPackDescription] = useState('')
+  const [packPriority, setPackPriority] = useState(0)
   const [packFee, setPackFee] = useState('')
 
   const { loading, packs, error } = useSelector((state) => state.packs)
@@ -45,7 +46,6 @@ const PackManagement = () => {
     error: packError,
   } = useSelector((state) => state.pack)
 
-  console.log(error)
   useEffect(() => {
     dispatch(getPacks())
 
@@ -96,6 +96,7 @@ const PackManagement = () => {
   const resetPackInfo = () => {
     setPackName('')
     setPackDescription('')
+    setPackPriority(0)
     setPackFee('')
   }
 
@@ -103,25 +104,40 @@ const PackManagement = () => {
     setPackId(pack._id)
     setPackName(pack.name)
     setPackDescription(pack.description)
+    setPackPriority(pack.priority)
     setPackFee(pack.fee)
   }
 
   const addHandler = (e) => {
     e.preventDefault()
-    if (!packName.trim() || !packDescription.trim() || !packFee.trim()) {
+    if (
+      !packName.trim() ||
+      !packDescription.trim() ||
+      !packPriority.trim() ||
+      !packFee.trim()
+    ) {
       // Kiểm tra xem input có giá trị không
       alert.error('Vui lòng đủ thông tin gói tin.') // Hiển thị thông báo nếu input trống
       return
     }
 
-    dispatch(addPack(token, packName, packDescription, packFee))
+    dispatch(addPack(token, packName, packDescription, packPriority, packFee))
     setPackName('')
   }
 
   const updateHandler = (e) => {
     e.preventDefault()
 
-    dispatch(updatePack(token, packId, packName, packDescription, packFee))
+    dispatch(
+      updatePack(
+        token,
+        packId,
+        packName,
+        packDescription,
+        packPriority,
+        packFee
+      )
+    )
   }
 
   const deleteHandler = (e) => {
@@ -170,6 +186,7 @@ const PackManagement = () => {
                   <th style={{ whiteSpace: 'nowrap' }}>Mã gói tin</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Tên gói tin</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mô tả</th>
+                  <th style={{ whiteSpace: 'nowrap' }}>Mức ưu tiên</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phí/ngày</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày tạo</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày cập nhật</th>
@@ -195,6 +212,7 @@ const PackManagement = () => {
                       <td>#{pack._id}</td>
                       <td>{pack.name}</td>
                       <td>{pack.description}</td>
+                      <td>{pack.priority}</td>
                       <td>{pack.fee}</td>
                       <td>{format(pack.createdAt, 'HH:mm:ss - dd/MM/yyyy')}</td>
                       <td>{format(pack.updatedAt, 'HH:mm:ss - dd/MM/yyyy')}</td>
@@ -278,6 +296,19 @@ const PackManagement = () => {
                     id='message-text'
                     value={packDescription}
                     onChange={(e) => setPackDescription(e.target.value)}
+                  ></input>
+                </div>
+                <div className='mb-3'>
+                  <label htmlFor='message-text' className='col-form-label'>
+                    Mức ưu tiên:
+                  </label>
+                  <input
+                    type='number'
+                    min='0'
+                    className='form-control'
+                    id='message-text'
+                    value={packPriority}
+                    onChange={(e) => setPackPriority(e.target.value)}
                   ></input>
                 </div>
                 <div className='mb-3'>
@@ -371,6 +402,19 @@ const PackManagement = () => {
                     value={packDescription}
                     onChange={(e) => setPackDescription(e.target.value)}
                   ></textarea>
+                </div>
+                <div className='mb-3'>
+                  <label htmlFor='message-text' className='col-form-label'>
+                    Mức ưu tiên:
+                  </label>
+                  <input
+                    type='number'
+                    min='0'
+                    className='form-control'
+                    id='message-text'
+                    value={packPriority}
+                    onChange={(e) => setPackPriority(e.target.value)}
+                  ></input>
                 </div>
                 <div className='mb-3'>
                   <label htmlFor='message-text' className='col-form-label'>
