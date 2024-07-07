@@ -59,6 +59,12 @@ import {
   PAYMENT_POST_REQUEST,
   PAYMENT_POST_SUCCESS,
   PAYMENT_POST_FAIL,
+  UPDATE_PAYMENT_POST_REQUEST,
+  UPDATE_PAYMENT_POST_SUCCESS,
+  UPDATE_PAYMENT_POST_FAIL,
+  CALCULATE_UPDATE_PAYMENT_POST_REQUEST,
+  CALCULATE_UPDATE_PAYMENT_POST_SUCCESS,
+  CALCULATE_UPDATE_PAYMENT_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -589,6 +595,64 @@ export const payMent =
     } catch (error) {
       dispatch({
         type: PAYMENT_POST_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+
+//Update post Payment
+export const payMentUpDate =
+  (token, postId, newPackId, expandDay) => async (dispatch) => {
+    try {
+      dispatch({ type: UPDATE_PAYMENT_POST_REQUEST })
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+      const { data } = await axios.post(
+        `https://boardinghouse-api.onrender.com/api/v1/payments/vnpay/upgrade/me`,
+        { postId, newPackId, expandDay },
+        config
+      )
+
+      dispatch({
+        type: UPDATE_PAYMENT_POST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: UPDATE_PAYMENT_POST_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+
+//Update post Payment
+export const CalculatePayMentUpDate =
+  (token, postId, newPackId, expandDay) => async (dispatch) => {
+    try {
+      dispatch({ type: CALCULATE_UPDATE_PAYMENT_POST_REQUEST })
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+          'Content-Type': 'application/json',
+        },
+      }
+      const { data } = await axios.post(
+        `https://boardinghouse-api.onrender.com/api/v1/payments/estimate/upgrade/me`,
+        { postId, newPackId, expandDay },
+        config
+      )
+
+      dispatch({
+        type: CALCULATE_UPDATE_PAYMENT_POST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: CALCULATE_UPDATE_PAYMENT_POST_FAIL,
         payload: error.response.data.message,
       })
     }

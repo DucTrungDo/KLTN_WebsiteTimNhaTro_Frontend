@@ -11,6 +11,7 @@ import {
   moderatorPostsReducer,
   moderatorPostReducer,
   payMentPostReducer,
+  CalculatePayment,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -51,6 +52,7 @@ const reducer = combineReducers({
   postEdit: postEditReducer,
   newPost: newPostReducer,
   payMent: payMentPostReducer,
+  calculatePayment: CalculatePayment,
   packs: packsReducer,
   pack: packReducer,
 })
