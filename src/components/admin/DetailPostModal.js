@@ -567,6 +567,25 @@ const DetailPostModal = ({
               </div>
               <div className='form-group row mt-3'>
                 <label htmlFor='post_cat' className='col-md-12 col-form-label'>
+                  Gói tin
+                </label>
+                <div className='col-md-6'>
+                  <div className='input-group mb-3'>
+                    <input
+                      id='goi_tin'
+                      type='text'
+                      name='goi_tin'
+                      className='form-control'
+                      readOnly='readOnly'
+                      required=''
+                      data-msg-required='Gói tin'
+                      value={post.type?.name}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className='form-group row'>
+                <label htmlFor='post_cat' className='col-md-12 col-form-label'>
                   Loại chuyên mục
                 </label>
                 <div className='col-md-6'>

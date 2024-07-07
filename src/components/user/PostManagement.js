@@ -199,7 +199,7 @@ const PostManagement = () => {
   const deletePostHandler = (slug) => {
     dispatch(deleteUserPost(slug, token))
   }
-  
+
   return (
     <div>
       <nav aria-label='breadcrumb' className='bg-body-secondary px-3 py-1 mb-3'>
@@ -510,6 +510,30 @@ const PostManagement = () => {
                             </Link>
                           )}
 
+                          {post.isHided && (
+                            <button
+                              className='btn btn-sm mt-2'
+                              // onClick={}
+                            >
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='24'
+                                height='24'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                stroke-width='2'
+                                stroke-linecap='round'
+                                stroke-linejoin='round'
+                                class='feather feather-eye'
+                              >
+                                <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
+                                <circle cx='12' cy='12' r='3' />
+                              </svg>
+                              Bỏ ẩn tin
+                            </button>
+                          )}
+
                           {post.isPaid &&
                             post.isApproved &&
                             !post.isViolated &&
@@ -536,7 +560,7 @@ const PostManagement = () => {
                                   Sửa tin
                                 </Link> */}
 
-                                <a href='' className='btn btn-sm mt-2'>
+                                {/* <a href='' className='btn btn-sm mt-2'>
                                   <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     width='24'
@@ -553,7 +577,7 @@ const PostManagement = () => {
                                     <polyline points='5 12 12 5 19 12'></polyline>
                                   </svg>
                                   Đẩy tin
-                                </a>
+                                </a> */}
 
                                 <Link
                                   to={'/user/payment/' + post.slug + '/update'}

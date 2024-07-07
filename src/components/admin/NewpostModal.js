@@ -664,38 +664,6 @@ const NewpostModal = ({ user, setShowModal }) => {
                     </div>
                   </div>
                 </div>
-                <form className='row'>
-                  <div class='mb-3 col'>
-                    <label for='recipient-name' class='col-form-label'>
-                      Loại tin đăng
-                    </label>{' '}
-                    <select
-                      className='form-control valid'
-                      id='post_cat'
-                      name='loai_chuyen_muc'
-                      required=''
-                      data-msg-required='Chưa chọn loại chuyên mục'
-                      aria-invalid='false'
-                    >
-                      <option value=''>Chọn loại tin</option>
-                      <option value=''>Cấp 1</option>
-                      <option value=''>Cấp 2</option>
-                      <option value=''>Cấp 3</option>
-                    </select>
-                  </div>
-
-                  <div class='mb-3 col'>
-                    <label for='recipient-name' class='col-form-label'>
-                      hạn tin đăng
-                    </label>
-                    <input
-                      type='datetime-local'
-                      id='meeting-time'
-                      name='meeting-time'
-                      className='w-100 form-control'
-                    />
-                  </div>
-                </form>
 
                 <div className='form-group row mt-5'>
                   <div className='col-md-12'>

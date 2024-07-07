@@ -97,7 +97,7 @@ const Post = ({ post }) => {
             <div className='bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3'>
               {post.categoryId?.name}
             </div>
-            <div className='rounded text-white position-absolute end-0 top-0 mx-4 py-0 px-3 homepage-post-listing'>
+            <div className='rounded text-white position-absolute end-0 bottom-0 mx-4 mb-2 py-0 px-3 homepage-post-listing'>
               <span
                 className={`post-save ${saved ? 'saved' : ''}`}
                 title='Thêm vào danh sách yêu thích'
@@ -111,13 +111,13 @@ const Post = ({ post }) => {
               </span>
             </div>
             {post.priority === 5 && (
-              <div className='bg-light rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-1 border border-bottom-0'>
+              <div className='rounded-top text-primary position-absolute end-0 top-0 mx-4 mt-3 px-2'>
                 <img
                   src='images/bookmark.png'
-                  alt=''
+                  alt='Tin nổi bật'
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: '55px',
+                    height: '55px',
                   }}
                 />
               </div>

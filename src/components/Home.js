@@ -36,7 +36,7 @@ const Home = () => {
       )
     }
   }, [posts])
-  
+
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
     dispatch(getPosts(indexPageCurrent))
@@ -109,7 +109,9 @@ const Home = () => {
               <div id='tab-1' className=''>
                 <div className='row g-4'>
                   {posts.posts?.length === 0 ? (
-                    <h4>Không tìm thấy bài đăng nào.</h4>
+                    <h4 style={{ minHeight: '300px' }}>
+                      Không tìm thấy bài đăng nào.
+                    </h4>
                   ) : (
                     posts.posts?.map((post, index) => (
                       <Post key={index} post={post} />

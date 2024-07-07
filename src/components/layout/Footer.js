@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
@@ -38,22 +39,22 @@ const Footer = () => {
               />
               <p>
                 <a href='#!' className='text-dark'>
-                  MDBootstrap
+                  Boarding houses
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-dark'>
-                  MDWordPress
+                  Dormitory
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-dark'>
-                  BrandFlow
+                  Apartment for rent
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-dark'>
-                  Bootstrap Angular
+                  House for rent
                 </a>
               </p>
             </div>
@@ -69,24 +70,24 @@ const Footer = () => {
                 }}
               />
               <p>
-                <a href='#!' className='text-dark'>
+                <Link to='/user/profile' className='text-dark'>
                   Your Account
-                </a>
+                </Link>
               </p>
               <p>
-                <a href='#!' className='text-dark'>
-                  Become an Affiliate
-                </a>
+                <Link to='/user/add-new-post' className='text-dark'>
+                  Create Post
+                </Link>
               </p>
               <p>
-                <a href='#!' className='text-dark'>
-                  Shipping Rates
-                </a>
+                <Link to='/favorite_post' className='text-dark'>
+                  Favorite Post
+                </Link>
               </p>
               <p>
-                <a href='#!' className='text-dark'>
-                  Help
-                </a>
+                <Link to='/service-price-list' className='text-dark'>
+                  Service Price List
+                </Link>
               </p>
             </div>
 
