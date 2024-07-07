@@ -450,6 +450,16 @@ const PostModeration = () => {
                           >
                             <strong>Người đăng:</strong> {post.userId?.name}
                           </span>
+                          <span
+                            style={{
+                              display: 'block',
+                              color: '#999',
+                              marginTop: '10px',
+                            }}
+                          >
+                            Cập nhật gần nhất:{' '}
+                            {format(post.updatedAt, 'HH:mm - dd/MM/yyyy')}
+                          </span>
                         </td>
                         <td>
                           <div className='post_price'>
@@ -457,10 +467,14 @@ const PostModeration = () => {
                           </div>
                         </td>
                         <td>
-                          {format(post.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
+                          {post.startedAt
+                            ? format(post.startedAt, 'HH:mm - dd/MM/yyyy')
+                            : ' - '}
                         </td>
                         <td>
-                          {format(post.updatedAt, 'HH:mm:ss - dd/MM/yyyy')}
+                          {post.endedAt
+                            ? format(post.endedAt, 'HH:mm - dd/MM/yyyy')
+                            : ' - '}
                         </td>
                         {filterData.tab !== 'moderated' &&
                         filterData.tab !== 'myModerated' ? (

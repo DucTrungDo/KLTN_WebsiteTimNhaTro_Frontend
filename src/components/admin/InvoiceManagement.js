@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 import { format } from 'date-fns'
 
 import { getAllInvoices, clearErrors } from '../../actions/invoiceActions'
@@ -17,17 +15,45 @@ const InvoiceManagement = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const token = Cookies.get('accessToken')
+  const [page, setPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const { loading, invoices, error } = useSelector((state) => state.invoices)
 
   useEffect(() => {
-    dispatch(getAllInvoices(token))
+    dispatch(getAllInvoices(token, currentPage))
 
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
     }
-  }, [dispatch, alert])
+  }, [dispatch, alert, error])
+
+  useEffect(() => {
+    if (JSON.stringify(invoices) !== '{}' && invoices !== undefined) {
+      setPage(
+        Math.round(
+          invoices.total % 10 !== 0
+            ? Math.floor(invoices.total / 10) + 1
+            : Math.floor(invoices.total / 10)
+        )
+      )
+    }
+  }, [invoices])
+
+  const ChoosePage = (indexPageCurrent) => {
+    setCurrentPage(indexPageCurrent)
+    dispatch(getAllInvoices(token, indexPageCurrent))
+  }
+  const NextAndPrevious = (Actions) => {
+    if (Actions === 'next') {
+      setCurrentPage(currentPage + 1)
+      dispatch(getAllInvoices(token, currentPage + 1))
+    } else {
+      setCurrentPage(currentPage - 1)
+      dispatch(getAllInvoices(token, currentPage - 1))
+    }
+  }
 
   return (
     <div>
@@ -56,11 +82,13 @@ const InvoiceManagement = () => {
             <table className='table table_post_listing table-bordered _table-hover'>
               <thead>
                 <tr>
+                  <th style={{ whiteSpace: 'nowrap' }}>Stt</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã hóa đơn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã người dùng</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã tin đăng</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã gói tin</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phí</th>
+                  <th style={{ whiteSpace: 'nowrap' }}>Thời hạn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phương thức</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày thanh toán</th>
                   {/* <th
@@ -80,13 +108,15 @@ const InvoiceManagement = () => {
                     <td colSpan='7'>Không có hóa đơn nào</td>
                   </tr>
                 ) : (
-                  invoices.invoices?.map((invoice) => (
+                  invoices.invoices?.map((invoice, index) => (
                     <tr key={invoice._id}>
+                      <td>{index + 1 + 10 * (currentPage - 1)}</td>
                       <td>{invoice._id}</td>
                       <td>{invoice.userId}</td>
                       <td>{invoice.postId}</td>
                       <td>{invoice.packId}</td>
                       <td>{invoice.amount}</td>
+                      <td>{invoice.period} ngày</td>
                       <td>{invoice.method}</td>
                       <td>
                         {format(invoice.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
@@ -111,6 +141,57 @@ const InvoiceManagement = () => {
                 )}
               </tbody>
             </table>
+            <nav aria-label='...'>
+              <ul className='pagination justify-content-end'>
+                <li
+                  className={
+                    currentPage === 1 ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('previous')
+                    }}
+                    className='page-link'
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from({ length: page }, (_, index) => (
+                  <li
+                    key={index}
+                    className={
+                      currentPage === index + 1
+                        ? 'page-item active '
+                        : 'page-item'
+                    }
+                  >
+                    <button
+                      onClick={() => {
+                        ChoosePage(index + 1)
+                      }}
+                      className='page-link'
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+                <li
+                  className={
+                    currentPage === page ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('next')
+                    }}
+                    className='page-link'
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       )}

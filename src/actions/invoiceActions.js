@@ -19,7 +19,7 @@ import {
 } from '../constants/invoiceConstants'
 
 // Get user's invoices - User
-export const getUserInvoices = (token) => async (dispatch) => {
+export const getUserInvoices = (token, page) => async (dispatch) => {
   try {
     dispatch({ type: ALL_USER_INVOICES_REQUEST })
 
@@ -30,7 +30,7 @@ export const getUserInvoices = (token) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/invoices/me`,
+      `https://boardinghouse-api.onrender.com/api/v1/invoices/me?page=${page}`,
       config
     )
 
@@ -105,7 +105,7 @@ export const addNewInvoice =
   }
 
 // Get all invoices - Admin
-export const getAllInvoices = (token) => async (dispatch) => {
+export const getAllInvoices = (token, page) => async (dispatch) => {
   try {
     dispatch({ type: ALL_ADMIN_INVOICES_REQUEST })
 
@@ -116,7 +116,7 @@ export const getAllInvoices = (token) => async (dispatch) => {
     }
 
     const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/invoices`,
+      `https://boardinghouse-api.onrender.com/api/v1/invoices?page=${page}`,
       config
     )
 

@@ -37,36 +37,37 @@ export const getPacks = () => async (dispatch) => {
 }
 
 // Admin - Add pack
-export const addPack = (token, name, description, fee) => async (dispatch) => {
-  try {
-    dispatch({ type: ADMIN_ADD_PACK_REQUEST })
+export const addPack =
+  (token, name, description, priority, fee) => async (dispatch) => {
+    try {
+      dispatch({ type: ADMIN_ADD_PACK_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.post(
+        `https://boardinghouse-api.onrender.com/api/v1/packs`,
+        { name, description, priority, fee },
+        config
+      )
+      dispatch({
+        type: ADMIN_ADD_PACK_SUCCESS,
+        payload: data.success,
+      })
+    } catch (error) {
+      dispatch({
+        type: ADMIN_ADD_PACK_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.post(
-      `https://boardinghouse-api.onrender.com/api/v1/packs`,
-      { name, description, fee },
-      config
-    )
-    dispatch({
-      type: ADMIN_ADD_PACK_SUCCESS,
-      payload: data.success,
-    })
-  } catch (error) {
-    dispatch({
-      type: ADMIN_ADD_PACK_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Admin - Update pack
 export const updatePack =
-  (token, packId, name, description, fee) => async (dispatch) => {
+  (token, packId, name, description, priority, fee) => async (dispatch) => {
     try {
       dispatch({ type: ADMIN_UPDATE_PACK_REQUEST })
 
@@ -79,7 +80,7 @@ export const updatePack =
 
       const { data } = await axios.put(
         `https://boardinghouse-api.onrender.com/api/v1/packs/${packId}`,
-        { name, description, fee },
+        { name, description, priority, fee },
         config
       )
 

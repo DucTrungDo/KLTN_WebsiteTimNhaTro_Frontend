@@ -61,7 +61,7 @@ const Home = () => {
                   className='text-start mx-auto mb-5 wow slideInLeft'
                   data-wow-delay='0.1s'
                 >
-                  <h1 className='mb-3'>Property Listing</h1>
+                  <h1 className='mb-3'>Danh sách tin đăng</h1>
                   <h4>Kết quả tìm thấy: {posts.count}</h4>
                 </div>
               </div>

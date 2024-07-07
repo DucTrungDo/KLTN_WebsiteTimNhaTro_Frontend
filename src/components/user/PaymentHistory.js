@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 import { format } from 'date-fns'
 
 import { getUserInvoices, clearErrors } from '../../actions/invoiceActions'
@@ -16,17 +14,46 @@ const PaymentHistory = () => {
   const alert = useAlert()
   const dispatch = useDispatch()
   const token = Cookies.get('accessToken')
+  const [page, setPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const { loading, invoices, error } = useSelector((state) => state.invoices)
 
   useEffect(() => {
-    dispatch(getUserInvoices(token))
+    dispatch(getUserInvoices(token, currentPage))
 
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
     }
-  }, [dispatch, alert])
+  }, [dispatch, alert, error])
+
+  useEffect(() => {
+    if (JSON.stringify(invoices) !== '{}' && invoices !== undefined) {
+      setPage(
+        Math.round(
+          invoices.total % 10 !== 0
+            ? Math.floor(invoices.total / 10) + 1
+            : Math.floor(invoices.total / 10)
+        )
+      )
+    }
+  }, [invoices])
+
+  const ChoosePage = (indexPageCurrent) => {
+    setCurrentPage(indexPageCurrent)
+    dispatch(getUserInvoices(token, indexPageCurrent))
+  }
+
+  const NextAndPrevious = (Actions) => {
+    if (Actions === 'next') {
+      setCurrentPage(currentPage + 1)
+      dispatch(getUserInvoices(token, currentPage + 1))
+    } else {
+      setCurrentPage(currentPage - 1)
+      dispatch(getUserInvoices(token, currentPage - 1))
+    }
+  }
 
   return (
     <div>
@@ -55,10 +82,12 @@ const PaymentHistory = () => {
             <table className='table table_post_listing table-bordered _table-hover'>
               <thead>
                 <tr>
+                  <th style={{ whiteSpace: 'nowrap' }}>Stt</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Mã hóa đơn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Tin đăng</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Gói tin</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phí</th>
+                  <th style={{ whiteSpace: 'nowrap' }}>Thời hạn</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Phương thức</th>
                   <th style={{ whiteSpace: 'nowrap' }}>Ngày thanh toán</th>
                   {/* <th
@@ -78,12 +107,14 @@ const PaymentHistory = () => {
                     <td colSpan='6'>Không có hóa đơn nào</td>
                   </tr>
                 ) : (
-                  invoices.invoices?.map((invoice) => (
+                  invoices.invoices?.map((invoice, index) => (
                     <tr key={invoice._id}>
+                      <td>{index + 1 + 10 * (currentPage - 1)}</td>
                       <td>{invoice._id}</td>
                       <td>{invoice.postId?.title}</td>
                       <td>{invoice.packId?.name}</td>
                       <td>{invoice.amount}</td>
+                      <td>{invoice.period} ngày</td>
                       <td>{invoice.method}</td>
                       <td>{format(invoice.createdAt, 'HH:mm- dd/MM/yyyy')}</td>
                       {/* <td className='d-block'>
@@ -106,6 +137,57 @@ const PaymentHistory = () => {
                 )}
               </tbody>
             </table>
+            <nav aria-label='...'>
+              <ul className='pagination justify-content-end'>
+                <li
+                  className={
+                    currentPage === 1 ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('previous')
+                    }}
+                    className='page-link'
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from({ length: page }, (_, index) => (
+                  <li
+                    key={index}
+                    className={
+                      currentPage === index + 1
+                        ? 'page-item active '
+                        : 'page-item'
+                    }
+                  >
+                    <button
+                      onClick={() => {
+                        ChoosePage(index + 1)
+                      }}
+                      className='page-link'
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+                <li
+                  className={
+                    currentPage === page ? 'page-item disabled' : 'page-item'
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      NextAndPrevious('next')
+                    }}
+                    className='page-link'
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       )}
