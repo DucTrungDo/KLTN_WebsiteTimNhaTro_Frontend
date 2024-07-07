@@ -19,6 +19,24 @@
   background: #eee;
 }
 
+.title-uppercase {
+  text-transform: uppercase;
+}
+
+.title-color {
+  color: #363b3f;
+}
+
+.title-color-nomal {
+  color: #055699;
+}
+.title-color-vip {
+  color: #ea2e9d;
+}
+.title-color-oustanding-vip {
+  color: #e13427;
+}
+
 /* Post detail */
 .navbar_space {
   width: 50px;

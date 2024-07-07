@@ -99,6 +99,29 @@ const PostDetail = () => {
     post.address?.city,
   ])
 
+  const StarRating = ({ index }) => {
+    if (index > 5) {
+      index = 5
+    }
+
+    const stars = []
+
+    for (let i = 0; i < index; i++) {
+      stars.push(<FontAwesomeIcon icon={faStar} className='iconstar' key={i} />)
+    }
+
+    return stars
+  }
+
+  const getTitleClassName = () => {
+    if (post.priority === 5) {
+      return 'title-uppercase title-color-oustanding-vip'
+    } else if (post.priority >= 3) {
+      return 'title-uppercase title-color-vip'
+    }
+    return 'title-color-nomal'
+  }
+
   const PriceDisplay = ({ price }) => {
     if (!price) return
     if (price >= 1000000) {
@@ -261,12 +284,9 @@ const PostDetail = () => {
               ) : null}
 
               <div>
-                <h4 className='mt-2 text-danger fw-bold'>
-                  <FontAwesomeIcon icon={faStar} className='iconstar' />
-                  <FontAwesomeIcon icon={faStar} className='iconstar' />
-                  <FontAwesomeIcon icon={faStar} className='iconstar' />
-                  <FontAwesomeIcon icon={faStar} className='iconstar' />
-                  <FontAwesomeIcon icon={faStar} className='iconstar' />{' '}
+                <h4 className={`mt-2 fw-bold ${getTitleClassName()}`}>
+                  <StarRating index={post.priority} />
+                  {post.priority > 0 && ' '}
                   {post.title}
                 </h4>
               </div>
@@ -354,18 +374,18 @@ const PostDetail = () => {
                     </tr>
                     <tr>
                       <td className='name'>Ngày đăng:</td>
-                      {post.createdAt && (
-                        <td>
-                          {format(post.createdAt, 'HH:mm:ss - dd/MM/yyyy')}
-                        </td>
-                      )}
+                      <td>
+                        {post.startedAt
+                          ? format(post.startedAt, 'dd/MM/yyyy')
+                          : ' - '}
+                      </td>
                     </tr>
                     <tr>
                       <td className='name'>Ngày hết hạn:</td>
                       <td>
-                        <time title='Thứ 6, 15:15 17/05/2024'>
-                          Thứ 6, 15:15 17/05/2024
-                        </time>
+                        {post.endedAt
+                          ? format(post.endedAt, 'dd/MM/yyyy')
+                          : ' - '}
                       </td>
                     </tr>
                   </tbody>

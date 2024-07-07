@@ -199,21 +199,7 @@ const PostManagement = () => {
   const deletePostHandler = (slug) => {
     dispatch(deleteUserPost(slug, token))
   }
-  const comPareDay = (post) => {
-    const currentDate = new Date()
-    const dateEndOfPost = new Date(post.endedAt)
-    if (
-      currentDate.getFullYear() > dateEndOfPost.getUTCFullYear() ||
-      currentDate.getMonth() > dateEndOfPost.getUTCMonth() ||
-      currentDate.getDate() > dateEndOfPost.getUTCDate() ||
-      currentDate.getHours() > dateEndOfPost.getUTCHours() ||
-      currentDate.getMinutes() > dateEndOfPost.getUTCMinutes() ||
-      currentDate.getSeconds() > dateEndOfPost.getUTCSeconds()
-    ) {
-      return true
-    }
-    return false
-  }
+  
   return (
     <div>
       <nav aria-label='breadcrumb' className='bg-body-secondary px-3 py-1 mb-3'>

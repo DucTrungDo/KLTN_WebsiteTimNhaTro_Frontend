@@ -38,6 +38,29 @@ const Post = ({ post }) => {
     setSaved(isFavorite)
   }, [favoritePosts, post.slug])
 
+  const StarRating = ({ index }) => {
+    if (index > 5) {
+      index = 5
+    }
+
+    const stars = []
+
+    for (let i = 0; i < index; i++) {
+      stars.push(<FontAwesomeIcon icon={faStar} className='iconstar' key={i} />)
+    }
+
+    return stars
+  }
+
+  const getTitleClassName = () => {
+    if (post.priority === 5) {
+      return 'title-uppercase title-color'
+    } else if (post.priority >= 3) {
+      return 'title-uppercase'
+    }
+    return ''
+  }
+
   const handleSaveClick = () => {
     if (saved) {
       dispatch(removePostFromFavorite(post.slug))
@@ -87,9 +110,18 @@ const Post = ({ post }) => {
                 <i></i>
               </span>
             </div>
-            <div className='bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3 border border-bottom-0'>
-              Shop
-            </div>
+            {post.priority === 5 && (
+              <div className='bg-light rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-1 border border-bottom-0'>
+                <img
+                  src='images/bookmark.png'
+                  alt=''
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                  }}
+                />
+              </div>
+            )}
           </div>
           <div
             style={{
@@ -98,12 +130,11 @@ const Post = ({ post }) => {
             className='d-flex flex-column'
           >
             <div className='p-4 pb-0'>
-              <div className='d-block ellipsis h4 mb-3'>
-                <FontAwesomeIcon icon={faStar} className='iconstar' />
-                <FontAwesomeIcon icon={faStar} className='iconstar' />
-                <FontAwesomeIcon icon={faStar} className='iconstar' />
-                <FontAwesomeIcon icon={faStar} className='iconstar' />
-                <FontAwesomeIcon icon={faStar} className='iconstar' />{' '}
+              <div
+                className={`d-block ellipsis h4 mb-3 ${getTitleClassName()}`}
+              >
+                <StarRating index={post.priority} />
+                {post.priority > 0 && ' '}
                 {truncateTitle(post.title, 50)}
               </div>
               <h5 className='text-primary mb-2'>

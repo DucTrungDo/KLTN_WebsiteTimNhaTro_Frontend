@@ -14,6 +14,7 @@ const Home = () => {
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [filterData, setFilterData] = useState({})
+
   useEffect(() => {
     dispatch(getPosts(1, {}))
   }, [dispatch])
@@ -23,6 +24,7 @@ const Home = () => {
       dispatch(clearErrors())
     }
   }, [dispatch, alert, error])
+
   useEffect(() => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
@@ -34,10 +36,12 @@ const Home = () => {
       )
     }
   }, [posts])
+  
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
     dispatch(getPosts(indexPageCurrent))
   }
+
   async function NextAndPrevious(Actions) {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
@@ -47,6 +51,7 @@ const Home = () => {
       dispatch(getPosts(currentPage - 1, filterData))
     }
   }
+
   return (
     <>
       <SearchFilter setFilterData={setFilterData} />
