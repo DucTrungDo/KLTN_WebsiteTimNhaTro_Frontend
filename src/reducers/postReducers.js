@@ -66,6 +66,12 @@ import {
   PAYMENT_POST_REQUEST,
   PAYMENT_POST_SUCCESS,
   PAYMENT_POST_FAIL,
+  UPDATE_PAYMENT_POST_REQUEST,
+  UPDATE_PAYMENT_POST_SUCCESS,
+  UPDATE_PAYMENT_POST_FAIL,
+  CALCULATE_UPDATE_PAYMENT_POST_REQUEST,
+  CALCULATE_UPDATE_PAYMENT_POST_SUCCESS,
+  CALCULATE_UPDATE_PAYMENT_POST_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -333,16 +339,49 @@ export const postEditReducer = (state = { post: {} }, action) => {
 export const payMentPostReducer = (state = { link: {} }, action) => {
   switch (action.type) {
     case PAYMENT_POST_REQUEST:
+    case UPDATE_PAYMENT_POST_REQUEST:
       return {
         ...state,
         loading: true,
       }
     case PAYMENT_POST_SUCCESS:
+    case UPDATE_PAYMENT_POST_SUCCESS:
       return {
         loading: false,
         link: action.payload.data,
       }
     case PAYMENT_POST_FAIL:
+    case UPDATE_PAYMENT_POST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+export const CalculatePayment = (state = { result: {} }, action) => {
+  switch (action.type) {
+    case CALCULATE_UPDATE_PAYMENT_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case CALCULATE_UPDATE_PAYMENT_POST_SUCCESS:
+      return {
+        loading: false,
+        result: action.payload.data,
+      }
+    case CALCULATE_UPDATE_PAYMENT_POST_FAIL:
       return {
         ...state,
         loading: false,
