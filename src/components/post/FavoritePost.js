@@ -6,12 +6,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { differenceInDays } from 'date-fns'
 import { removePostFromFavorite } from '../../actions/favoriteActions'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+
 const FavoritePost = () => {
   const dispatch = useDispatch()
 
   const { favoritePosts } = useSelector((state) => state.favorite)
 
-  console.log(favoritePosts)
+  favoritePosts.sort((a, b) => parseFloat(b.priority) - parseFloat(a.priority))
+
   // Function to handle click event on save button
   const handleSaveClick = (slug) => {
     dispatch(removePostFromFavorite(slug))
@@ -57,6 +61,30 @@ const FavoritePost = () => {
       return description.slice(0, maxLength) + '...'
     }
   }
+
+  const StarRating = ({ index }) => {
+    if (index > 5) {
+      index = 5
+    }
+
+    const stars = []
+
+    for (let i = 0; i < index; i++) {
+      stars.push(<FontAwesomeIcon icon={faStar} className='iconstar' key={i} />)
+    }
+
+    return stars
+  }
+
+  const getTitleClassName = (post) => {
+    if (post.priority === 5) {
+      return 'title-uppercase title-color-oustanding-vip'
+    } else if (post.priority >= 3) {
+      return 'title-uppercase title-color-vip'
+    }
+    return 'title-color-nomal'
+  }
+
   return (
     <div>
       <nav
@@ -130,7 +158,7 @@ const FavoritePost = () => {
                 {favoritePosts.map((post) => (
                   <li
                     key={post._id}
-                    className='post-item post-id-650734 style-4 clearfix tin-vip vip1'
+                    className='post-item clearfix'
                     style={{ borderColor: '#ddd' }}
                     post-id='650734'
                   >
@@ -138,17 +166,25 @@ const FavoritePost = () => {
                       <Link className='clearfix' to={'/post/' + post.slug}>
                         <img
                           className='lazy_done'
-                          src='images/property-test.jpg'
+                          src={
+                            post.images[0]
+                              ? post.images[0]
+                              : 'images/property-test.jpg'
+                          }
+                          alt='property-image'
                           data-src='images/property-test.jpg'
-                          alt='property-test'
                           height='100'
                           width='100'
                           layout='responsive'
                           data-loaded='true'
                         />
                       </Link>
-                      <span className='images-number'>10 ảnh</span>
-                      <span className='has-video'></span>
+                      {post.images[0] && (
+                        <span className='images-number'>
+                          {post.images.length} ảnh
+                        </span>
+                      )}
+                      {post.video && <span className='has-video'></span>}
                       <span
                         className='post-save saved'
                         title='Tin đã lưu'
@@ -160,10 +196,12 @@ const FavoritePost = () => {
                     <div className='post-meta'>
                       <h3 className='post-title'>
                         <Link
-                          style={{ color: '#055699' }}
+                          // style={{ color: '#055699' }}
+                          className={`${getTitleClassName(post)}`}
                           to={'/post/' + post.slug}
                         >
-                          {/* <span className='star star-4'></span>  */}
+                          <StarRating index={post.priority} />
+                          {post.priority > 0 && ' '}
                           {post.title}
                         </Link>
                       </h3>

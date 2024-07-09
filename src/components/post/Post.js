@@ -92,7 +92,7 @@ const Post = ({ post }) => {
                 objectFit: 'cover',
               }}
               src={post.images[0] ? post.images[0] : 'images/property-test.jpg'}
-              alt=''
+              alt='property-image'
             />
             <div className='bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3'>
               {post.categoryId?.name}
