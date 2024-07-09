@@ -7,11 +7,13 @@ import { format } from 'date-fns'
 import {
   getUserPosts,
   hideUserPost,
+  unhideUserPost,
   deleteUserPost,
   clearErrors,
 } from '../../actions/postActions'
 import {
   HIDE_USER_POST_RESET,
+  UNHIDE_USER_POST_RESET,
   DELETE_USER_POST_RESET,
 } from '../../constants/postConstants'
 import Cookies from 'js-cookie'
@@ -54,7 +56,7 @@ const PostManagement = () => {
   })
 
   const { loading, posts, error } = useSelector((state) => state.userPosts)
-  const { postLoading, postError, isHided, isDeleted } = useSelector(
+  const { postLoading, postError, isHided, isUnhided, isDeleted } = useSelector(
     (state) => state.userPost
   )
 
@@ -129,6 +131,12 @@ const PostManagement = () => {
       dispatch({ type: HIDE_USER_POST_RESET })
     }
 
+    if (isUnhided) {
+      alert.success('Post unhided')
+      navigate('/user/post-management')
+      dispatch({ type: UNHIDE_USER_POST_RESET })
+    }
+
     if (isDeleted) {
       alert.success('Post deleted')
       navigate('/user/post-management')
@@ -138,6 +146,7 @@ const PostManagement = () => {
     dispatch,
     alert,
     isHided,
+    isUnhided,
     isDeleted,
     error,
     postError,
@@ -194,6 +203,10 @@ const PostManagement = () => {
 
   const hidePostHandler = (slug) => {
     dispatch(hideUserPost(slug, token))
+  }
+
+  const unhidePostHandler = (slug) => {
+    dispatch(unhideUserPost(slug, token))
   }
 
   const deletePostHandler = (slug) => {
@@ -513,7 +526,11 @@ const PostManagement = () => {
                           {post.isHided && (
                             <button
                               className='btn btn-sm mt-2'
-                              // onClick={}
+                              type='button'
+                              data-bs-toggle='modal'
+                              data-bs-target='#unhideModal'
+                              onClick={() => setPostSlug(post.slug)}
+                              disabled={postLoading ? true : false}
                             >
                               <svg
                                 xmlns='http://www.w3.org/2000/svg'
@@ -522,10 +539,10 @@ const PostManagement = () => {
                                 viewBox='0 0 24 24'
                                 fill='none'
                                 stroke='currentColor'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                                class='feather feather-eye'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='feather feather-eye'
                               >
                                 <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
                                 <circle cx='12' cy='12' r='3' />
@@ -859,6 +876,51 @@ const PostManagement = () => {
                 disabled={postLoading ? true : false}
               >
                 Ẩn tin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className='modal fade'
+        id='unhideModal'
+        tabIndex='-1'
+        aria-labelledby='unhideModalLabel'
+        aria-hidden='true'
+      >
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='unhideModalLabel'>
+                Bỏ ẩn tin
+              </h1>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              ></button>
+            </div>
+            <div className='modal-body'>
+              Bạn có chắc là muốn hiển thị post chứ?
+            </div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                className='btn btn-success'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => unhidePostHandler(postSlug)}
+                disabled={postLoading ? true : false}
+              >
+                Hiển thị tin
               </button>
             </div>
           </div>

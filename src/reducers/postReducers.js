@@ -22,6 +22,10 @@ import {
   HIDE_USER_POST_SUCCESS,
   HIDE_USER_POST_FAIL,
   HIDE_USER_POST_RESET,
+  UNHIDE_USER_POST_REQUEST,
+  UNHIDE_USER_POST_SUCCESS,
+  UNHIDE_USER_POST_FAIL,
+  UNHIDE_USER_POST_RESET,
   DELETE_USER_POST_REQUEST,
   DELETE_USER_POST_SUCCESS,
   DELETE_USER_POST_RESET,
@@ -197,6 +201,7 @@ export const userPostReducer = (state = {}, action) => {
     case DELETE_USER_POST_REQUEST:
     case DELETE_ADMIN_POST_REQUEST:
     case HIDE_USER_POST_REQUEST:
+    case UNHIDE_USER_POST_REQUEST:
       return {
         ...state,
         postLoading: true,
@@ -217,6 +222,13 @@ export const userPostReducer = (state = {}, action) => {
         isHided: true,
       }
 
+    case UNHIDE_USER_POST_SUCCESS:
+      return {
+        ...state,
+        postLoading: false,
+        isUnhided: true,
+      }
+
     case DELETE_USER_POST_FAIL:
     case DELETE_ADMIN_POST_FAIL:
       return {
@@ -226,6 +238,7 @@ export const userPostReducer = (state = {}, action) => {
       }
 
     case HIDE_USER_POST_FAIL:
+    case UNHIDE_USER_POST_FAIL:
       return {
         ...state,
         postLoading: false,
@@ -243,6 +256,12 @@ export const userPostReducer = (state = {}, action) => {
       return {
         ...state,
         isHided: false,
+      }
+
+    case UNHIDE_USER_POST_RESET:
+      return {
+        ...state,
+        isUnhided: false,
       }
 
     case CLEAR_ERRORS:

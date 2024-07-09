@@ -23,6 +23,9 @@ import {
   HIDE_USER_POST_REQUEST,
   HIDE_USER_POST_SUCCESS,
   HIDE_USER_POST_FAIL,
+  UNHIDE_USER_POST_REQUEST,
+  UNHIDE_USER_POST_SUCCESS,
+  UNHIDE_USER_POST_FAIL,
   DELETE_USER_POST_REQUEST,
   DELETE_USER_POST_SUCCESS,
   DELETE_USER_POST_FAIL,
@@ -260,6 +263,35 @@ export const hideUserPost = (slug, token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: HIDE_USER_POST_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Unhide user's post (User)
+export const unhideUserPost = (slug, token) => async (dispatch) => {
+  try {
+    dispatch({ type: UNHIDE_USER_POST_REQUEST })
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const { data } = await axios.patch(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/visible/me`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: UNHIDE_USER_POST_SUCCESS,
+      payload: data.success,
+    })
+  } catch (error) {
+    dispatch({
+      type: UNHIDE_USER_POST_FAIL,
       payload: error.response.data.message,
     })
   }

@@ -67,14 +67,17 @@ const UserSidebar = () => {
               <span>TK Chính:</span>{' '}
               <span style={{ fontWeight: '700' }}> 0</span>
             </div> */}
-            {/* <div className='my-2'>
-              <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
+            <div className='my-2'>
+              {/* <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
                 Nạp tiền
-              </Link>
-              <Link className='btn btn-danger btn-sm' to='/user/add-new-post'>
+              </Link> */}
+              <Link
+                className='btn btn-warning btn-sm w-50 fw-semibold'
+                to='/user/add-new-post'
+              >
                 Đăng tin
               </Link>
-            </div> */}
+            </div>
           </div>
           <hr />
           <ul className='nav nav-pills flex-column mb-auto'>
@@ -193,26 +196,26 @@ const UserSidebar = () => {
         </div>
       </div>
       <div
-        class='modal fade'
+        className='modal fade'
         id='exampleModal'
-        tabindex='-1'
+        tabIndex='-1'
         aria-labelledby='exampleModalLabel'
         aria-hidden='true'
       >
-        <div class='modal-dialog'>
-          <div class='modal-content'>
-            <div class='modal-header'>
-              <h1 class='modal-title fs-5' id='exampleModalLabel'>
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='exampleModalLabel'>
                 Trợ giúp, liên hệ
               </h1>
               <button
                 type='button'
-                class='btn-close'
+                className='btn-close'
                 data-bs-dismiss='modal'
                 aria-label='Close'
               ></button>
             </div>
-            <div class='modal-body'>
+            <div className='modal-body'>
               <h6>Bạn cần hỗ trợ đăng tin hoặc đang có thắc mắc?</h6>
               <br />
               Hãy liên hệ Admin qua Email{' '}
@@ -227,10 +230,10 @@ const UserSidebar = () => {
                 <strong>0346952976</strong>
               </a>
             </div>
-            <div class='modal-footer'>
+            <div className='modal-footer'>
               <button
                 type='button'
-                class='btn btn-secondary'
+                className='btn btn-secondary'
                 data-bs-dismiss='modal'
               >
                 Đóng
