@@ -60,14 +60,15 @@ const AdminSidebar = () => {
               </div>
             </Link>
 
-            <div className='my-2'>
+            {/* <div className='my-2'>
               <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
                 Nạp tiền
               </Link>
               <Link className='btn btn-danger btn-sm' to='/user/add-new-post'>
                 Đăng tin
               </Link>
-            </div>
+            </div> */}
+            <hr />
           </div>
           <ul className='nav nav-pills flex-column mb-auto'>
             <li className='nav-item '>
@@ -117,7 +118,7 @@ const AdminSidebar = () => {
             </li>
             <li>
               <NavLink
-                to='/user/service-price-list'
+                to='/service-price-list'
                 className='nav-link link-dark'
               >
                 <FontAwesomeIcon icon={faFile} className='me-2' />

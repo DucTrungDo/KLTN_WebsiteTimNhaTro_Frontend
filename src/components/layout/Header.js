@@ -83,11 +83,11 @@ const Header = () => {
                         <img src={user.img} className='user-info' />
                         <div>
                           <span className='d-block fs-6 mw-200 text-ellipsis overflow-hidden nowrap'>
-                            Xin chào, <strong>{user.name}</strong>
+                            Xin chào! <br /> <strong>{user.name}</strong>
                           </span>
-                          <span className='fs-6'>
+                          {/* <span className='fs-6'>
                             TK Chính: <strong>0 VNĐ</strong>
-                          </span>
+                          </span> */}
                         </div>
                       </Link>
                     </li>

@@ -72,7 +72,7 @@ const Dashboard = () => {
             Quản lý tin đăng
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
-          <Link className='list-group-item' to='/user/recharge'>
+          {/* <Link className='list-group-item' to='/user/recharge'>
             <FontAwesomeIcon icon={faDollarSign} className='me-2' />
             Nạp tiền vào tài khoản
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
@@ -81,32 +81,32 @@ const Dashboard = () => {
             <FontAwesomeIcon icon={faClock} className='me-2' />
             Lịch sử nạp tiền
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
+          </Link> */}
+          <Link className='list-group-item' to='/user/profile'>
+            <FontAwesomeIcon icon={faPenToSquare} className='me-2' />
+            Sửa thông tin cá nhân
+            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
           <Link className='list-group-item' to='/user/payment-history'>
             <FontAwesomeIcon icon={faCalendar} className='me-2' />
             Lịch sử thanh toán
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
-          <Link className='list-group-item' to='/user/profile'>
-            <FontAwesomeIcon icon={faPenToSquare} className='me-2' />
-            Sửa thông tin cá nhân
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link className='list-group-item' to='/user/change-phone-number'>
+          {/* <Link className='list-group-item' to='/user/change-phone-number'>
             <FontAwesomeIcon icon={faPhone} className='me-2' />
             Đổi số điện thoại
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
+          </Link> */}
           <Link className='list-group-item' to='/user/change-password'>
             <FontAwesomeIcon icon={faLock} className='me-2' />
             Đổi mật khẩu
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
           </Link>
-          <Link className='list-group-item' to='/contact'>
+          {/* <Link className='list-group-item' to='/contact'>
             <FontAwesomeIcon icon={faComment} className='me-2' />
             Liên hệ
             <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
+          </Link> */}
           <Link
             className='list-group-item'
             data-bs-toggle='modal'

@@ -63,19 +63,20 @@ const UserSidebar = () => {
                 </div>
               </div>
             </Link>
-            <div>
+            {/* <div>
               <span>TK Chính:</span>{' '}
               <span style={{ fontWeight: '700' }}> 0</span>
-            </div>
-            <div className='my-2'>
+            </div> */}
+            {/* <div className='my-2'>
               <Link className='btn btn-warning btn-sm me-2' to='/user/recharge'>
                 Nạp tiền
               </Link>
               <Link className='btn btn-danger btn-sm' to='/user/add-new-post'>
                 Đăng tin
               </Link>
-            </div>
+            </div> */}
           </div>
+          <hr />
           <ul className='nav nav-pills flex-column mb-auto'>
             <li className='nav-item '>
               <NavLink
@@ -92,7 +93,7 @@ const UserSidebar = () => {
                 Sửa thông tin cá nhân
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to='/user/recharge' className='nav-link link-dark'>
                 <FontAwesomeIcon icon={faDollarSign} className='me-2' />
                 Nạp tiền vào tài khoản
@@ -106,7 +107,7 @@ const UserSidebar = () => {
                 <FontAwesomeIcon icon={faClock} className='me-2' />
                 Lịch sử nạp tiền
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to='/user/payment-history'
@@ -117,19 +118,21 @@ const UserSidebar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to='/user/service-price-list'
-                className='nav-link link-dark'
-              >
+              <NavLink to='/service-price-list' className='nav-link link-dark'>
                 <FontAwesomeIcon icon={faFile} className='me-2' />
                 Bảng giá dịch vụ
               </NavLink>
             </li>
             <li>
-              <NavLink to='/contact' className='nav-link link-dark'>
+              <button
+                type='button'
+                data-bs-toggle='modal'
+                data-bs-target='#exampleModal'
+                className='nav-link link-dark w-100 text-start'
+              >
                 <FontAwesomeIcon icon={faComment} className='me-2' />
-                Liên hệ
-              </NavLink>
+                Trợ giúp, liên hệ
+              </button>
             </li>
             <li>
               <Link
@@ -184,6 +187,53 @@ const UserSidebar = () => {
                 onClick={logoutHandler}
               >
                 Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class='modal fade'
+        id='exampleModal'
+        tabindex='-1'
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'
+      >
+        <div class='modal-dialog'>
+          <div class='modal-content'>
+            <div class='modal-header'>
+              <h1 class='modal-title fs-5' id='exampleModalLabel'>
+                Trợ giúp, liên hệ
+              </h1>
+              <button
+                type='button'
+                class='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              ></button>
+            </div>
+            <div class='modal-body'>
+              <h6>Bạn cần hỗ trợ đăng tin hoặc đang có thắc mắc?</h6>
+              <br />
+              Hãy liên hệ Admin qua Email{' '}
+              <strong>
+                <a href='https://mail.google.com/mail/#inbox?compose=jrjtXSqmMDFqLsbCvGKqCKvVJmJPDDhCgXQqRrkfMLkwnkMVMSwFNLSRCMDrqplSgrqcNHxF'>
+                  alltapduel@gmail.com
+                </a>{' '}
+              </strong>{' '}
+              <br />
+              hoặc Sđt/Zalo{' '}
+              <a href='https://zalo.me/0346952976' target='_blank'>
+                <strong>0346952976</strong>
+              </a>
+            </div>
+            <div class='modal-footer'>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                Đóng
               </button>
             </div>
           </div>
