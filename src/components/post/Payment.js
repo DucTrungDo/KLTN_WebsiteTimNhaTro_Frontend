@@ -235,7 +235,7 @@ const Payment = () => {
                         <select
                           className='form-select'
                           aria-label='Default select example'
-                          key={newPackId}
+                          value={newPackId}
                           onChange={(e) => getPackUpdateSelect(e)}
                         >
                           <option value=''>Gói tin</option>

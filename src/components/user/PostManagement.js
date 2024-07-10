@@ -554,7 +554,8 @@ const PostManagement = () => {
                           {post.isPaid &&
                             post.isApproved &&
                             !post.isViolated &&
-                            !post.isHided && (
+                            !post.isHided &&
+                            !post.isExpired && (
                               <>
                                 {/* <Link
                                   to={'/user/post/edit/' + post.slug}
