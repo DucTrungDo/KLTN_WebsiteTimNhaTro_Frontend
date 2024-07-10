@@ -158,9 +158,9 @@ const PostManagement = () => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
         Math.round(
-          posts.total % 10 !== 0
-            ? Math.floor(posts.total / 10) + 1
-            : Math.floor(posts.total / 10)
+          posts.total % 9 !== 0
+            ? Math.floor(posts.total / 9) + 1
+            : Math.floor(posts.total / 9)
         )
       )
     }
@@ -414,7 +414,7 @@ const PostManagement = () => {
                   // Load all post here
                   posts.posts?.map((post, idx) => (
                     <tr key={post._id}>
-                      <td>{idx + 1 + 10 * (currentPage - 1)}</td>
+                      <td>{idx + 1 + 9 * (currentPage - 1)}</td>
                       <td>
                         <div className='post_thumb'>
                           <Link

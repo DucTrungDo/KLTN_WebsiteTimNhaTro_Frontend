@@ -152,9 +152,9 @@ const PostModeration = () => {
     ) {
       setPage(
         Math.round(
-          moderatorPosts.total % 10 !== 0
-            ? Math.floor(moderatorPosts.total / 10) + 1
-            : Math.floor(moderatorPosts.total / 10)
+          moderatorPosts.total % 9 !== 0
+            ? Math.floor(moderatorPosts.total / 9) + 1
+            : Math.floor(moderatorPosts.total / 9)
         )
       )
     }
@@ -409,7 +409,7 @@ const PostModeration = () => {
                     // Load all post here
                     moderatorPosts.posts?.map((post, idx) => (
                       <tr key={post._id}>
-                        <td>{idx + 1 + 10 * (currentPage - 1)}</td>
+                        <td>{idx + 1 + 9 * (currentPage - 1)}</td>
                         <td>
                           <div className='post_thumb'>
                             <Link
