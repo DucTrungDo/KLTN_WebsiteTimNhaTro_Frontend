@@ -76,6 +76,9 @@ import {
   CALCULATE_UPDATE_PAYMENT_POST_REQUEST,
   CALCULATE_UPDATE_PAYMENT_POST_SUCCESS,
   CALCULATE_UPDATE_PAYMENT_POST_FAIL,
+  STATISTICAL_ADMIN_REQUEST,
+  STATISTICAL_ADMIN_SUCCESS,
+  STATISTICAL_ADMIN_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -489,6 +492,41 @@ export const moderatorPostReducer = (state = {}, action) => {
 
     case MODERATOR_APPROVE_POST_FAIL:
     case MODERATOR_REPORT_POST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const statisticalAdminReducer = (
+  state = { statistical: {} },
+  action
+) => {
+  switch (action.type) {
+    case STATISTICAL_ADMIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case STATISTICAL_ADMIN_SUCCESS:
+      return {
+        loading: false,
+        statistical: action.payload.data,
+      }
+
+    case STATISTICAL_ADMIN_FAIL:
       return {
         ...state,
         loading: false,
