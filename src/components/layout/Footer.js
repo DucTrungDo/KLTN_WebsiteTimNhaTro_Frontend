@@ -1,11 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Footer = () => {
+  const { loading } = useSelector((state) => state.posts)
   return (
     <footer
       className='text-center text-lg-start text-dark'
-      style={{ backgroundColor: '#ECEFF1' }}
+      style={
+        loading
+          ? { backgroundColor: '#ECEFF1', marginTop: '240px' }
+          : { backgroundColor: '#ECEFF1' }
+      }
     >
       <section className='pt-2'>
         <div className='container text-center text-md-start mt-5'>
