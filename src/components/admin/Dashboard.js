@@ -1,41 +1,61 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquarePlus, faFileLines } from '@fortawesome/free-regular-svg-icons'
-import {
-  faAngleRight,
-  faList,
-  faReceipt,
-  faUser,
-  faArrowRightFromBracket,
-  faBoxArchive,
-} from '@fortawesome/free-solid-svg-icons'
-import { logout } from '../../actions/userActions'
-import { RESET_USER_POST } from '../../constants/postConstants'
-import { RESET_INVOICES } from '../../constants/invoiceConstants'
+import { Bar } from 'react-chartjs-2'
+import Chart from 'chart.js/auto'
+import { CategoryScale } from 'chart.js'
+import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
+import { statisticalAdmin } from '../../actions/postActions'
 
 const Dashboard = () => {
+  const token = Cookies.get('accessToken')
+  const [chartData, setChartData] = useState({
+    labels: ['Red', 'Orange', 'Blue'],
+    datasets: [
+      {
+        label: 'Popularity of colours',
+        data: [55, 23, 96],
+        // you can set indiviual colors for each bar
+        backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
+        borderWidth: 1,
+      },
+    ],
+  })
+  const { loading, statistical } = useSelector(
+    (state) => state.statisticalAdmin
+  )
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const alert = useAlert()
-
-  const logoutHandler = () => {
-    dispatch(logout())
-    dispatch({
-      type: RESET_USER_POST,
+  useEffect(() => {
+    dispatch(statisticalAdmin(token))
+  }, [dispatch])
+  useEffect(() => {
+    console.log(statistical.statistics)
+    setChartData({
+      labels: [
+        statistical.statistics.packRevenue[0].packName,
+        statistical.statistics.packRevenue[1].packName,
+        statistical.statistics.packRevenue[2].packName,
+      ],
+      // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+      datasets: [
+        {
+          label: 'Popularity of colours',
+          data: [
+            statistical.statistics.packRevenue[0].totalRevenue,
+            statistical.statistics.packRevenue[1].totalRevenue,
+            statistical.statistics.packRevenue[2].totalRevenue,
+          ],
+          // you can set indiviual colors for each bar
+          backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
+          borderWidth: 1,
+        },
+      ],
     })
-    dispatch({
-      type: RESET_INVOICES,
-    })
-    Cookies.remove('accessToken')
-    alert.success('Logged out successfully.')
-    navigate('/')
-  }
-
+  }, [statistical])
   return (
     <>
       <div>
@@ -54,88 +74,160 @@ const Dashboard = () => {
             </li>
           </ol>
         </nav>
-        <Link
-          className='btn btn-danger btn-block desktop'
-          to='/user/add-new-post'
+        <div
+          class='me-3 border-5 border-success border-start shadow p-3 bg-body rounded '
+          style={{ textAlign: 'center' }}
         >
-          <FontAwesomeIcon icon={faSquarePlus} className='me-2' />
-          Đăng tin mới
-        </Link>
-        <div className='list-group dashboard_list_menu mt-4'>
-          <Link className='list-group-item' to='/admin/post-management'>
-            <FontAwesomeIcon icon={faFileLines} className='me-2' />
-            Quản lý tin đăng
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link className='list-group-item' to='/admin/user-management'>
-            <FontAwesomeIcon icon={faUser} className='me-2' />
-            Quản lý người dùng
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link className='list-group-item' to='/admin/category-management'>
-            <FontAwesomeIcon icon={faList} className='me-2' />
-            Quản lý danh mục
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link className='list-group-item' to='/admin/pack-management'>
-            <FontAwesomeIcon icon={faBoxArchive} className='me-2' />
-            Quản lý gói tin
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link className='list-group-item' to='/admin/invoice-management'>
-            <FontAwesomeIcon icon={faReceipt} className='me-2' />
-            Quản lý hóa đơn
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-          <Link
-            className='list-group-item'
-            data-bs-toggle='modal'
-            data-bs-target='#logoutModal'
-          >
-            <FontAwesomeIcon icon={faArrowRightFromBracket} className='me-2' />
-            Đăng xuất
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
+          <div className='text-success fw-bold fs-3'>TỔNG DOANH THU</div>
+          <div className='fw-bold fs-4'>
+            {parseInt(statistical.statistics.totalRevenue).toLocaleString(
+              'vi-VN'
+            )}{' '}
+            VND
+          </div>
         </div>
-      </div>
-      <div
-        className='modal fade'
-        id='logoutModal'
-        tabIndex='-1'
-        aria-labelledby='logoutModalLabel'
-        aria-hidden='true'
-      >
-        <div className='modal-dialog'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h1 className='modal-title fs-5' id='logoutModalLabel'>
-                Đăng xuất
-              </h1>
-              <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
+        <div>
+          <div class='row ms-0 me-0' style={{ marginTop: '20px' }}>
+            <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-primary fw-bold'>DOANH THU (Tháng)</div>
+                <div className='fw-bold'>
+                  {parseInt(
+                    statistical.statistics.totalRevenueThisMonth
+                  ).toLocaleString('vi-VN')}{' '}
+                  VND
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
             </div>
-            <div className='modal-body'>Bạn chắc chắn muốn thoát chứ?</div>
-            <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-secondary'
-                data-bs-dismiss='modal'
-              >
-                Hủy
-              </button>
-              <button
-                type='button'
-                className='btn btn-primary'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-                onClick={logoutHandler}
-              >
-                Xác nhận
-              </button>
+            <div class='col me-3 border-5 border-success border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-success fw-bold'>TỔNG SỐ BÀI ĐĂNG</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.totalPosts}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+            <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-info fw-bold'>SỐ BÀI ĐĂNG MỚI</div>
+                <div className='fw-bold'>{statistical.statistics.newPosts}</div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+            <div class='col  me-3 border-5 border-warning border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-warning fw-bold'>BÀI ĐƯỢC DUYỆT</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.totalApprovedPost}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+          </div>
+          <div class='row ms-0 me-0'>
+            <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-primary fw-bold'>BÀI VI PHẠM</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.totalViolatedPost}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+            <div class='col me-3 border-5 border-success border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-success fw-bold'>BÀI ĐĂNG CHƯA DUYỆT</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.toModeratedPost}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+            <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-info fw-bold'>SỐ LƯỢNG NGƯỜI DÙNG</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.totalUser}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+            <div class='col me-3 border-5 border-warning border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+              <div>
+                <div className='text-warning fw-bold'>NGƯỜI DÙNG/BÀI ĐĂNG</div>
+                <div className='fw-bold'>
+                  {statistical.statistics.avgPostPerUser}
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className='me-2 align-self-center'
+              />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='chart-container col-md-8'>
+              <h2 style={{ textAlign: 'center' }}>Biểu đồ</h2>
+              <Bar
+                data={chartData}
+                options={{
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Lợi nhuận gói tin',
+                    },
+                    legend: {
+                      display: false,
+                    },
+                  },
+                }}
+              />
+            </div>
+            <div className='col-md-4 align-center align-content-center'>
+              <div className='col me-3  border-5 border-secondary border-start shadow p-3 bg-body rounded d-flex justify-content-around h-50'>
+                <div className='align-center align-content-center'>
+                  <div className='text-secondary fw-bold'>
+                    DOANH THU GÓI NỔI BẬT (THÁNG)
+                  </div>
+                  <div className='text-secondary fw-bold'>
+                    {statistical.statistics.packRevenueThisMonth[0].packName}
+                  </div>
+                  <div className='fw-bold fs-4'>
+                    {parseInt(
+                      statistical.statistics.packRevenueThisMonth[0]
+                        .totalRevenue
+                    ).toLocaleString('vi-VN')}{' '}
+                    VND
+                  </div>
+                </div>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  className='me-2 align-self-center'
+                />
+              </div>
             </div>
           </div>
         </div>

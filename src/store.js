@@ -12,6 +12,7 @@ import {
   moderatorPostReducer,
   payMentPostReducer,
   CalculatePayment,
+  statisticalAdminReducer,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -55,6 +56,7 @@ const reducer = combineReducers({
   calculatePayment: CalculatePayment,
   packs: packsReducer,
   pack: packReducer,
+  statisticalAdmin: statisticalAdminReducer,
 })
 
 let initialState = {

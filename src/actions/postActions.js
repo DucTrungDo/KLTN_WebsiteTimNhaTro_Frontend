@@ -68,6 +68,9 @@ import {
   CALCULATE_UPDATE_PAYMENT_POST_REQUEST,
   CALCULATE_UPDATE_PAYMENT_POST_SUCCESS,
   CALCULATE_UPDATE_PAYMENT_POST_FAIL,
+  STATISTICAL_ADMIN_REQUEST,
+  STATISTICAL_ADMIN_SUCCESS,
+  STATISTICAL_ADMIN_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -689,6 +692,32 @@ export const CalculatePayMentUpDate =
       })
     }
   }
+export const statisticalAdmin = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: STATISTICAL_ADMIN_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/statistics/admin`,
+      config
+    )
+
+    dispatch({
+      type: STATISTICAL_ADMIN_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: STATISTICAL_ADMIN_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({
