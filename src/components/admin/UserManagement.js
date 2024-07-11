@@ -60,9 +60,9 @@ const UserManagement = () => {
     if (JSON.stringify(users) !== '{}' && users !== undefined) {
       setPage(
         Math.round(
-          users.total % 10 !== 0
-            ? Math.floor(users.total / 10) + 1
-            : Math.floor(users.total / 10)
+          users.total % 9 !== 0
+            ? Math.floor(users.total / 9) + 1
+            : Math.floor(users.total / 9)
         )
       )
     }
@@ -239,7 +239,7 @@ const UserManagement = () => {
                   {users &&
                     users.users?.map((user, index) => (
                       <tr key={user._id}>
-                        <td>{index + 1 + 10 * (currentPage - 1)}</td>
+                        <td>{index + 1 + 9 * (currentPage - 1)}</td>
                         <td>
                           <div className='user_avatar'>
                             <img src={user.img} className='user-info' />

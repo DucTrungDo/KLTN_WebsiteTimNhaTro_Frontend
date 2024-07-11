@@ -344,12 +344,12 @@ const EditPost = () => {
             </Link>
           </li>
           <li className='breadcrumb-item active' aria-current='page'>
-            Đăng tin
+            Sửa tin
           </li>
         </ol>
       </nav>
       <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
-        <h1 className='h1'>Đăng tin mới</h1>
+        <h1 className='h1'>Sửa tin</h1>
       </div>
       {loading || PostLoading ? (
         <Loader></Loader>

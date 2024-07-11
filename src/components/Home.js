@@ -29,9 +29,9 @@ const Home = () => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
         Math.round(
-          posts.count % 10 !== 0
-            ? Math.floor(posts.count / 10) + 1
-            : Math.floor(posts.count / 10)
+          posts.count % 9 !== 0
+            ? Math.floor(posts.count / 9) + 1
+            : Math.floor(posts.count / 9)
         )
       )
     }
