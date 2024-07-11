@@ -33,28 +33,28 @@ const Dashboard = () => {
     dispatch(statisticalAdmin(token))
   }, [dispatch])
   useEffect(() => {
-    console.log(statistical.statistics)
-    setChartData({
-      labels: [
-        statistical.statistics.packRevenue[0].packName,
-        statistical.statistics.packRevenue[1].packName,
-        statistical.statistics.packRevenue[2].packName,
-      ],
-      // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
-      datasets: [
-        {
-          label: 'Popularity of colours',
-          data: [
-            statistical.statistics.packRevenue[0].totalRevenue,
-            statistical.statistics.packRevenue[1].totalRevenue,
-            statistical.statistics.packRevenue[2].totalRevenue,
-          ],
-          // you can set indiviual colors for each bar
-          backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
-          borderWidth: 1,
-        },
-      ],
-    })
+    statistical.statistics &&
+      setChartData({
+        labels: [
+          statistical.statistics.packRevenue[0].packName,
+          statistical.statistics.packRevenue[1].packName,
+          statistical.statistics.packRevenue[2].packName,
+        ],
+        // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+        datasets: [
+          {
+            label: 'Popularity of colours',
+            data: [
+              statistical.statistics.packRevenue[0].totalRevenue,
+              statistical.statistics.packRevenue[1].totalRevenue,
+              statistical.statistics.packRevenue[2].totalRevenue,
+            ],
+            // you can set indiviual colors for each bar
+            backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
+            borderWidth: 1,
+          },
+        ],
+      })
   }, [statistical])
   return (
     <>
@@ -80,7 +80,7 @@ const Dashboard = () => {
         >
           <div className='text-success fw-bold fs-3'>TỔNG DOANH THU</div>
           <div className='fw-bold fs-4'>
-            {parseInt(statistical.statistics.totalRevenue).toLocaleString(
+            {parseInt(statistical.statistics?.totalRevenue).toLocaleString(
               'vi-VN'
             )}{' '}
             VND
@@ -93,7 +93,7 @@ const Dashboard = () => {
                 <div className='text-primary fw-bold'>DOANH THU (Tháng)</div>
                 <div className='fw-bold'>
                   {parseInt(
-                    statistical.statistics.totalRevenueThisMonth
+                    statistical.statistics?.totalRevenueThisMonth
                   ).toLocaleString('vi-VN')}{' '}
                   VND
                 </div>
@@ -107,7 +107,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-success fw-bold'>TỔNG SỐ BÀI ĐĂNG</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.totalPosts}
+                  {statistical.statistics?.totalPosts}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -118,7 +118,9 @@ const Dashboard = () => {
             <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
               <div>
                 <div className='text-info fw-bold'>SỐ BÀI ĐĂNG MỚI</div>
-                <div className='fw-bold'>{statistical.statistics.newPosts}</div>
+                <div className='fw-bold'>
+                  {statistical.statistics?.newPosts}
+                </div>
               </div>
               <FontAwesomeIcon
                 icon={faSquarePlus}
@@ -129,7 +131,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-warning fw-bold'>BÀI ĐƯỢC DUYỆT</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.totalApprovedPost}
+                  {statistical.statistics?.totalApprovedPost}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -143,7 +145,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-primary fw-bold'>BÀI VI PHẠM</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.totalViolatedPost}
+                  {statistical.statistics?.totalViolatedPost}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -155,7 +157,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-success fw-bold'>BÀI ĐĂNG CHƯA DUYỆT</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.toModeratedPost}
+                  {statistical.statistics?.toModeratedPost}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -167,7 +169,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-info fw-bold'>SỐ LƯỢNG NGƯỜI DÙNG</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.totalUser}
+                  {statistical.statistics?.totalUser}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -179,7 +181,7 @@ const Dashboard = () => {
               <div>
                 <div className='text-warning fw-bold'>NGƯỜI DÙNG/BÀI ĐĂNG</div>
                 <div className='fw-bold'>
-                  {statistical.statistics.avgPostPerUser}
+                  {statistical.statistics?.avgPostPerUser}
                 </div>
               </div>
               <FontAwesomeIcon
@@ -213,11 +215,11 @@ const Dashboard = () => {
                     DOANH THU GÓI NỔI BẬT (THÁNG)
                   </div>
                   <div className='text-secondary fw-bold'>
-                    {statistical.statistics.packRevenueThisMonth[0].packName}
+                    {statistical.statistics?.packRevenueThisMonth[0].packName}
                   </div>
                   <div className='fw-bold fs-4'>
                     {parseInt(
-                      statistical.statistics.packRevenueThisMonth[0]
+                      statistical.statistics?.packRevenueThisMonth[0]
                         .totalRevenue
                     ).toLocaleString('vi-VN')}{' '}
                     VND
