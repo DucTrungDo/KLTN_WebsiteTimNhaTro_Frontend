@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/KLTN_WebsiteTimNhaTro_Frontend/static/css/main.5e15df05.css",
-    "main.js": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/main.a017d85a.js",
+    "main.css": "/KLTN_WebsiteTimNhaTro_Frontend/static/css/main.f24333c2.css",
+    "main.js": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/main.cef4b6c4.js",
     "static/js/453.699627e3.chunk.js": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/453.699627e3.chunk.js",
     "static/media/love-full.png": "/KLTN_WebsiteTimNhaTro_Frontend/static/media/love-full.3f54d936b0881aa65b8b.png",
     "index.html": "/KLTN_WebsiteTimNhaTro_Frontend/index.html",
-    "main.5e15df05.css.map": "/KLTN_WebsiteTimNhaTro_Frontend/static/css/main.5e15df05.css.map",
-    "main.a017d85a.js.map": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/main.a017d85a.js.map",
+    "main.f24333c2.css.map": "/KLTN_WebsiteTimNhaTro_Frontend/static/css/main.f24333c2.css.map",
+    "main.cef4b6c4.js.map": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/main.cef4b6c4.js.map",
     "453.699627e3.chunk.js.map": "/KLTN_WebsiteTimNhaTro_Frontend/static/js/453.699627e3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5e15df05.css",
-    "static/js/main.a017d85a.js"
+    "static/css/main.f24333c2.css",
+    "static/js/main.cef4b6c4.js"
   ]
 }
