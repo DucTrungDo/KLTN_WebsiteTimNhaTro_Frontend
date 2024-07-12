@@ -5,6 +5,12 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  POPULAR_POSTS_REQUEST,
+  POPULAR_POSTS_SUCCESS,
+  POPULAR_POSTS_FAIL,
+  LASTEST_POSTS_REQUEST,
+  LASTEST_POSTS_SUCCESS,
+  LASTEST_POSTS_FAIL,
   USER_POST_DETAILS_REQUEST,
   USER_POST_DETAILS_SUCCESS,
   USER_POST_DETAILS_FAIL,
@@ -79,6 +85,9 @@ import {
   STATISTICAL_ADMIN_REQUEST,
   STATISTICAL_ADMIN_SUCCESS,
   STATISTICAL_ADMIN_FAIL,
+  STATISTICAL_MODERATOR_REQUEST,
+  STATISTICAL_MODERATOR_SUCCESS,
+  STATISTICAL_MODERATOR_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -144,6 +153,69 @@ export const postDetailsReducer = (state = { post: {} }, action) => {
     case USER_POST_DETAILS_FAIL:
     case MODERATOR_POST_DETAILS_FAIL:
     case ADMIN_POST_DETAILS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const popularPostsReducer = (state = { popularPosts: [] }, action) => {
+  switch (action.type) {
+    case POPULAR_POSTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case POPULAR_POSTS_SUCCESS:
+      return {
+        loading: false,
+        popularPosts: action.payload,
+      }
+
+    case POPULAR_POSTS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const latestPostsReducer = (state = { latestPosts: [] }, action) => {
+  switch (action.type) {
+    case LASTEST_POSTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case LASTEST_POSTS_SUCCESS:
+      return {
+        loading: false,
+        latestPosts: action.payload,
+      }
+
+    case LASTEST_POSTS_FAIL:
       return {
         ...state,
         loading: false,
@@ -527,6 +599,41 @@ export const statisticalAdminReducer = (
       }
 
     case STATISTICAL_ADMIN_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+
+    default:
+      return state
+  }
+}
+
+export const statisticalModeratorReducer = (
+  state = { statistical: {} },
+  action
+) => {
+  switch (action.type) {
+    case STATISTICAL_MODERATOR_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+
+    case STATISTICAL_MODERATOR_SUCCESS:
+      return {
+        loading: false,
+        statistical: action.payload.data,
+      }
+
+    case STATISTICAL_MODERATOR_FAIL:
       return {
         ...state,
         loading: false,

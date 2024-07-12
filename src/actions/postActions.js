@@ -7,6 +7,12 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
+  POPULAR_POSTS_REQUEST,
+  POPULAR_POSTS_SUCCESS,
+  POPULAR_POSTS_FAIL,
+  LASTEST_POSTS_REQUEST,
+  LASTEST_POSTS_SUCCESS,
+  LASTEST_POSTS_FAIL,
   USER_POST_DETAILS_REQUEST,
   USER_POST_DETAILS_SUCCESS,
   USER_POST_DETAILS_FAIL,
@@ -71,6 +77,9 @@ import {
   STATISTICAL_ADMIN_REQUEST,
   STATISTICAL_ADMIN_SUCCESS,
   STATISTICAL_ADMIN_FAIL,
+  STATISTICAL_MODERATOR_REQUEST,
+  STATISTICAL_MODERATOR_SUCCESS,
+  STATISTICAL_MODERATOR_FAIL,
   CLEAR_ERRORS,
 } from '../constants/postConstants'
 
@@ -117,6 +126,48 @@ export const getPostDetails = (slug) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: POST_DETAILS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get popular posts
+export const getPopularPosts = (slug) => async (dispatch) => {
+  try {
+    dispatch({ type: POPULAR_POSTS_REQUEST })
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/popular`
+    )
+
+    dispatch({
+      type: POPULAR_POSTS_SUCCESS,
+      payload: data.data.popularPosts,
+    })
+  } catch (error) {
+    dispatch({
+      type: POPULAR_POSTS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+// Get latest posts
+export const getLatestPosts = (slug) => async (dispatch) => {
+  try {
+    dispatch({ type: LASTEST_POSTS_REQUEST })
+
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/posts/${slug}/latest`
+    )
+
+    dispatch({
+      type: LASTEST_POSTS_SUCCESS,
+      payload: data.data.latestPosts,
+    })
+  } catch (error) {
+    dispatch({
+      type: LASTEST_POSTS_FAIL,
       payload: error.response.data.message,
     })
   }
@@ -692,6 +743,7 @@ export const CalculatePayMentUpDate =
       })
     }
   }
+
 export const statisticalAdmin = (token) => async (dispatch) => {
   try {
     dispatch({ type: STATISTICAL_ADMIN_REQUEST })
@@ -713,6 +765,32 @@ export const statisticalAdmin = (token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: STATISTICAL_ADMIN_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+
+export const statisticalModerator = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: STATISTICAL_MODERATOR_REQUEST })
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        'Content-Type': 'application/json',
+      },
+    }
+    const { data } = await axios.get(
+      `https://boardinghouse-api.onrender.com/api/v1/statistics/moderator`,
+      config
+    )
+
+    dispatch({
+      type: STATISTICAL_MODERATOR_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: STATISTICAL_MODERATOR_FAIL,
       payload: error.response.data.message,
     })
   }

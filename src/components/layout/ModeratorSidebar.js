@@ -5,7 +5,10 @@ import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileLines } from '@fortawesome/free-regular-svg-icons'
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRightFromBracket,
+  faChartLine,
+} from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink } from 'react-router-dom'
 
 import { logout } from '../../actions/userActions'
@@ -64,7 +67,13 @@ const ModeratorSidebar = () => {
             </div> */}
             <hr />
           </div>
-          <ul className='nav nav-pills flex-column mb-auto'>
+          <ul className='nav nav-pills flex-column mb-auto my-2'>
+            <li className='nav-item '>
+              <NavLink to='/moderator/dashboard' className='nav-link link-dark'>
+                <FontAwesomeIcon icon={faChartLine} className='me-2' />
+                Xem thống kê
+              </NavLink>
+            </li>
             <li className='nav-item '>
               <NavLink
                 to='/moderator/post-moderation'

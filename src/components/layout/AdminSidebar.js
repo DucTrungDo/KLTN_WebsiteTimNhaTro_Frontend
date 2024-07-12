@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileLines, faFile } from '@fortawesome/free-regular-svg-icons'
 import {
+  faChartLine,
   faArrowRightFromBracket,
   faList,
   faReceipt,
@@ -71,6 +72,15 @@ const AdminSidebar = () => {
             <hr />
           </div>
           <ul className='nav nav-pills flex-column mb-auto'>
+          <li className='nav-item '>
+              <NavLink
+                to='/admin/dashboard'
+                className='nav-link link-dark'
+              >
+                <FontAwesomeIcon icon={faChartLine} className='me-2' />
+                Xem thống kê
+              </NavLink>
+            </li>
             <li className='nav-item '>
               <NavLink
                 to='/admin/post-management'

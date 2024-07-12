@@ -13,6 +13,9 @@ import {
   payMentPostReducer,
   CalculatePayment,
   statisticalAdminReducer,
+  statisticalModeratorReducer,
+  popularPostsReducer,
+  latestPostsReducer,
 } from './reducers/postReducers'
 import { favoriteReducer } from './reducers/favoriteReducers'
 import {
@@ -34,6 +37,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const reducer = combineReducers({
   posts: postsReducer,
   postDetails: postDetailsReducer,
+  popularPosts: popularPostsReducer,
+  latestPosts: latestPostsReducer,
   moderatorPosts: moderatorPostsReducer,
   moderatorPost: moderatorPostReducer,
   favorite: favoriteReducer,
@@ -57,6 +62,7 @@ const reducer = combineReducers({
   packs: packsReducer,
   pack: packReducer,
   statisticalAdmin: statisticalAdminReducer,
+  statisticalModerator: statisticalModeratorReducer,
 })
 
 let initialState = {

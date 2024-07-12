@@ -1,36 +1,36 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquareCheck } from '@fortawesome/free-regular-svg-icons'
 import {
-  faAngleRight,
-  faArrowRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons'
-import { logout } from '../../actions/userActions'
-import { RESET_USER_POST } from '../../constants/postConstants'
-import { RESET_INVOICES } from '../../constants/invoiceConstants'
+  faSquareCheck,
+  faSquarePlus,
+} from '@fortawesome/free-regular-svg-icons'
+import Loader from '../layout/Loader'
+import { statisticalModerator } from '../../actions/postActions'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const alert = useAlert()
+  const token = Cookies.get('accessToken')
 
-  const logoutHandler = () => {
-    dispatch(logout())
-    dispatch({
-      type: RESET_USER_POST,
-    })
-    dispatch({
-      type: RESET_INVOICES,
-    })
-    Cookies.remove('accessToken')
-    alert.success('Logged out successfully.')
-    navigate('/')
-  }
+  const { loading, statistical, error } = useSelector(
+    (state) => state.statisticalModerator
+  )
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+  }, [dispatch, alert, error])
+
+  useEffect(() => {
+    dispatch(statisticalModerator(token))
+  }, [dispatch])
+
   return (
     <>
       <div>
@@ -49,66 +49,74 @@ const Dashboard = () => {
             </li>
           </ol>
         </nav>
-        <Link
-          className='btn btn-danger btn-block desktop'
-          to='/moderator/post-moderation'
-        >
-          <FontAwesomeIcon icon={faSquareCheck} className='me-2' />
-          Kiểm duyệt bài đăng
-        </Link>
-        <div className='list-group dashboard_list_menu mt-4'>
-          <Link
-            className='list-group-item'
-            data-bs-toggle='modal'
-            data-bs-target='#logoutModal'
-          >
-            <FontAwesomeIcon icon={faArrowRightFromBracket} className='me-2' />
-            Đăng xuất
-            <FontAwesomeIcon icon={faAngleRight} className='angle-icon' />
-          </Link>
-        </div>
-      </div>
-      <div
-        className='modal fade'
-        id='logoutModal'
-        tabIndex='-1'
-        aria-labelledby='logoutModalLabel'
-        aria-hidden='true'
-      >
-        <div className='modal-dialog'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h1 className='modal-title fs-5' id='logoutModalLabel'>
-                Đăng xuất
-              </h1>
-              <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className='row ms-0 me-0' style={{ marginTop: '20px' }}>
+              <div className='col me-3 border-5 border-primary border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                <div>
+                  <div className='text-primary fw-bold'>
+                    Tổng số bài đã kiểm duyệt
+                  </div>
+                  <div className='fw-bold'>
+                    {parseInt(
+                      statistical.statistics?.totalPosts
+                    ).toLocaleString('vi-VN')}{' '}
+                    VND
+                  </div>
+                </div>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  className='me-2 align-self-center'
+                />
+              </div>
+              <div className='col me-3 border-5 border-success border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                <div>
+                  <div className='text-success fw-bold'>Số bài hợp lệ</div>
+                  <div className='fw-bold'>
+                    {statistical.statistics?.totalApprovedPost}
+                  </div>
+                </div>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  className='me-2 align-self-center'
+                />
+              </div>
+              <div className='col  me-3 border-5 border-warning border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                <div>
+                  <div className='text-warning fw-bold'>Số bài vi phạm</div>
+                  <div className='fw-bold'>
+                    {statistical.statistics?.totalViolatedPost}
+                  </div>
+                </div>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  className='me-2 align-self-center'
+                />
+              </div>
+              <div className='col  me-3 border-5 border-info border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                <div>
+                  <div className='text-info fw-bold'>Số bài chờ duyệt</div>
+                  <div className='fw-bold'>
+                    {statistical.statistics?.toModeratedPost}
+                  </div>
+                </div>
+                <FontAwesomeIcon
+                  icon={faSquarePlus}
+                  className='me-2 align-self-center'
+                />
+              </div>
             </div>
-            <div className='modal-body'>Bạn chắc chắn muốn thoát chứ?</div>
-            <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-secondary'
-                data-bs-dismiss='modal'
-              >
-                Hủy
-              </button>
-              <button
-                type='button'
-                className='btn btn-primary'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-                onClick={logoutHandler}
-              >
-                Xác nhận
-              </button>
-            </div>
-          </div>
-        </div>
+            <Link
+              className='btn btn-danger btn-block desktop'
+              to='/moderator/post-moderation'
+            >
+              <FontAwesomeIcon icon={faSquareCheck} className='me-2' />
+              Kiểm duyệt bài đăng
+            </Link>
+          </>
+        )}
       </div>
     </>
   )

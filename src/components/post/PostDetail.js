@@ -23,6 +23,8 @@ import {
   getPostDetailsByModerator,
   getPostDetailsByAdmin,
   getPostDetails,
+  getPopularPosts,
+  getLatestPosts,
   clearErrors,
 } from '../../actions/postActions'
 import {
@@ -38,6 +40,17 @@ const PostDetail = () => {
   const { slug } = useParams()
   const token = Cookies.get('accessToken')
   const { loading, post, error } = useSelector((state) => state.postDetails)
+  const {
+    loading: popularPostLoading,
+    popularPosts,
+    error: popularPostError,
+  } = useSelector((state) => state.popularPosts)
+  const {
+    loading: latestPostLoading,
+    latestPosts,
+    error: latestPostError,
+  } = useSelector((state) => state.latestPosts)
+
   const { favoritePosts } = useSelector((state) => state.favorite)
   const [addressPost, setaddressPost] = useState('')
   const [saved, setSaved] = useState(false)
@@ -69,8 +82,10 @@ const PostDetail = () => {
       dispatch(getPostDetailsByAdmin(slug, token))
     } else {
       dispatch(getPostDetails(slug))
+      dispatch(getPopularPosts(slug))
+      dispatch(getLatestPosts(slug))
     }
-  }, [dispatch])
+  }, [dispatch, location])
 
   useEffect(() => {
     if (error) {
@@ -78,7 +93,19 @@ const PostDetail = () => {
       dispatch(clearErrors())
       navigate('/')
     }
-  }, [dispatch, error, alert])
+
+    if (popularPostError) {
+      alert.error(popularPostError)
+      dispatch(clearErrors())
+      navigate('/')
+    }
+
+    if (latestPostError) {
+      alert.error(latestPostError)
+      dispatch(clearErrors())
+      navigate('/')
+    }
+  }, [dispatch, navigate, error, popularPostError, latestPostError, alert])
 
   useEffect(() => {
     if (post.address !== undefined) {
@@ -99,6 +126,13 @@ const PostDetail = () => {
     post.address?.city,
   ])
 
+  const truncateTitle = (title, limit) => {
+    if (title.length > limit) {
+      return title.substring(0, limit) + '...'
+    }
+    return title
+  }
+
   const StarRating = ({ index }) => {
     if (index > 5) {
       index = 5
@@ -113,7 +147,7 @@ const PostDetail = () => {
     return stars
   }
 
-  const getTitleClassName = () => {
+  const getTitleClassName = (post) => {
     if (post.priority === 5) {
       return 'title-uppercase title-color-oustanding-vip'
     } else if (post.priority >= 3) {
@@ -204,7 +238,7 @@ const PostDetail = () => {
         </div>
       </nav>
       {/* <SearchFilter /> */}
-      {loading ? (
+      {loading || popularPostLoading || latestPostLoading ? (
         <Loader />
       ) : (
         <div className='container mt-1 mb-4'>
@@ -284,7 +318,7 @@ const PostDetail = () => {
               ) : null}
 
               <div>
-                <h4 className={`mt-2 fw-bold ${getTitleClassName()}`}>
+                <h4 className={`mt-2 fw-bold ${getTitleClassName(post)}`}>
                   <StarRating index={post.priority} />
                   {post.priority > 0 && ' '}
                   {post.title}
@@ -319,15 +353,18 @@ const PostDetail = () => {
                     {post.area}m<sup>2</sup>
                   </span>
                 </div>
-                <div className='flex-row me-3'>
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className='post-attributes-icon me-2'
-                  />
-                  <span>
-                    <FormatDateAgo date={post.createdAt} />
-                  </span>
-                </div>
+                {post.startedAt && (
+                  <div className='flex-row me-3'>
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className='post-attributes-icon me-2'
+                    />
+                    <span>
+                      <FormatDateAgo date={post.startedAt} />
+                    </span>
+                  </div>
+                )}
+
                 {/* <div className='flex-row'>
                   <FontAwesomeIcon
                     icon={faHashtag}
@@ -403,22 +440,23 @@ const PostDetail = () => {
                       <td className='name'>Điện thoại:</td>
                       <td> {post.userId?.phone} </td>
                     </tr>
-                    {post.userId?.zalo !== 'undefined' && (
+                    {post.userId?.zalo !== 'undefined' && post.userId?.zalo && (
                       <tr>
                         <td className='name'>Zalo</td>
                         <td> {post.userId?.zalo} </td>
                       </tr>
                     )}
-                    {post.userId?.facebook !== 'undefined' && (
-                      <tr>
-                        <td className='name'>Facebook</td>
-                        <td>
-                          <a href={post.userId?.facebook} target='_blank'>
-                            {post.userId?.facebook}
-                          </a>
-                        </td>
-                      </tr>
-                    )}
+                    {post.userId?.facebook !== 'undefined' &&
+                      post.userId?.facebook && (
+                        <tr>
+                          <td className='name'>Facebook</td>
+                          <td>
+                            <a href={post.userId?.facebook} target='_blank'>
+                              {post.userId?.facebook}
+                            </a>
+                          </td>
+                        </tr>
+                      )}
                   </tbody>
                 </table>
               </div>
@@ -432,7 +470,7 @@ const PostDetail = () => {
               </div>
             </div>
             <div className='col-sm-12 col-md-4 pe-0'>
-              <div className='info_sell border border-1 rounded'>
+              <div className='info_sell border border-1 rounded mb-3'>
                 <div className='mt-3'>
                   <img
                     src={post.userId?.img}
@@ -481,149 +519,108 @@ const PostDetail = () => {
                   </button>
                 </div>
               </div>
-              <section className='section section-aside-tinmoidang mt-3 pb-0'>
-                <div className='section-header'>
-                  <span className='section-title'>Tin nổi bật</span>
-                </div>
-                <ul className='post-listing aside clearfix'>
-                  <li
-                    className='post-item clearfix tin-vip vip1'
-                    post-id='654398'
-                  >
-                    <a href='/' className='text-decoration-none'>
-                      <figure>
-                        <img
-                          className='lazy_done'
-                          src='images/property-test.jpg'
-                          data-src='images/property-test.jpg'
-                          alt='Khai trương phòng giá rẻ, duplex siêu phẩm BanCol, đầy đủ nội thất, tại Tân Bình, giáp Quận 10'
-                          height='100'
-                          width='100'
-                          layout='responsive'
-                          data-loaded='true'
-                        />
-                      </figure>
-                      <div className='post-meta'>
-                        <span
-                          className='post-title'
-                          style={{ color: '#ea2e9d' }}
+              {popularPosts.length !== 0 && (
+                <section className='section section-aside-tinmoidang pb-0'>
+                  <div className='section-header'>
+                    <span className='section-title'>Tin nổi bật</span>
+                  </div>
+                  <ul className='post-listing aside clearfix'>
+                    {popularPosts.map((post) => (
+                      <li
+                        key={post._id}
+                        className='post-item clearfix tin-vip vip1'
+                      >
+                        <Link
+                          to={'/post/' + post.slug}
+                          className='text-decoration-none'
                         >
-                          <span className='star star-4'></span> Khai trương
-                          phòng giá rẻ, duplex siêu phẩm…
-                        </span>
-                        <span className='post-price'>5 triệu/tháng</span>
-                        <time
-                          className='post-time'
-                          title='Thứ 7, 19:49 11/05/2024'
+                          <figure>
+                            <img
+                              className='lazy_done'
+                              src={
+                                post.images[0]
+                                  ? post.images[0]
+                                  : 'images/property-test.jpg'
+                              }
+                              data-src='images/property-test.jpg'
+                              alt='property-image'
+                              height='100'
+                              width='100'
+                              layout='responsive'
+                              data-loaded='true'
+                            />
+                          </figure>
+                          <div className='post-meta'>
+                            <span
+                              className={`${getTitleClassName(
+                                post
+                              )} post-title`}
+                            >
+                              <StarRating index={post.priority} />
+                              {post.priority > 0 && ' '}
+                              {truncateTitle(post.title, 50)}
+                            </span>
+                            <span className='post-price'>
+                              <PriceDisplay price={post.price} />
+                            </span>
+                            <time className='post-time' title={post.startedAt}>
+                              <FormatDateAgo date={post.startedAt} />
+                            </time>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {latestPosts.length !== 0 && (
+                <section className='section section-aside-tinmoidang pb-0'>
+                  <div className='section-header'>
+                    <span className='section-title'>Tin mới đăng</span>
+                  </div>
+                  <ul className='post-listing aside clearfix'>
+                    {latestPosts.map((post) => (
+                      <li key={post._id} className='post-item clearfix normal'>
+                        <Link
+                          to={'/post/' + post.slug}
+                          className='text-decoration-none'
                         >
-                          Hôm nay
-                        </time>
-                      </div>
-                    </a>
-                  </li>
-                  <li
-                    className='post-item clearfix tin-vip vip2'
-                    post-id='596753'
-                  >
-                    <a href='/' className='text-decoration-none'>
-                      <figure>
-                        <img
-                          className='lazy_done'
-                          src='images/property-test.jpg'
-                          data-src='images/property-test.jpg'
-                          alt='Phòng mới xây 572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr'
-                          height='100'
-                          width='100'
-                          layout='responsive'
-                          data-loaded='true'
-                        />
-                      </figure>
-                      <div className='post-meta'>
-                        <span className='post-title' style={{ color: '#f60' }}>
-                          <span className='star star-3'></span> Phòng mới xây
-                          572/9 Âu Cơ, P10, Tân Bình 3.5tr-4,7tr
-                        </span>
-                        <span className='post-price'>3.6 triệu/tháng</span>
-                        <time
-                          className='post-time'
-                          title='Thứ 2, 14:33 13/05/2024'
-                        >
-                          5 giờ trước
-                        </time>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </section>
-              <section className='section section-aside-tinmoidang pb-0'>
-                <div className='section-header'>
-                  <span className='section-title'>Tin mới đăng</span>
-                </div>
-                <ul className='post-listing aside clearfix'>
-                  <li className='post-item clearfix normal' post-id='654608'>
-                    <a href='/' className='text-decoration-none'>
-                      <figure>
-                        <img
-                          className='lazy_done'
-                          src='images/property-test.jpg'
-                          data-src='images/property-test.jpg'
-                          alt='phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN ngay khu Bàu Cát'
-                          height='100'
-                          width='100'
-                          layout='responsive'
-                          data-loaded='true'
-                        />
-                      </figure>
-                      <div className='post-meta'>
-                        <span
-                          className='post-title'
-                          style={{ color: '#055699' }}
-                        >
-                          phòng trọ GIẢ RẺ SẴN NỘI THẤT CƠ BẢN…
-                        </span>
-                        <span className='post-price'>3.5 triệu/tháng</span>
-                        <time
-                          className='post-time'
-                          title='Thứ 2, 12:27 13/05/2024'
-                        >
-                          7 giờ trước
-                        </time>
-                      </div>
-                    </a>
-                  </li>
-                  <li className='post-item clearfix normal' post-id='654606'>
-                    <a href='/' className='text-decoration-none'>
-                      <figure>
-                        <img
-                          className='lazy_done'
-                          src='images/property-test.jpg'
-                          data-src='images/property-test.jpg'
-                          alt='PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3'
-                          height='100'
-                          width='100'
-                          layout='responsive'
-                          data-loaded='true'
-                        />
-                      </figure>
-                      <div className='post-meta'>
-                        <span
-                          className='post-title'
-                          style={{ color: '#055699' }}
-                        >
-                          PHÒNG TIỆN NGHI CAO CẤP NGAY 4’ ĐI ĐH VĂN LANG CS3
-                        </span>
-                        <span className='post-price'>3.7 triệu/tháng</span>
-                        <time
-                          className='post-time'
-                          title='Thứ 2, 11:35 13/05/2024'
-                        >
-                          8 giờ trước
-                        </time>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </section>
+                          <figure>
+                            <img
+                              className='lazy_done'
+                              src={
+                                post.images[0]
+                                  ? post.images[0]
+                                  : 'images/property-test.jpg'
+                              }
+                              data-src='images/property-test.jpg'
+                              alt='property-image'
+                              height='100'
+                              width='100'
+                              layout='responsive'
+                              data-loaded='true'
+                            />
+                          </figure>
+                          <div className='post-meta'>
+                            <span
+                              className='post-title'
+                              style={{ color: '#055699' }}
+                            >
+                              {truncateTitle(post.title, 50)}
+                            </span>
+                            <span className='post-price'>
+                              <PriceDisplay price={post.price} />
+                            </span>
+                            <time className='post-time' title={post.startedAt}>
+                              <FormatDateAgo date={post.startedAt} />
+                            </time>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
             </div>
           </div>
         </div>

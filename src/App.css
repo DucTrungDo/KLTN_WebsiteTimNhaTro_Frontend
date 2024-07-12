@@ -692,16 +692,6 @@ figure img {
   float: left;
 }
 
-.star.star-4 {
-  width: 56px;
-  height: 17px;
-}
-
-.star.star-3 {
-  width: 42px;
-  height: 17px;
-}
-
 .post-listing .post-item .post-acreage,
 .post-listing .post-item .post-location,
 .post-listing .post-item .post-price,

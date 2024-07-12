@@ -213,8 +213,8 @@ const FavoritePost = () => {
                         <span className='post-location'>
                           {post.address.district}, {post.address.city}
                         </span>
-                        <time className='post-time' title={post.createdAt}>
-                          <FormatDateAgo date={post.createdAt} />
+                        <time className='post-time' title={post.startedAt}>
+                          <FormatDateAgo date={post.startedAt} />
                         </time>
                       </div>
                       <div className='meta-row clearfix'>

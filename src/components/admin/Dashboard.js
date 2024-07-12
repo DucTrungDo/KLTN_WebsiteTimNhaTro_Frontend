@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Bar } from 'react-chartjs-2'
 import Chart from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
+import Loader from '../layout/Loader'
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons'
-import { statisticalAdmin } from '../../actions/postActions'
+import { statisticalAdmin, clearErrors } from '../../actions/postActions'
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  const alert = useAlert()
   const token = Cookies.get('accessToken')
+
   const [chartData, setChartData] = useState({
     labels: ['Red', 'Orange', 'Blue'],
     datasets: [
@@ -24,14 +28,21 @@ const Dashboard = () => {
       },
     ],
   })
-  const { loading, statistical } = useSelector(
+  const { loading, statistical, error } = useSelector(
     (state) => state.statisticalAdmin
   )
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error)
+      dispatch(clearErrors())
+    }
+  }, [alert, error])
+
   useEffect(() => {
     dispatch(statisticalAdmin(token))
   }, [dispatch])
+
   useEffect(() => {
     statistical.statistics &&
       setChartData({
@@ -74,165 +85,182 @@ const Dashboard = () => {
             </li>
           </ol>
         </nav>
-        <div
-          class='me-3 border-5 border-success border-start shadow p-3 bg-body rounded '
-          style={{ textAlign: 'center' }}
-        >
-          <div className='text-success fw-bold fs-3'>TỔNG DOANH THU</div>
-          <div className='fw-bold fs-4'>
-            {parseInt(statistical.statistics?.totalRevenue).toLocaleString(
-              'vi-VN'
-            )}{' '}
-            VND
-          </div>
-        </div>
-        <div>
-          <div class='row ms-0 me-0' style={{ marginTop: '20px' }}>
-            <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-primary fw-bold'>DOANH THU (Tháng)</div>
-                <div className='fw-bold'>
-                  {parseInt(
-                    statistical.statistics?.totalRevenueThisMonth
-                  ).toLocaleString('vi-VN')}{' '}
-                  VND
-                </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div
+              class='me-3 border-5 border-success border-start shadow p-3 bg-body rounded '
+              style={{ textAlign: 'center' }}
+            >
+              <div className='text-success fw-bold fs-3'>TỔNG DOANH THU</div>
+              <div className='fw-bold fs-4'>
+                {parseInt(statistical.statistics?.totalRevenue).toLocaleString(
+                  'vi-VN'
+                )}{' '}
+                VND
               </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
             </div>
-            <div class='col me-3 border-5 border-success border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-success fw-bold'>TỔNG SỐ BÀI ĐĂNG</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.totalPosts}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-            <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-info fw-bold'>SỐ BÀI ĐĂNG MỚI</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.newPosts}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-            <div class='col  me-3 border-5 border-warning border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-warning fw-bold'>BÀI ĐƯỢC DUYỆT</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.totalApprovedPost}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-          </div>
-          <div class='row ms-0 me-0'>
-            <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-primary fw-bold'>BÀI VI PHẠM</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.totalViolatedPost}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-            <div class='col me-3 border-5 border-success border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-success fw-bold'>BÀI ĐĂNG CHƯA DUYỆT</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.toModeratedPost}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-            <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-info fw-bold'>SỐ LƯỢNG NGƯỜI DÙNG</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.totalUser}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-            <div class='col me-3 border-5 border-warning border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
-              <div>
-                <div className='text-warning fw-bold'>NGƯỜI DÙNG/BÀI ĐĂNG</div>
-                <div className='fw-bold'>
-                  {statistical.statistics?.avgPostPerUser}
-                </div>
-              </div>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className='me-2 align-self-center'
-              />
-            </div>
-          </div>
-          <div className='row'>
-            <div className='chart-container col-md-8'>
-              <h2 style={{ textAlign: 'center' }}>Biểu đồ</h2>
-              <Bar
-                data={chartData}
-                options={{
-                  plugins: {
-                    title: {
-                      display: true,
-                      text: 'Lợi nhuận gói tin',
-                    },
-                    legend: {
-                      display: false,
-                    },
-                  },
-                }}
-              />
-            </div>
-            <div className='col-md-4 align-center align-content-center'>
-              <div className='col me-3  border-5 border-secondary border-start shadow p-3 bg-body rounded d-flex justify-content-around h-50'>
-                <div className='align-center align-content-center'>
-                  <div className='text-secondary fw-bold'>
-                    DOANH THU GÓI NỔI BẬT (THÁNG)
+            <div>
+              <div class='row ms-0 me-0' style={{ marginTop: '20px' }}>
+                <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-primary fw-bold'>
+                      DOANH THU (Tháng)
+                    </div>
+                    <div className='fw-bold'>
+                      {parseInt(
+                        statistical.statistics?.totalRevenueThisMonth
+                      ).toLocaleString('vi-VN')}{' '}
+                      VND
+                    </div>
                   </div>
-                  <div className='text-secondary fw-bold'>
-                    {statistical.statistics?.packRevenueThisMonth[0].packName}
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col me-3 border-5 border-success border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-success fw-bold'>TỔNG SỐ BÀI ĐĂNG</div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.totalPosts}
+                    </div>
                   </div>
-                  <div className='fw-bold fs-4'>
-                    {parseInt(
-                      statistical.statistics?.packRevenueThisMonth[0]
-                        .totalRevenue
-                    ).toLocaleString('vi-VN')}{' '}
-                    VND
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col  me-3 border-5 border-info border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-info fw-bold'>SỐ BÀI ĐĂNG MỚI</div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.newPosts}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col  me-3 border-5 border-warning border-start shadow p-3 mb-3 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-warning fw-bold'>BÀI ĐƯỢC DUYỆT</div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.totalApprovedPost}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+              </div>
+              <div class='row ms-0 me-0'>
+                <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-primary fw-bold'>
+                      BÀI ĐĂNG/NGƯỜI DÙNG
+                    </div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.avgPostPerUser.toFixed(2)}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col me-3 border-5 border-success border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-success fw-bold'>
+                      SỐ LƯỢNG NGƯỜI DÙNG
+                    </div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.totalUser}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col me-3 border-5 border-info border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-info fw-bold'>
+                      SỐ BÀI ĐĂNG CHƯA DUYỆT
+                    </div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.toModeratedPost}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+                <div class='col me-3 border-5 border-warning border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
+                  <div>
+                    <div className='text-warning fw-bold'>BÀI VI PHẠM</div>
+                    <div className='fw-bold'>
+                      {statistical.statistics?.totalViolatedPost}
+                    </div>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSquarePlus}
+                    className='me-2 align-self-center'
+                  />
+                </div>
+              </div>
+              <div className='row'>
+                <div className='chart-container col-md-8'>
+                  <h2 style={{ textAlign: 'center' }}>Biểu đồ</h2>
+                  <Bar
+                    data={chartData}
+                    options={{
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: 'Lợi nhuận gói tin',
+                        },
+                        legend: {
+                          display: false,
+                        },
+                      },
+                    }}
+                  />
+                </div>
+                <div className='col-md-4 align-center align-content-center'>
+                  <div className='col me-3  border-5 border-secondary border-start shadow p-3 bg-body rounded d-flex justify-content-around h-50'>
+                    <div className='align-center align-content-center'>
+                      <div className='text-secondary fw-bold'>
+                        DOANH THU GÓI NỔI BẬT (THÁNG)
+                      </div>
+                      <div className='text-secondary fw-bold'>
+                        {
+                          statistical.statistics?.packRevenueThisMonth[0]
+                            .packName
+                        }
+                      </div>
+                      <div className='fw-bold fs-4'>
+                        {parseInt(
+                          statistical.statistics?.packRevenueThisMonth[0]
+                            .totalRevenue
+                        ).toLocaleString('vi-VN')}{' '}
+                        VND
+                      </div>
+                    </div>
+                    <FontAwesomeIcon
+                      icon={faSquarePlus}
+                      className='me-2 align-self-center'
+                    />
                   </div>
                 </div>
-                <FontAwesomeIcon
-                  icon={faSquarePlus}
-                  className='me-2 align-self-center'
-                />
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   )
