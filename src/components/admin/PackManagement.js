@@ -165,6 +165,9 @@ const PackManagement = () => {
           </li>
         </ol>
       </nav>
+      <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
+        <h1 className='h2'>Quản lý Gói tin</h1>
+      </div>
       <button
         type='button'
         className='btn btn-success btn-sm mb-2 px-4 fw-semibold'

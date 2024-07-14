@@ -60,10 +60,7 @@ const Dashboard = () => {
                     Tổng số bài đã kiểm duyệt
                   </div>
                   <div className='fw-bold'>
-                    {parseInt(
-                      statistical.statistics?.totalPosts
-                    ).toLocaleString('vi-VN')}{' '}
-                    VND
+                    {statistical.statistics?.totalPosts}
                   </div>
                 </div>
                 <FontAwesomeIcon

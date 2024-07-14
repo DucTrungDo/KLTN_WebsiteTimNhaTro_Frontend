@@ -192,7 +192,7 @@ const Profile = () => {
               className='form-control'
               id='user_zalo'
               name='user_zalo'
-              value={zalo !== 'undefined' ? zalo : ''}
+              value={zalo && zalo !== 'undefined' ? zalo : ''}
               onChange={(e) => setZalo(e.target.value)}
             />
           </div>
@@ -210,7 +210,7 @@ const Profile = () => {
               className='form-control'
               id='user_facebook'
               name='user_facebook'
-              value={facebook !== 'undefined' ? facebook : ''}
+              value={facebook || facebook !== 'undefined' ? facebook : ''}
               onChange={(e) => setFacebook(e.target.value)}
             />
           </div>

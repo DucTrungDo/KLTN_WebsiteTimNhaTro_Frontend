@@ -19,32 +19,33 @@ import {
 } from '../constants/invoiceConstants'
 
 // Get user's invoices - User
-export const getUserInvoices = (token, page) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_USER_INVOICES_REQUEST })
+export const getUserInvoices =
+  (token, page, search, fromDate, toDate) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_USER_INVOICES_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/invoices/me?page=${page}}&search=${search}&fromDate${fromDate}&toDate=${toDate}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_USER_INVOICES_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_USER_INVOICES_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/invoices/me?page=${page}`,
-      config
-    )
-
-    dispatch({
-      type: ALL_USER_INVOICES_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: ALL_USER_INVOICES_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Get user's invoice details - User
 export const getUserInvoiceDetails = (token, id) => async (dispatch) => {
@@ -105,32 +106,33 @@ export const addNewInvoice =
   }
 
 // Get all invoices - Admin
-export const getAllInvoices = (token, page) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_ADMIN_INVOICES_REQUEST })
+export const getAllInvoices =
+  (token, page, search, fromDate, toDate) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_ADMIN_INVOICES_REQUEST })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
-      },
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header Authorization
+        },
+      }
+
+      const { data } = await axios.get(
+        `https://boardinghouse-api.onrender.com/api/v1/invoices?page=${page}&search=${search}&fromDate${fromDate}&toDate=${toDate}`,
+        config
+      )
+
+      dispatch({
+        type: ALL_ADMIN_INVOICES_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: ALL_ADMIN_INVOICES_FAIL,
+        payload: error.response.data.message,
+      })
     }
-
-    const { data } = await axios.get(
-      `https://boardinghouse-api.onrender.com/api/v1/invoices?page=${page}`,
-      config
-    )
-
-    dispatch({
-      type: ALL_ADMIN_INVOICES_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: ALL_ADMIN_INVOICES_FAIL,
-      payload: error.response.data.message,
-    })
   }
-}
 
 // Get invoice details - Admin
 export const getInvoiceDetails = (token, id) => async (dispatch) => {

@@ -660,9 +660,10 @@ const UserManagement = () => {
                         className='form-control'
                         id='recipient-name'
                         value={
-                          userDetail.facebook === undefined
-                            ? ''
-                            : userDetail.facebook
+                          userDetail.facebook &&
+                          userDetail.facebook !== 'undefined'
+                            ? userDetail.facebook
+                            : ''
                         }
                         onChange={(e) =>
                           setUserDetail((prevState) => ({
@@ -739,7 +740,9 @@ const UserManagement = () => {
                         className='form-control'
                         id='recipient-name'
                         value={
-                          userDetail.zalo === undefined ? '' : userDetail.zalo
+                          userDetail.zalo && userDetail.zalo !== 'undefined'
+                            ? userDetail.zalo
+                            : ''
                         }
                         onChange={(e) =>
                           setUserDetail((prevState) => ({

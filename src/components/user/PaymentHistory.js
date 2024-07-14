@@ -5,9 +5,9 @@ import { useAlert } from 'react-alert'
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { getUserInvoices, clearErrors } from '../../actions/invoiceActions'
-
 import Loader from '../layout/Loader'
 
 const PaymentHistory = () => {
@@ -16,25 +16,37 @@ const PaymentHistory = () => {
   const token = Cookies.get('accessToken')
   const [page, setPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
-
+  const [searchText, setSearchText] = useState('')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
   const { loading, invoices, error } = useSelector((state) => state.invoices)
 
   useEffect(() => {
-    dispatch(getUserInvoices(token, currentPage))
+    dispatch(getUserInvoices(token, currentPage, searchText, fromDate, toDate))
+  }, [dispatch])
 
+  useEffect(() => {
     if (error) {
       alert.error(error)
       dispatch(clearErrors())
     }
-  }, [dispatch, alert, error])
+  }, [alert, error])
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      setSearchText('')
+      dispatch(getUserInvoices(token, 1, searchText, fromDate, toDate))
+      setCurrentPage(1)
+    }
+  }, [dispatch, fromDate, toDate])
 
   useEffect(() => {
     if (JSON.stringify(invoices) !== '{}' && invoices !== undefined) {
       setPage(
         Math.round(
-          invoices.total % 10 !== 0
-            ? Math.floor(invoices.total / 10) + 1
-            : Math.floor(invoices.total / 10)
+          invoices.total % 9 !== 0
+            ? Math.floor(invoices.total / 9) + 1
+            : Math.floor(invoices.total / 9)
         )
       )
     }
@@ -42,17 +54,35 @@ const PaymentHistory = () => {
 
   const ChoosePage = (indexPageCurrent) => {
     setCurrentPage(indexPageCurrent)
-    dispatch(getUserInvoices(token, indexPageCurrent))
+    dispatch(
+      getUserInvoices(token, indexPageCurrent, searchText, fromDate, toDate)
+    )
   }
 
   const NextAndPrevious = (Actions) => {
     if (Actions === 'next') {
       setCurrentPage(currentPage + 1)
-      dispatch(getUserInvoices(token, currentPage + 1))
+      dispatch(
+        getUserInvoices(token, currentPage + 1, searchText, fromDate, toDate)
+      )
     } else {
       setCurrentPage(currentPage - 1)
-      dispatch(getUserInvoices(token, currentPage - 1))
+      dispatch(
+        getUserInvoices(token, currentPage - 1, searchText, fromDate, toDate)
+      )
     }
+  }
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      Search()
+    }
+  }
+  async function Search() {
+    setToDate('')
+    setFromDate('')
+    dispatch(getUserInvoices(token, 1, searchText, fromDate, toDate))
+    setCurrentPage(1)
   }
 
   return (
@@ -70,10 +100,67 @@ const PaymentHistory = () => {
             </Link>
           </li>
           <li className='breadcrumb-item active' aria-current='page'>
-            Quản lý hóa đơn
+            Lịch sử thanh toán
           </li>
         </ol>
       </nav>
+      <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
+        <h1 className='h2'>Lịch sử thanh toán</h1>
+      </div>
+      <div className='d-flex bd-highlight mb-2 justify-content-end align-items-center'>
+        <div className='d-flex me-3'>
+          <label htmlFor='fromDate' className='col-form-label me-3'>
+            Từ ngày:
+          </label>
+          <input
+            type='date'
+            id='fromDate'
+            name='meeting-time'
+            className='form-control'
+            style={{ width: '200px' }}
+            value={fromDate}
+            max={toDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+        </div>
+        <div className='d-flex me-3'>
+          <label htmlFor='toDate' className='col-form-label me-3'>
+            Đến ngày:
+          </label>
+          <input
+            type='date'
+            id='toDate'
+            name='meeting-time'
+            className='form-control'
+            style={{ width: '200px' }}
+            value={toDate}
+            min={fromDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
+        </div>
+        <div className='input-group' style={{ width: '20%' }}>
+          <input
+            type='text'
+            className='form-control'
+            placeholder='Tìm Kiếm'
+            aria-label='Tìm kiếm'
+            aria-describedby='button-addon2'
+            onKeyDown={handleKeyPress}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              Search()
+            }}
+            className='btn btn-outline-secondary'
+            type='button'
+            id='button-addon2'
+          >
+            <FontAwesomeIcon className='me-1 ' icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      </div>
       {loading || !invoices ? (
         <Loader />
       ) : (
@@ -109,7 +196,7 @@ const PaymentHistory = () => {
                 ) : (
                   invoices.invoices?.map((invoice, index) => (
                     <tr key={invoice._id}>
-                      <td>{index + 1 + 10 * (currentPage - 1)}</td>
+                      <td>{index + 1 + 9 * (currentPage - 1)}</td>
                       <td>{invoice._id}</td>
                       <td>{invoice.postId?.title}</td>
                       <td>{invoice.packId?.name}</td>
