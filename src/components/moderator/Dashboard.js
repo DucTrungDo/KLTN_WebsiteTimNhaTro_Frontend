@@ -9,7 +9,7 @@ import {
   faSquarePlus,
 } from '@fortawesome/free-regular-svg-icons'
 import Loader from '../layout/Loader'
-import { statisticalModerator } from '../../actions/postActions'
+import { statisticalModerator, clearErrors } from '../../actions/postActions'
 
 const Dashboard = () => {
   const dispatch = useDispatch()

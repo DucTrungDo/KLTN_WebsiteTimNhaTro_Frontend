@@ -28,6 +28,18 @@ const Dashboard = () => {
       },
     ],
   })
+  const [chartDataMoth, setChartDataMoth] = useState({
+    labels: ['Red', 'Orange', 'Blue'],
+    datasets: [
+      {
+        label: 'Popularity of colours',
+        data: [55, 23, 96],
+        // you can set indiviual colors for each bar
+        backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
+        borderWidth: 1,
+      },
+    ],
+  })
   const { loading, statistical, error } = useSelector(
     (state) => state.statisticalAdmin
   )
@@ -44,21 +56,23 @@ const Dashboard = () => {
   }, [dispatch])
 
   useEffect(() => {
-    statistical.statistics &&
+    if (statistical.statistics !== undefined) {
       setChartData({
-        labels: [
-          statistical.statistics.packRevenue[0].packName,
-          statistical.statistics.packRevenue[1].packName,
-          statistical.statistics.packRevenue[2].packName,
-        ],
+        labels: ['Tin thường', 'Tin Vip', 'Tin Vip nổi bật'],
         // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
         datasets: [
           {
             label: 'Popularity of colours',
             data: [
-              statistical.statistics.packRevenue[0].totalRevenue,
-              statistical.statistics.packRevenue[1].totalRevenue,
-              statistical.statistics.packRevenue[2].totalRevenue,
+              statistical.statistics.packRevenue.find(
+                (pack) => pack.packName === 'Tin thường'
+              ).totalRevenue,
+              statistical.statistics.packRevenue.find(
+                (pack) => pack.packName === 'Tin Vip'
+              ).totalRevenue,
+              statistical.statistics.packRevenue.find(
+                (pack) => pack.packName === 'Tin Vip nổi bật'
+              ).totalRevenue,
             ],
             // you can set indiviual colors for each bar
             backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
@@ -66,6 +80,30 @@ const Dashboard = () => {
           },
         ],
       })
+      setChartDataMoth({
+        labels: ['Tin thường', 'Tin Vip', 'Tin Vip nổi bật'],
+        // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+        datasets: [
+          {
+            label: 'Popularity of colours',
+            data: [
+              statistical.statistics.packRevenueThisMonth.find(
+                (pack) => pack.packName === 'Tin thường'
+              ).totalRevenue,
+              statistical.statistics.packRevenueThisMonth.find(
+                (pack) => pack.packName === 'Tin Vip'
+              ).totalRevenue,
+              statistical.statistics.packRevenueThisMonth.find(
+                (pack) => pack.packName === 'Tin Vip nổi bật'
+              ).totalRevenue,
+            ],
+            // you can set indiviual colors for each bar
+            backgroundColor: ['#50AF95', '#f3ba2f', '#2a71d0'],
+            borderWidth: 1,
+          },
+        ],
+      })
+    }
   }, [statistical])
   return (
     <>
@@ -214,15 +252,16 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className='row'>
-                <div className='chart-container col-md-8'>
-                  <h2 style={{ textAlign: 'center' }}>Biểu đồ</h2>
+                <div className='chart-container col-md-6'>
+                  <h2 style={{ textAlign: 'center' }}>
+                    Tổng lợi nhuận các gói tin
+                  </h2>
                   <Bar
                     data={chartData}
                     options={{
                       plugins: {
                         title: {
                           display: true,
-                          text: 'Lợi nhuận gói tin',
                         },
                         legend: {
                           display: false,
@@ -231,31 +270,23 @@ const Dashboard = () => {
                     }}
                   />
                 </div>
-                <div className='col-md-4 align-center align-content-center'>
-                  <div className='col me-3  border-5 border-secondary border-start shadow p-3 bg-body rounded d-flex justify-content-around h-50'>
-                    <div className='align-center align-content-center'>
-                      <div className='text-secondary fw-bold'>
-                        DOANH THU GÓI NỔI BẬT (THÁNG)
-                      </div>
-                      <div className='text-secondary fw-bold'>
-                        {
-                          statistical.statistics?.packRevenueThisMonth[0]
-                            .packName
-                        }
-                      </div>
-                      <div className='fw-bold fs-4'>
-                        {parseInt(
-                          statistical.statistics?.packRevenueThisMonth[0]
-                            .totalRevenue
-                        ).toLocaleString('vi-VN')}{' '}
-                        VND
-                      </div>
-                    </div>
-                    <FontAwesomeIcon
-                      icon={faSquarePlus}
-                      className='me-2 align-self-center'
-                    />
-                  </div>
+                <div className='chart-container col-md-6'>
+                  <h2 style={{ textAlign: 'center' }}>
+                    Lợi nhuận gói tin trong tháng
+                  </h2>
+                  <Bar
+                    data={chartDataMoth}
+                    options={{
+                      plugins: {
+                        title: {
+                          display: true,
+                        },
+                        legend: {
+                          display: false,
+                        },
+                      },
+                    }}
+                  />
                 </div>
               </div>
             </div>
