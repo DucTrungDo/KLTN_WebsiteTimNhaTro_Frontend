@@ -210,7 +210,7 @@ const Profile = () => {
               className='form-control'
               id='user_facebook'
               name='user_facebook'
-              value={facebook || facebook !== 'undefined' ? facebook : ''}
+              value={facebook && facebook !== 'undefined' ? facebook : ''}
               onChange={(e) => setFacebook(e.target.value)}
             />
           </div>

@@ -195,7 +195,7 @@ const PostManagement = () => {
       Search()
     }
   }
-  console.log(filterData)
+  
   const Search = () => {
     if (whatList === 'listallpost') {
       dispatch(getPostsAdmin(token, 1, filterData))

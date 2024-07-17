@@ -29,9 +29,9 @@ const Home = () => {
     if (JSON.stringify(posts) !== '{}' && posts !== undefined) {
       setPage(
         Math.round(
-          posts.count % 9 !== 0
-            ? Math.floor(posts.count / 9) + 1
-            : Math.floor(posts.count / 9)
+          posts.total % 9 !== 0
+            ? Math.floor(posts.total / 9) + 1
+            : Math.floor(posts.total / 9)
         )
       )
     }
@@ -39,7 +39,7 @@ const Home = () => {
 
   async function ChoisePage(indexPageCurrent) {
     setCurrentPage(indexPageCurrent)
-    dispatch(getPosts(indexPageCurrent))
+    dispatch(getPosts(indexPageCurrent, filterData))
   }
 
   async function NextAndPrevious(Actions) {

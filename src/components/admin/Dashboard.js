@@ -161,7 +161,7 @@ const Dashboard = () => {
                 <div class='col me-3 border-5 border-primary border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
                   <div>
                     <div className='text-primary fw-bold'>
-                      BÀI ĐĂNG/NGƯỜI DÙNG
+                      TRUNG BÌNH BÀI ĐĂNG/NGƯỜI DÙNG
                     </div>
                     <div className='fw-bold'>
                       {statistical.statistics?.avgPostPerUser.toFixed(2)}
@@ -175,7 +175,7 @@ const Dashboard = () => {
                 <div class='col me-3 border-5 border-success border-start shadow p-3 mb-5 bg-body rounded d-flex justify-content-between'>
                   <div>
                     <div className='text-success fw-bold'>
-                      SỐ LƯỢNG NGƯỜI DÙNG
+                      SỐ LƯỢNG TÀI KHOẢN NGƯỜI DÙNG
                     </div>
                     <div className='fw-bold'>
                       {statistical.statistics?.totalUser}

@@ -64,8 +64,8 @@ const PostModeration = () => {
       filterData.province !== ''
     ) {
       const keypro = provinces.find(
-        (location) => location.province_name === filterData.province
-      ).province_id
+        (location) => location.full_name === filterData.province
+      ).id
       dispatch(getdistrict(keypro))
     }
     if (filterData.province === '') {
@@ -86,8 +86,8 @@ const PostModeration = () => {
       filterData.district !== ''
     ) {
       const keydis = districts.find(
-        (location) => location.district_name === filterData.district
-      ).district_id
+        (location) => location.full_name === filterData.district
+      ).id
       dispatch(getWard(keydis))
     }
     if (filterData.district === '') {
@@ -112,8 +112,6 @@ const PostModeration = () => {
     dispatch(getModeratorPosts(token, currentPage, filterData))
     setCurrentPage(1)
   }
-
-  console.log(filterData)
 
   useEffect(() => {
     dispatch(getModeratorPosts(token, currentPage, filterData))
@@ -225,11 +223,8 @@ const PostModeration = () => {
                 <option value=''>--Chọn Tỉnh/TP--</option>
                 {provinces &&
                   provinces.map((location) => (
-                    <option
-                      key={location.province_id}
-                      value={location.province_name}
-                    >
-                      {location.province_name}
+                    <option key={location.id} value={location.full_name}>
+                      {location.full_name}
                     </option>
                   ))}
               </select>
@@ -249,11 +244,8 @@ const PostModeration = () => {
                 <option value=''>--Chọn Quận/Huyện--</option>
                 {districts &&
                   districts.map((district) => (
-                    <option
-                      key={district.district_id}
-                      value={district.district_name}
-                    >
-                      {district.district_name}
+                    <option key={district.id} value={district.full_name}>
+                      {district.full_name}
                     </option>
                   ))}
               </select>
@@ -273,8 +265,8 @@ const PostModeration = () => {
                 <option value=''>--Chọn Phường/Xã--</option>
                 {wards &&
                   wards.map((ward) => (
-                    <option key={ward.ward_id} value={ward.ward_name}>
-                      {ward.ward_name}
+                    <option key={ward.id} value={ward.full_name}>
+                      {ward.full_name}
                     </option>
                   ))}
               </select>
